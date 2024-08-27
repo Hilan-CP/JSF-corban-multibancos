@@ -9,6 +9,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import model.enumeration.ProposalStatus;
 
 @Entity
@@ -19,7 +21,11 @@ public class Proposal implements Serializable{
 	private Long id;
 	
 	private Double value;
+	
+	@Temporal(TemporalType.DATE)
 	private Date generation;
+	
+	@Temporal(TemporalType.DATE)
 	private Date payment;
 	
 	@Enumerated(EnumType.STRING)

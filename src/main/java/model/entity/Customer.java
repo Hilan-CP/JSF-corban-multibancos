@@ -7,6 +7,8 @@ import java.util.Objects;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Customer implements Serializable{
@@ -21,6 +23,7 @@ public class Customer implements Serializable{
 	@Column(length = 11)
 	private String phone;
 	
+	@Temporal(TemporalType.DATE)
 	private Date birthDate;
 
 	public String getCpf() {
