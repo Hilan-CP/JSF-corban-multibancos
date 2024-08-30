@@ -7,7 +7,7 @@
 	<persistence-unit name="DevPU">
 		<description>Persistence Unit de desenvolvimento</description>
 		<properties>
-			<property name="jakarta.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jsfcorban" />
             <property name="jakarta.persistence.jdbc.user" value="root" />
             <property name="jakarta.persistence.jdbc.password" value="123456" />

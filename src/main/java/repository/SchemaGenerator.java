@@ -13,4 +13,5 @@ public class SchemaGenerator {
 		entityManager.close();
 		entityManagerFactory.close();
 	}
+	
 }
