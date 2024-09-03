@@ -20,6 +20,10 @@ public class TeamRepository {
 		this.entityManager = entityManager;
 	}
 	
+	public Team findById(Long id){
+		return entityManager.find(Team.class, id);
+	}
+	
 	public List<Team> findAll(){
 		TypedQuery<Team> query = entityManager.createQuery("SELECT t FROM team t", Team.class);
 		return query.getResultList();
@@ -30,7 +34,7 @@ public class TeamRepository {
 	}
 	
 	public void remove(Team team) {
-		team = entityManager.find(Team.class, team.getId());
+		team = findById(team.getId());
 		entityManager.remove(team);
 	}
 }
