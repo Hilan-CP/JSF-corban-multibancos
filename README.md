@@ -5,20 +5,23 @@ A empresa Corban Multibancos atua como correspondente bancário na oferta de emp
 
 <h2>
 	<p>Diagrama de classe</p>
-	<img src="./images/diagrama de classe.png"/>
+	<img src="./documents/diagrama de classe.png"/>
 </h2>
 As entidades do sistema são as equipes, os funcionários que podem ou não ter uma equipe, os cliente, os bancos atendidos pela empresa, e as propostas de empréstimo oferecidas aos clientes.
 
 
 <h2>
 	<p>Diagrama de caso de uso</p>
-	<img src="./images/diagrama de caso de uso.png"/>
+	<img src="./documents/diagrama de caso de uso.png"/>
 </h2>
 Inicialmente há dois tipos de usuários no sistema: consultor e gestor.<br>
 O consultor é quem irá negociar com os clientes e inserir dados do cliente e da proposta.<br>
 O gestor possui acesso a outras funcionalidades e pode também gerar negociações. O gestor pode gerenciar o cadastro dos bancos atendidos pela empresa, dos funcionários que utilizam o sistema e das equipes de funcionários, podendo também gerar relatórios e negociações.
 
-### Tecnologias utilizadas
+#### Requisitos de software
+[Documento de requisitos](./documents/requisitos de software.docx)
+
+#### Tecnologias utilizadas
 - Java
 - Jakarta Faces
 - Jakarta Persistence
