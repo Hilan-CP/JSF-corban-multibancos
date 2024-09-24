@@ -19,7 +19,7 @@ O consultor é quem irá negociar com os clientes e inserir dados do cliente e d
 O gestor possui acesso a outras funcionalidades e pode também gerar negociações. O gestor pode gerenciar o cadastro dos bancos atendidos pela empresa, dos funcionários que utilizam o sistema e das equipes de funcionários, podendo também gerar relatórios e negociações.
 
 ### Requisitos de software
-<a href="./documents/requisitos de software.docx">Documento de requisitos</a>
+Os requisitos funcionais do sistema podem ser encontrados no <a href="./documents/requisitos de software.docx">documento de requisitos</a>
 
 ### Tecnologias utilizadas
 - Java
