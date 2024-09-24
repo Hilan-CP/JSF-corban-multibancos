@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+header{
+	height: 50px;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: #000080;
+	position: fixed;
+}
+
+header p{
+	padding-top: 5px;
+	padding-left: 15px;
+	font-size: medium;
+	color: white;
+}
+
+.sidemenu{
+	height: 100%;
+	width: 120px;
+	margin-top: 50px;
+	background-color: #0000a0;
+	top: 0;
+	left: 0;
+	overflow-x: hidden;
+	position: fixed;
+}
+
+.sidemenu p{
+	padding-left: 10px;
+	color: white;
+}
+
+.content{
+	margin-top: 50px;
+	margin-left: 120px;
+}

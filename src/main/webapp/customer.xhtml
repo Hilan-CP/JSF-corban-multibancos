@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<ui:composition template="layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="content">
+		<h3>CLIENTES</h3>
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:inputText size="20" />
+					<p:commandButton value="Buscar" icon="pi pi-search" />
+					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
+					<p:commandButton value="Alterar" icon="pi pi-pencil" />
+				</f:facet>
+			</p:toolbar>
+			<p:dataTable value="{0}" >
+				<p:column headerText="cpf">
+					<h:outputText value="12345678900" />
+				</p:column>
+				<p:column headerText="nome">
+					<h:outputText value="Testinho Teste" />
+				</p:column>
+				<p:column headerText="telefone">
+					<h:outputText value="44987654321" />
+				</p:column>
+				<p:column headerText="nascimento">
+					<h:outputText value="01/01/1999" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

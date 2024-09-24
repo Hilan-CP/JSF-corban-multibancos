@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8" />
+	<h:outputStylesheet library="css" name="layout.css"/>
+</h:head>
+<h:body>
+	<header>
+		<p><b>CENTRAL MULTIBANCOS</b></p>
+	</header>
+	<h:form class="sidemenu">
+		<p><p:commandLink value="Equipes" action="team" /></p>
+		<p><p:commandLink value="Funcionários" action="employee" /></p>
+		<p><p:commandLink value="Bancos" action="bank" /></p>
+		<p><p:commandLink value="Clientes" action="customer" /></p>
+		<p><p:commandLink value="Propostas" action="proposal" /></p>
+		<p><p:commandLink value="Relatório" /></p>
+	</h:form>
+	<div class="content">
+		<ui:insert name="content" />
+	</div>
+</h:body>
+</html>

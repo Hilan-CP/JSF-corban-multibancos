@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<ui:composition template="layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="content">
+		<h3>EQUIPES</h3>
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Buscar" icon="pi pi-search" />
+					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
+					<p:commandButton value="Alterar" icon="pi pi-pencil" />
+					<p:commandButton value="Apagar" icon="pi pi-trash" />
+				</f:facet>
+			</p:toolbar>
+			<p:dataTable value="{0}" >
+				<p:column headerText="id">
+					<h:outputText value="1" />
+				</p:column>
+				<p:column headerText="nome">
+					<h:outputText value="equipe1" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
