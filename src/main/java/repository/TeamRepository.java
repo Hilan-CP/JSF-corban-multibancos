@@ -1,14 +1,18 @@
 package repository;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import model.entity.Team;
 
-public class TeamRepository {
-
+@Dependent
+public class TeamRepository implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private EntityManager entityManager;
 
@@ -25,7 +29,7 @@ public class TeamRepository {
 	}
 	
 	public List<Team> findAll(){
-		TypedQuery<Team> query = entityManager.createQuery("SELECT t FROM team t", Team.class);
+		TypedQuery<Team> query = entityManager.createQuery("SELECT t FROM Team t", Team.class);
 		return query.getResultList();
 	}
 	

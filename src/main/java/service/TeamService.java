@@ -1,13 +1,17 @@
 package service;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Team;
 import repository.TeamRepository;
 import util.Transaction;
 
-public class TeamService {
+@Dependent
+public class TeamService implements Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	@Inject
 	private TeamRepository repository;

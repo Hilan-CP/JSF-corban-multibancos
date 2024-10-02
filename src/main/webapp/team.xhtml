@@ -8,23 +8,48 @@
 	
 	<ui:define name="content">
 		<h3>EQUIPES</h3>
-		<h:form>
-			<p:toolbar>
+		<h:form id="contentForm">
+			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:commandButton value="Buscar" icon="pi pi-search" />
-					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
-					<p:commandButton value="Alterar" icon="pi pi-pencil" />
-					<p:commandButton value="Apagar" icon="pi pi-trash" />
+					<p:commandButton value="Buscar" icon="pi pi-search" 
+						actionListener="#{teamBean.findAll}" update="teamTable" />
+					<p:commandButton value="Criar" icon="pi pi-plus"
+						actionListener="#{teamBean.initializeTeam}"
+						oncomplete="PF('teamDialog').show()" update="teamDialog" />
+					<p:commandButton value="Alterar" icon="pi pi-pencil"
+						oncomplete="PF('teamDialog').show()" update="teamDialog"
+						disabled="#{teamBean.team == null}" />
+					<p:commandButton value="Apagar" icon="pi pi-trash"
+						actionListener="#{teamBean.delete}"
+						disabled="#{teamBean.team == null}" />
 				</f:facet>
 			</p:toolbar>
-			<p:dataTable value="{0}" >
+			
+			<p:dataTable id="teamTable" value="#{teamBean.teamList}" var="team"
+				selectionMode="single" selection="#{teamBean.team}" rowKey="#{team.id}"
+				lazy="true" >
+				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
+				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				<p:column headerText="id">
-					<h:outputText value="1" />
+					<h:outputText value="#{team.id}" />
 				</p:column>
 				<p:column headerText="nome">
-					<h:outputText value="equipe1" />
+					<h:outputText value="#{team.name}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
+
+		<p:dialog id="teamDialog" header="Nova equipe" widgetVar="teamDialog"
+			resizable="false" modal="true" closeOnEscape="true" width="900">
+			<h:form>
+				<h:panelGrid columns="2" rendered="#{teamBean.team != null}"
+					cellpadding="10">
+					<p:outputLabel value="Nome: " />
+					<p:inputText size="45" value="#{teamBean.team.name}" />
+					<p:commandButton value="Salvar" actionListener="#{teamBean.save}"
+						oncomplete="PF('teamDialog').hide()" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

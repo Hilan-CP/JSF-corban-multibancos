@@ -6,16 +6,13 @@ import jakarta.enterprise.inject.Disposes;
 import jakarta.enterprise.inject.Produces;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceUnit;
 
 @ApplicationScoped
 public class EntityManagerProducer {
 
+	@PersistenceUnit(unitName = "nonjtaPU")
 	EntityManagerFactory entityManagerfactory;
-	
-	public EntityManagerProducer() {
-		this.entityManagerfactory = Persistence.createEntityManagerFactory("DevPU");
-	}
 	
 	@Produces
 	@RequestScoped
