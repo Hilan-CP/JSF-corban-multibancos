@@ -3,4 +3,28 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
               https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
+
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>team</from-outcome>
+			<to-view-id>/team.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>bank</from-outcome>
+			<to-view-id>/bank.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>customer</from-outcome>
+			<to-view-id>/customer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>employee</from-outcome>
+			<to-view-id>/employee.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>proposal</from-outcome>
+			<to-view-id>/proposal.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 </faces-config>
