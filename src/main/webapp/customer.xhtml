@@ -8,30 +8,75 @@
 	
 	<ui:define name="content">
 		<h3>CLIENTES</h3>
-		<h:form>
-			<p:toolbar>
+		<h:form id="contentForm">
+			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:inputText size="20" />
-					<p:commandButton value="Buscar" icon="pi pi-search" />
-					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
-					<p:commandButton value="Alterar" icon="pi pi-pencil" />
+					<span>
+						<p:inputText size="20" value="#{customerBean.searchTerm}"/>
+						<p:selectOneMenu value="#{customerBean.searchOption}">
+							<f:selectItem itemLabel="CPF" itemValue="CPF"/>
+							<f:selectItem itemLabel="Nome" itemValue="Nome"/>
+							<f:selectItem itemLabel="Telefone" itemValue="Telefone"/>
+						</p:selectOneMenu>
+					</span>
+					<p:commandButton value="Buscar" icon="pi pi-search"
+						actionListener="#{customerBean.find}" update="customerTable"/>
+					<p:commandButton value="Criar" icon="pi pi-plus"
+						actionListener="#{customerBean.initializeCustomer}"
+						oncomplete="PF('customerDialog').show()" update="customerDialog"/>
+					<p:commandButton value="Alterar" icon="pi pi-pencil"
+						oncomplete="PF('customerDialog').show()" update="customerDialog"
+						disabled="#{customerBean.customer == null}" />
 				</f:facet>
 			</p:toolbar>
-			<p:dataTable value="{0}" >
+			
+			<p:dataTable id="customerTable" value="#{customerBean.customerList}"
+				var="customer" selectionMode="single" selection="#{customerBean.customer}"
+				rowKey="#{customer.cpf}" lazy="true">
+				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
+				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
+				
 				<p:column headerText="cpf">
-					<h:outputText value="12345678900" />
+					<h:outputText value="#{customer.cpf}" />
 				</p:column>
 				<p:column headerText="nome">
-					<h:outputText value="Testinho Teste" />
+					<h:outputText value="#{customer.name}" />
 				</p:column>
 				<p:column headerText="telefone">
-					<h:outputText value="44987654321" />
+					<h:outputText value="#{customer.phone}" />
 				</p:column>
 				<p:column headerText="nascimento">
-					<h:outputText value="01/01/1999" />
+					<h:outputText value="#{customer.birthDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</h:outputText>
 				</p:column>
 			</p:dataTable>
 		</h:form>
+		
+		<p:dialog id="customerDialog" header="Cliente" widgetVar="customerDialog"
+			resizable="false" modal="true" closeOnEscape="true">
+			<h:form>
+				<h:panelGrid columns="2" rendered="#{customerBean.customer != null}"
+					cellpadding="10">
+					<p:outputLabel value="CPF"/>
+					<p:inputText size="45" value="#{customerBean.customer.cpf}"/>
+					
+					<p:outputLabel value="Nome"/>
+					<p:inputText size="45" value="#{customerBean.customer.name}"/>
+					
+					<p:outputLabel value="Telefone"/>
+					<p:inputText size="45" value="#{customerBean.customer.phone}"/>
+					
+					<p:outputLabel value="Nascimento"/>
+					<p:inputMask size="45" value="#{customerBean.customer.birthDate}"
+						mask="99/99/9999">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</p:inputMask>
+					
+					<p:commandButton value="Salvar" actionListener="#{customerBean.save}"
+						oncomplete="PF('customerDialog').hide()"/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
-
 </ui:composition>
