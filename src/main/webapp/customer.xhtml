@@ -11,14 +11,13 @@
 		<h:form id="contentForm">
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<span>
-						<p:inputText size="20" value="#{customerBean.searchTerm}"/>
-						<p:selectOneMenu value="#{customerBean.searchOption}">
-							<f:selectItem itemLabel="CPF" itemValue="CPF"/>
-							<f:selectItem itemLabel="Nome" itemValue="Nome"/>
-							<f:selectItem itemLabel="Telefone" itemValue="Telefone"/>
-						</p:selectOneMenu>
-					</span>
+					<p:inputText size="20" value="#{customerBean.searchTerm}"/>
+					<p:selectOneMenu value="#{customerBean.searchOption}">
+						<f:selectItem itemLabel="CPF" itemValue="CPF"/>
+						<f:selectItem itemLabel="Nome" itemValue="Nome"/>
+						<f:selectItem itemLabel="Telefone" itemValue="Telefone"/>
+					</p:selectOneMenu>
+					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{customerBean.find}" update="customerTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
@@ -59,7 +58,8 @@
 				<h:panelGrid columns="2" rendered="#{customerBean.customer != null}"
 					cellpadding="10">
 					<p:outputLabel value="CPF"/>
-					<p:inputText size="45" value="#{customerBean.customer.cpf}"/>
+					<p:inputText size="45" value="#{customerBean.customer.cpf}"
+						disabled="#{customerBean.customer.cpf > 0}"/>
 					
 					<p:outputLabel value="Nome"/>
 					<p:inputText size="45" value="#{customerBean.customer.name}"/>
