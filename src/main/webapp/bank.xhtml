@@ -8,23 +8,50 @@
 	
 	<ui:define name="content">
 		<h3>BANCOS</h3>
-		<h:form>
-			<p:toolbar>
+		<h:form id="contentForm">
+			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:commandButton value="Buscar" icon="pi pi-search" />
-					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
-					<p:commandButton value="Alterar" icon="pi pi-pencil" />
+					<p:commandButton value="Buscar" icon="pi pi-search"
+						actionListener="#{bankBean.findAll}" update="bankTable"/>
+					<p:commandButton value="Criar" icon="pi pi-plus-circle"
+						actionListener="#{bankBean.initializeBank}"
+						oncomplete="PF('bankDialog').show()" update="bankDialog"/>
+					<p:commandButton value="Alterar" icon="pi pi-pencil"
+						oncomplete="PF('bankDialog').show()" update="bankDialog"
+						disabled="#{bankBean.bank == null}"/>
 				</f:facet>
 			</p:toolbar>
-			<p:dataTable value="{0}" >
+			
+			<p:dataTable id="bankTable" value="#{bankBean.bankList}" var="bank"
+				selectionMode="single" selection="#{bankBean.bank}"
+				rowKey="#{bank.id}" lazy="true">
+				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
+				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
+				
 				<p:column headerText="código">
-					<h:outputText value="1" />
+					<h:outputText value="#{bank.code}" />
 				</p:column>
 				<p:column headerText="nome">
-					<h:outputText value="Banco do Brasil" />
+					<h:outputText value="#{bank.shortName}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
+		
+		<p:dialog id="bankDialog" header="Banco" widgetVar="bankDialog"
+			resizable="false" modal="true" closeOnEscape="true">
+			<h:form>
+				<h:panelGrid columns="2" rendered="#{bankBean.bank != null}"
+					cellpadding="10">
+					<p:outputLabel value="Código: "/>
+					<p:inputText size="45" value="#{bankBean.bank.code}"/>
+					
+					<p:outputLabel value="Nome: "/>
+					<p:inputText size="45" value="#{bankBean.bank.shortName}"/>
+					
+					<p:commandButton value="Salvar" actionListener="#{bankBean.save}"
+						oncomplete="PF('bankDialog').hide()"/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
-
 </ui:composition>

@@ -3,7 +3,10 @@ package model.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
@@ -11,7 +14,11 @@ public class Bank implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(unique = true)
+	private Integer code;
 	
 	private String shortName;
 
@@ -21,6 +28,14 @@ public class Bank implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Integer getCode() {
+		return code;
+	}
+
+	public void setCode(Integer code) {
+		this.code = code;
 	}
 
 	public String getShortName() {

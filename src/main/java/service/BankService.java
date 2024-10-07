@@ -1,14 +1,18 @@
 package service;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Bank;
 import repository.BankRepository;
 import util.Transaction;
 
-public class BankService {
-
+@Dependent
+public class BankService implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private BankRepository repository;
 	

@@ -1,14 +1,18 @@
 package repository;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import model.entity.Bank;
 
-public class BankRepository {
-
+@Dependent
+public class BankRepository implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private EntityManager entityManager;
 	
@@ -21,7 +25,7 @@ public class BankRepository {
 	}
 	
 	public List<Bank> findAll() {
-		TypedQuery<Bank> query = entityManager.createQuery("SELECT b FROM bank b", Bank.class);
+		TypedQuery<Bank> query = entityManager.createQuery("SELECT b FROM Bank b", Bank.class);
 		return query.getResultList();
 	}
 	
