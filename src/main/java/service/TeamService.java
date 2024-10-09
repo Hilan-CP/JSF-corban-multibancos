@@ -23,6 +23,10 @@ public class TeamService implements Serializable{
 	public TeamService(TeamRepository repository) {
 		this.repository = repository;
 	}
+	
+	public Team findById(Long id) {
+		return repository.findById(id);
+	}
 
 	public List<Team> findAll() {
 		return repository.findAll();

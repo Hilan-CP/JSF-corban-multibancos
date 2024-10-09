@@ -8,30 +8,78 @@
 	
 	<ui:define name="content">
 		<h3>FUNCIONÁRIOS</h3>
-		<h:form>
-			<p:toolbar>
+		<h:form id="contentForm">
+			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:inputText size="20" />
-					<p:commandButton value="Buscar" icon="pi pi-search" />
-					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
-					<p:commandButton value="Alterar" icon="pi pi-pencil" />
+					<p:inputText size="20" value="#{employeeBean.searchTerm}"/>
+					<p:selectOneMenu value="#{employeeBean.searchOption}">
+						<f:selectItem itemLabel="CPF" itemValue="CPF"/>
+						<f:selectItem itemLabel="Nome" itemValue="Nome"/>
+					</p:selectOneMenu>
+					
+					<p:commandButton value="Buscar" icon="pi pi-search"
+						actionListener="#{employeeBean.findEmployees}" update="employeeTable"/>
+					<p:commandButton value="Criar" icon="pi pi-plus"
+						actionListener="#{employeeBean.initializeForm}"
+						oncomplete="PF('employeeDialog').show()" update="employeeDialog"/>
+					<p:commandButton value="Alterar" icon="pi pi-pencil"
+						actionListener="#{employeeBean.initializeForm}"
+						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
+						disabled="#{employeeBean.employee == null}"/>
 				</f:facet>
 			</p:toolbar>
-			<p:dataTable value="{0}" >
+			
+			<p:dataTable id="employeeTable" value="#{employeeBean.employeeList}"
+				var="employee" selectionMode="single" selection="#{employeeBean.employee}"
+				rowKey="#{employee.cpf}" lazy="true">
+				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
+				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
+				
 				<p:column headerText="cpf">
-					<h:outputText value="12345678900" />
+					<h:outputText value="#{employee.cpf}" />
 				</p:column>
 				<p:column headerText="nome">
-					<h:outputText value="Jonas" />
+					<h:outputText value="#{employee.name}" />
 				</p:column>
 				<p:column headerText="tipo">
-					<h:outputText value="CONSULTOR" />
+					<h:outputText value="#{employee.type}" />
 				</p:column>
 				<p:column headerText="equipe">
-					<h:outputText value="NOME DA EQUIPE" />
+					<h:outputText value="#{employee.team.name}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
+		
+		<p:dialog id="employeeDialog" header="Funcionário" widgetVar="employeeDialog"
+			resizable="false" modal="true" closeOnEscape="true">
+			<h:form>
+				<h:panelGrid columns="2" rendered="#{employeeBean.employee != null}"
+					cellpadding="10">
+					<p:outputLabel value="CPF: "/>
+					<p:inputText size="45" value="#{employeeBean.employee.cpf}"
+						disabled="#{employeeBean.employee.cpf > 0}"/>
+					
+					<p:outputLabel value="Nome: "/>
+					<p:inputText size="45" value="#{employeeBean.employee.name}"/>
+					
+					<p:outputLabel value="Tipo: "/>
+					<p:selectOneMenu value="#{employeeBean.employee.type}">
+						<f:selectItems value="#{employeeBean.allEmployeeTypes}"
+							var="type" itemLabel="#{type}" itemValue="#{type}"/>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Equipe: "/>
+					<p:selectOneMenu value="#{employeeBean.employee.team}"
+						converter="teamConverter">
+						<f:selectItem itemLabel="Nenhum"/>
+						<f:selectItems value="#{employeeBean.allTeams}"
+							var="team" itemLabel="#{team.name}" itemValue="#{team}"/>
+					</p:selectOneMenu>
+					
+					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
+						oncomplete="PF('employeeDialog').hide()"/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
-
 </ui:composition>

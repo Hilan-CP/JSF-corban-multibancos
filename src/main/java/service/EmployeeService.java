@@ -1,14 +1,18 @@
 package service;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Employee;
 import repository.EmployeeRepository;
 import util.Transaction;
 
-public class EmployeeService {
-
+@Dependent
+public class EmployeeService implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private EmployeeRepository repository;
 	
@@ -22,6 +26,10 @@ public class EmployeeService {
 	
 	public Employee findByCpf(String cpf) {
 		return repository.findByCpf(cpf);
+	}
+	
+	public List<Employee> findByName(String name) {
+		return repository.findByName(name);
 	}
 	
 	public List<Employee> findAll(){
