@@ -32,4 +32,8 @@ public class BankService implements Serializable{
 	public void save(Bank bank) {
 		repository.save(bank);
 	}
+
+	public Bank findById(Long id) {
+		return repository.findById(id);
+	}
 }

@@ -24,6 +24,10 @@ public class BankRepository implements Serializable{
 		this.entityManager = entityManager;
 	}
 	
+	public Bank findById(Long id) {
+		return entityManager.find(Bank.class, id);
+	}
+	
 	public List<Bank> findAll() {
 		TypedQuery<Bank> query = entityManager.createQuery("SELECT b FROM Bank b", Bank.class);
 		return query.getResultList();

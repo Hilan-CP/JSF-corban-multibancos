@@ -1,14 +1,18 @@
 package repository;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import model.entity.Proposal;
 
-public class ProposalRepository {
-
+@Dependent
+public class ProposalRepository implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private EntityManager entityManager;
 	
@@ -25,7 +29,7 @@ public class ProposalRepository {
 	}
 	
 	public List<Proposal> findAll() {
-		TypedQuery<Proposal> query = entityManager.createQuery("SELECT p FROM proposal p", Proposal.class);
+		TypedQuery<Proposal> query = entityManager.createQuery("SELECT p FROM Proposal p", Proposal.class);
 		return query.getResultList();
 	}
 	

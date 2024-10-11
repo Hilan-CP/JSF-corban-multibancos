@@ -1,14 +1,18 @@
 package service;
 
+import java.io.Serializable;
 import java.util.List;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Proposal;
 import repository.ProposalRepository;
 import util.Transaction;
 
-public class ProposalService {
-
+@Dependent
+public class ProposalService implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private ProposalRepository repository;
 	

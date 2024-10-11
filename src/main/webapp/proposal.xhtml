@@ -8,44 +8,122 @@
 	
 	<ui:define name="content">
 		<h3>PROPOSTAS</h3>
-		<h:form>
-			<p:toolbar>
+		<h:form id="contentForm">
+			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:inputText size="20" />
-					<p:commandButton value="Buscar" icon="pi pi-search" />
-					<p:commandButton value="Criar" icon="pi pi-plus-circle" />
-					<p:commandButton value="Alterar" icon="pi pi-pencil" />
+					
+					<p:commandButton value="Buscar" icon="pi pi-search"
+						actionListener="#{proposalBean.findProposals}" update="proposalTable"/>
+					<p:commandButton value="Criar" icon="pi pi-plus"
+						actionListener="#{proposalBean.initializeForm}"
+						oncomplete="PF('proposalDialog').show()" update="proposalDialog"/>
+					<p:commandButton value="Alterar" icon="pi pi-pencil"
+						actionListener="#{proposalBean.initializeForm}"
+						oncomplete="PF('proposalDialog').show()" update="proposalDialog"
+						disabled="#{proposalBean.proposal == null}"/>
 				</f:facet>
 			</p:toolbar>
-			<p:dataTable value="{0}" >
-				<p:column headerText="id">
-					<h:outputText value="123456" />
+			
+			<p:dataTable id="proposalTable" value="#{proposalBean.proposalList}"
+				var="proposal" selectionMode="single" selection="#{proposalBean.proposal}"
+				rowKey="#{proposal.id}" lazy="true">
+				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
+				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
+				
+				<p:column headerText="código">
+					<h:outputText value="#{proposal.id}" />
 				</p:column>
 				<p:column headerText="valor">
-					<h:outputText value="110,50" />
+					<h:outputText value="#{proposal.value}">
+						<f:convertNumber type="currency" currencyCode="BRL"/>
+					</h:outputText>
 				</p:column>
 				<p:column headerText="data gerado">
-					<h:outputText value="20/02/2024" />
+					<h:outputText value="#{proposal.generation}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</h:outputText>
 				</p:column>
 				<p:column headerText="data pago">
-					<h:outputText value="21/02/2024" />
+					<h:outputText value="#{proposal.payment}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</h:outputText>
 				</p:column>
 				<p:column headerText="status">
-					<h:outputText value="CONTRATADA" />
+					<h:outputText value="#{proposal.status}" />
 				</p:column>
 				<p:column headerText="funcionário">
-					<h:outputText value="Jonas" />
+					<h:outputText value="#{proposal.employee.name}" />
 				</p:column>
 				<p:column headerText="banco">
-					<h:outputText value="NOME DO BANCO" />
+					<h:outputText value="#{proposal.bank.shortName}" />
 				</p:column>
 				<p:column headerText="cpf cliente">
-					<h:outputText value="12345678900" />
+					<h:outputText value="#{proposal.customer.cpf}" />
 				</p:column>
 				<p:column headerText="nome do cliente">
-					<h:outputText value="Joãozinho" />
+					<h:outputText value="#{proposal.customer.name}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
+		
+		<p:dialog id="proposalDialog" header="Proposta" widgetVar="proposalDialog"
+			resizable="false" modal="true" closeOnEscape="true">
+			<h:form>
+				<h:panelGrid columns="2" rendered="#{proposalBean.proposal != null}"
+					cellpadding="10">
+					<p:outputLabel value="Código: "/>
+					<p:inputText size="45" value="#{proposalBean.proposal.id}"
+						disabled="#{proposalBean.proposal.id > 0}"/>
+					
+					<p:outputLabel value="Valor: "/>
+					<p:inputText size="45" value="#{proposalBean.proposal.value}"/>
+					
+					<p:outputLabel value="Data gerado: "/>
+					<p:inputMask size="45" value="#{proposalBean.proposal.generation}"
+						mask="99/99/9999">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</p:inputMask>
+					
+					<p:outputLabel value="Data pago: "/>
+					<p:inputMask size="45" value="#{proposalBean.proposal.payment}"
+						mask="99/99/9999">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</p:inputMask>
+					
+					<p:outputLabel value="Funcionário: "/>
+					<p:selectOneMenu value="#{proposalBean.proposal.employee}"
+						converter="employeeConverter">
+						<f:selectItems value="#{proposalBean.employeeList}"
+							var="employee" itemLabel="#{employee.name}" itemValue="#{employee}"/>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Banco: "/>
+					<p:selectOneMenu value="#{proposalBean.proposal.bank}"
+						converter="bankConverter">
+						<f:selectItems value="#{proposalBean.bankList}"
+							var="bank" itemLabel="#{bank.shortName}" itemValue="#{bank}"/>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="CPF cliente: "/>
+					<p:inputText size="45" value="#{proposalBean.proposal.customer.cpf}"/>
+					
+					<p:outputLabel value="Nome cliente: "/>
+					<p:inputText size="45" value="#{proposalBean.proposal.customer.name}"/>
+					
+					<p:outputLabel value="Telefone cliente: "/>
+					<p:inputText size="45" value="#{proposalBean.proposal.customer.phone}"/>
+					
+					<p:outputLabel value="Nascimento cliente: "/>
+					<p:inputMask size="45" value="#{proposalBean.proposal.customer.birthDate}"
+						mask="99/99/9999">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</p:inputMask>
+					
+					<p:commandButton value="Salvar" actionListener="#{proposalBean.save}"
+						oncomplete="PF('proposalDialog').hide()"/>
+				</h:panelGrid>
+			</h:form>	
+		</p:dialog>
 	</ui:define>
 </ui:composition>
