@@ -11,7 +11,21 @@
 		<h:form id="contentForm">
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:inputText size="20" />
+					<p:inputText size="20" value="#{proposalBean.searchTerm}"/>
+					<p:selectOneMenu value="#{proposalBean.searchOption}">
+						<f:selectItem itemLabel="Nome funcionário" itemValue="Employee"/>
+						<f:selectItem itemLabel="Código banco" itemValue="Bank"/>
+						<f:selectItem itemLabel="Código proposta" itemValue="Proposal"/>
+					</p:selectOneMenu>
+					
+					<p:datePicker size="8" value="#{proposalBean.beginDate}"
+						pattern="dd/MM/yyyy"/>
+					<p:datePicker size="8" value="#{proposalBean.endDate}"
+						pattern="dd/MM/yyyy"/>
+					<p:selectOneMenu value="#{proposalBean.dateOption}">
+						<f:selectItem itemLabel="Data gerado" itemValue="generation"/>
+						<f:selectItem itemLabel="Data pagamento" itemValue="payment"/>
+					</p:selectOneMenu>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{proposalBean.findProposals}" update="proposalTable"/>
