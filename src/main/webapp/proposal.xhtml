@@ -30,10 +30,10 @@
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{proposalBean.findProposals}" update="proposalTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
-						actionListener="#{proposalBean.initializeForm}"
+						actionListener="#{proposalBean.initializeCreate}"
 						oncomplete="PF('proposalDialog').show()" update="proposalDialog"/>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
-						actionListener="#{proposalBean.initializeForm}"
+						actionListener="#{proposalBean.initializeUpdate}"
 						oncomplete="PF('proposalDialog').show()" update="proposalDialog"
 						disabled="#{proposalBean.proposal == null}"/>
 				</f:facet>
@@ -120,17 +120,22 @@
 					</p:selectOneMenu>
 					
 					<p:outputLabel value="CPF cliente: "/>
-					<p:inputText size="45" value="#{proposalBean.proposal.customer.cpf}"/>
-					
+					<p:inputText size="40" value="#{proposalBean.proposal.customer.cpf}">
+						<p:commandButton icon="pi pi-search" actionListener="#{proposalBean.findCustomer}"
+							update="@form"/>
+					</p:inputText>
+
 					<p:outputLabel value="Nome cliente: "/>
-					<p:inputText size="45" value="#{proposalBean.proposal.customer.name}"/>
+					<p:inputText size="45" value="#{proposalBean.proposal.customer.name}"
+						disabled="#{proposalBean.proposal.customer.cpf > 0}"/>
 					
 					<p:outputLabel value="Telefone cliente: "/>
-					<p:inputText size="45" value="#{proposalBean.proposal.customer.phone}"/>
+					<p:inputText size="45" value="#{proposalBean.proposal.customer.phone}"
+						disabled="#{proposalBean.proposal.customer.cpf > 0}"/>
 					
 					<p:outputLabel value="Nascimento cliente: "/>
 					<p:inputMask size="45" value="#{proposalBean.proposal.customer.birthDate}"
-						mask="99/99/9999">
+						mask="99/99/9999" disabled="#{proposalBean.proposal.customer.cpf > 0}">
 						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 					</p:inputMask>
 					

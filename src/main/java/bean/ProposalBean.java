@@ -13,6 +13,7 @@ import model.entity.Employee;
 import model.entity.Proposal;
 import model.enumeration.ProposalStatus;
 import service.BankService;
+import service.CustomerService;
 import service.EmployeeService;
 import service.ProposalService;
 
@@ -29,6 +30,9 @@ public class ProposalBean implements Serializable{
 	
 	@Inject
 	private BankService bankService;
+	
+	@Inject
+	private CustomerService customerService;
 	
 	private Proposal proposal;
 	private List<Proposal> proposalList;
@@ -70,30 +74,43 @@ public class ProposalBean implements Serializable{
 	}
 	
 	private List<Proposal> findById(){
-		List<Proposal> result = List.of();
-		Proposal p = proposalService.findById(Long.parseLong(searchTerm));
-		if(p != null) {
-			result = List.of(p);
+		List<Proposal> list = List.of();
+		Proposal result = proposalService.findById(Long.parseLong(searchTerm));
+		if(result != null) {
+			list = List.of(result);
 		}
-		return result;
+		return list;
+	}
+	
+	public void findCustomer(){
+		String cpf = proposal.getCustomer().getCpf();
+		Customer result = customerService.findByCpf(cpf);
+		if(result == null) {
+			result = new Customer();
+		}
+		proposal.setCustomer(result);
 	}
 	
 	public void save() {
 		proposalService.save(proposal);
 	}
 	
-	public void initializeForm() {
+	public void initializeCreate() {
 		initializeProposal();
 		findEmployees();
 		findBanks();
 	}
 	
+	public void initializeUpdate() {
+		findEmployees();
+		findBanks();
+	}
+	
 	private void initializeProposal() {
-		if (proposal == null) {
-			proposal = new Proposal();
-			proposal.setStatus(ProposalStatus.SOLICITADA);
-			proposal.setCustomer(new Customer());
-		}
+		proposal = new Proposal();
+		proposal.setStatus(ProposalStatus.SOLICITADA);
+		proposal.setCustomer(new Customer());
+		proposal.setGeneration(new Date());
 	}
 	
 	private void findEmployees() {
