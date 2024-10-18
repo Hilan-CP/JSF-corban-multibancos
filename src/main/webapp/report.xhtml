@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<ui:composition template="layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="content">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:selectCheckboxMenu multiple="true" converter="teamConverter"
+						value="#{reportBean.selectedTeams}">
+						<f:selectItems value="#{reportBean.teams}" var="team"
+							itemLabel="#{team.name}" itemValue="#{team}"/>
+					</p:selectCheckboxMenu>
+					<p:commandButton value="Buscar" update="reportTable"
+						actionListener="#{reportBean.findProposals}" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable id="reportTable" value="#{reportBean.employees}" var="employee"
+				lazy="false">
+				<p:headerRow groupBy="#{employee.team}"
+					expandable="true"
+					expanded="true">
+					<p:column>
+						<p:outputLabel value="#{employee.team.name}"/>
+					</p:column>
+				</p:headerRow>
+				
+				<p:column headerText="funcionário">
+					<h:outputText value="#{employee.name}"/>
+				</p:column>
+				<p:column headerText="quantidade">
+					<h:outputText value="#{reportBean.count(employee)}"/>
+				</p:column>
+				<p:column headerText="soma gerado">
+					<h:outputText value="#{reportBean.sumGeneration(employee)}"/>
+				</p:column>
+				<p:column headerText="soma pago">
+					<h:outputText value="#{reportBean.sumPayment(employee)}"/>
+				</p:column>
+				<p:column headerText="resultado mês">
+					<h:outputText value="#{reportBean.monthlyResult(employee)}"/>
+				</p:column>
+				<p:column headerText="tendencia mês">
+					<h:outputText value="#{reportBean.monthlyTrend(employee)}"/>
+				</p:column>
+				
+				<p:summaryRow>
+					<p:column>
+						<h:outputText value="Subtotal"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{reportBean.subtotalCount(employee.team)}"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{reportBean.subtotalSumGeneration(employee.team)}"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{reportBean.subtotalSumPayment(employee.team)}"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{reportBean.subtotalMonthlyResult(employee.team)}"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{reportBean.subtotalMonthlyTrend(employee.team)}"/>
+					</p:column>
+				</p:summaryRow>
+				
+				<p:columnGroup type="footer">
+					<p:column>
+						<f:facet name="footer">
+							<h:outputText value="Total"/>
+						</f:facet>
+					</p:column>
+					<p:column>
+						<f:facet name="footer">
+							<h:outputText value="#{reportBean.totalCount()}"/>
+						</f:facet>
+					</p:column>
+					<p:column>
+						<f:facet name="footer">
+							<h:outputText value="#{reportBean.totalSumGeneration()}"/>
+						</f:facet>
+					</p:column>
+					<p:column>
+						<f:facet name="footer">
+							<h:outputText value="#{reportBean.totalSumPayment()}"/>
+						</f:facet>
+					</p:column>
+					<p:column>
+						<f:facet name="footer">
+							<h:outputText value="#{reportBean.totalMonthlyResult()}"/>
+						</f:facet>
+					</p:column>
+					<p:column>
+						<f:facet name="footer">
+							<h:outputText value="#{reportBean.totalMonthlyTrend()}"/>
+						</f:facet>
+					</p:column>
+				</p:columnGroup>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

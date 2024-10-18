@@ -9,12 +9,12 @@ import model.entity.Team;
 import service.TeamService;
 
 @FacesConverter(value = "teamConverter", managed = true)
-public class TeamConverter implements Converter<Object>{
+public class TeamConverter implements Converter<Team>{
 	
 	private TeamService service;
 
 	@Override
-	public Object getAsObject(FacesContext context, UIComponent component, String value) {
+	public Team getAsObject(FacesContext context, UIComponent component, String value) {
 		try {
 			service = CDI.current().select(TeamService.class).get();
 			return service.findById(Long.parseLong(value));
@@ -25,10 +25,9 @@ public class TeamConverter implements Converter<Object>{
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Team value) {
 		try {
-			Team team = (Team)value;
-			return team.getId().toString();
+			return value.getId().toString();
 		}
 		catch(Exception e) {
 			return null;

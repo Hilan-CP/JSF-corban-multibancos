@@ -26,5 +26,9 @@
 			<from-outcome>proposal</from-outcome>
 			<to-view-id>/proposal.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>report</from-outcome>
+			<to-view-id>/report.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 </faces-config>
