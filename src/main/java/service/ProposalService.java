@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Proposal;
+import model.entity.Team;
 import repository.ProposalRepository;
 import util.Transaction;
 
@@ -51,6 +52,10 @@ public class ProposalService implements Serializable{
 	
 	public List<Proposal> findByBankCodeAndPaymentDate(Long code, LocalDate beginDate, LocalDate endDate){
 		return repository.findByBankCodeAndPaymentDate(code, beginDate, endDate);
+	}
+	
+	public List<Proposal> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
+		return repository.findByTeamAndDate(teams, beginDate, endDate);
 	}
 	
 	@Transaction

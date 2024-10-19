@@ -43,18 +43,24 @@ public class ReportBean implements Serializable{
 		today = LocalDate.of(2024, 8, 15);
 	}
 	
-	public void findTeams() {
+	private void findTeams() {
 		teams = teamService.findAll();
 	}
 	
-	public void findProposals() {
-		LocalDate begin = LocalDate.of(2024, 8, 1);
-		LocalDate end = LocalDate.of(2024, 8, 30);
-		proposals = proposalService.findByGenerationDate(begin, end);
-		loadEmployees();
+	public void find() {
+		if(!selectedTeams.isEmpty()) {
+			findProposals();
+			loadEmployees();
+		}
 	}
 	
-	public void loadEmployees() {
+	private void findProposals() {
+		LocalDate begin = LocalDate.of(2024, 8, 1);
+		LocalDate end = LocalDate.of(2024, 8, 30);
+		proposals = proposalService.findByTeamAndDate(selectedTeams, begin, end);
+	}
+	
+	private void loadEmployees() {
 		Map<String, Employee> map = new HashMap<>();
 		for(Proposal proposal : proposals) {
 			if(!map.containsKey(proposal.getEmployee().getCpf())) {

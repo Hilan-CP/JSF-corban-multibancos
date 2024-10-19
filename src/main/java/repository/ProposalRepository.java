@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import model.entity.Proposal;
+import model.entity.Team;
 
 @Dependent
 public class ProposalRepository implements Serializable{
@@ -80,6 +81,16 @@ public class ProposalRepository implements Serializable{
 					+ " WHERE b.code = :code AND p.payment BETWEEN :beginDate AND :endDate";
 		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
 		query.setParameter("code", code);
+		query.setParameter("beginDate", beginDate);
+		query.setParameter("endDate", endDate);
+		return query.getResultList();
+	}
+	
+	public List<Proposal> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
+		String jpql = "SELECT p FROM Proposal p JOIN p.employee e"
+					+ " WHERE e.team IN :teams AND p.generation BETWEEN :beginDate AND :endDate";
+		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
+		query.setParameter("teams", teams);
 		query.setParameter("beginDate", beginDate);
 		query.setParameter("endDate", endDate);
 		return query.getResultList();
