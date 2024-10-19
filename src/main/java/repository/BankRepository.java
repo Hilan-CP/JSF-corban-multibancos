@@ -29,7 +29,8 @@ public class BankRepository implements Serializable{
 	}
 	
 	public List<Bank> findAll() {
-		TypedQuery<Bank> query = entityManager.createQuery("SELECT b FROM Bank b", Bank.class);
+		String jpql = "SELECT b FROM Bank b";
+		TypedQuery<Bank> query = entityManager.createQuery(jpql, Bank.class);
 		return query.getResultList();
 	}
 	

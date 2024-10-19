@@ -29,7 +29,8 @@ public class TeamRepository implements Serializable{
 	}
 	
 	public List<Team> findAll(){
-		TypedQuery<Team> query = entityManager.createQuery("SELECT t FROM Team t", Team.class);
+		String jpql = "SELECT t FROM Team t";
+		TypedQuery<Team> query = entityManager.createQuery(jpql, Team.class);
 		return query.getResultList();
 	}
 	

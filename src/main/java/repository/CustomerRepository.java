@@ -29,19 +29,22 @@ public class CustomerRepository implements Serializable{
 	}
 	
 	public List<Customer> findByName(String name){
-		TypedQuery<Customer> query = entityManager.createQuery("SELECT c FROM Customer c WHERE c.name LIKE :name", Customer.class);
+		String jpql = "SELECT c FROM Customer c WHERE c.name LIKE :name";
+		TypedQuery<Customer> query = entityManager.createQuery(jpql, Customer.class);
 		query.setParameter("name", "%"+name+"%");
 		return query.getResultList();
 	}
 	
 	public List<Customer> findByPhone(String phone){
-		TypedQuery<Customer> query = entityManager.createQuery("SELECT c FROM Customer c WHERE c.phone LIKE :phone", Customer.class);
+		String jpql = "SELECT c FROM Customer c WHERE c.phone LIKE :phone";
+		TypedQuery<Customer> query = entityManager.createQuery(jpql, Customer.class);
 		query.setParameter("phone", "%"+phone+"%");
 		return query.getResultList();
 	}
 	
 	public List<Customer> findAll(){
-		TypedQuery<Customer> query = entityManager.createQuery("SELECT c FROM Customer c", Customer.class);
+		String jpql = "SELECT c FROM Customer c";
+		TypedQuery<Customer> query = entityManager.createQuery(jpql, Customer.class);
 		return query.getResultList();
 	}
 	

@@ -29,14 +29,15 @@ public class EmployeeRepository implements Serializable{
 	}
 	
 	public List<Employee> findByName(String name){
-		TypedQuery<Employee> query;
-		query = entityManager.createQuery("SELECT e FROM Employee e WHERE e.name LIKE :name", Employee.class);
+		String jpql = "SELECT e FROM Employee e WHERE e.name LIKE :name";
+		TypedQuery<Employee> query = entityManager.createQuery(jpql, Employee.class);
 		query.setParameter("name", "%"+name+"%");
 		return query.getResultList();
 	}
 	
 	public List<Employee> findAll(){
-		TypedQuery<Employee> query = entityManager.createQuery("SELECT e FROM Employee e", Employee.class);
+		String jpql = "SELECT e FROM Employee e";
+		TypedQuery<Employee> query = entityManager.createQuery(jpql, Employee.class);
 		return query.getResultList();
 	}
 	
