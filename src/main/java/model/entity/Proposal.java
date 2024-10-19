@@ -1,7 +1,7 @@
 package model.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -9,8 +9,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import model.enumeration.ProposalStatus;
 
 @Entity
@@ -21,12 +19,8 @@ public class Proposal implements Serializable{
 	private Long id;
 	
 	private Double value;
-	
-	@Temporal(TemporalType.DATE)
-	private Date generation;
-	
-	@Temporal(TemporalType.DATE)
-	private Date payment;
+	private LocalDate generation;
+	private LocalDate payment;
 	
 	@Enumerated(EnumType.STRING)
 	private ProposalStatus status;
@@ -56,19 +50,19 @@ public class Proposal implements Serializable{
 		this.value = value;
 	}
 
-	public Date getGeneration() {
+	public LocalDate getGeneration() {
 		return generation;
 	}
 
-	public void setGeneration(Date generation) {
+	public void setGeneration(LocalDate generation) {
 		this.generation = generation;
 	}
 
-	public Date getPayment() {
+	public LocalDate getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Date payment) {
+	public void setPayment(LocalDate payment) {
 		this.payment = payment;
 	}
 

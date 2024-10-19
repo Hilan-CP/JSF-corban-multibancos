@@ -1,14 +1,12 @@
 package model.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 public class Customer implements Serializable{
@@ -23,8 +21,7 @@ public class Customer implements Serializable{
 	@Column(length = 11)
 	private String phone;
 	
-	@Temporal(TemporalType.DATE)
-	private Date birthDate;
+	private LocalDate birthDate;
 
 	public String getCpf() {
 		return cpf;
@@ -50,11 +47,11 @@ public class Customer implements Serializable{
 		this.phone = phone;
 	}
 
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 

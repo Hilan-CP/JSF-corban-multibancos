@@ -55,12 +55,12 @@
 				</p:column>
 				<p:column headerText="data gerado">
 					<h:outputText value="#{proposal.generation}">
-						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</h:outputText>
 				</p:column>
 				<p:column headerText="data pago">
 					<h:outputText value="#{proposal.payment}">
-						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</h:outputText>
 				</p:column>
 				<p:column headerText="status">
@@ -96,13 +96,13 @@
 					<p:outputLabel value="Data gerado: "/>
 					<p:inputMask size="45" value="#{proposalBean.proposal.generation}"
 						mask="99/99/9999">
-						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</p:inputMask>
 					
 					<p:outputLabel value="Data pago: "/>
 					<p:inputMask size="45" value="#{proposalBean.proposal.payment}"
 						mask="99/99/9999">
-						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</p:inputMask>
 					
 					<p:outputLabel value="Funcionário: "/>
@@ -136,7 +136,7 @@
 					<p:outputLabel value="Nascimento cliente: "/>
 					<p:inputMask size="45" value="#{proposalBean.proposal.customer.birthDate}"
 						mask="99/99/9999" disabled="#{proposalBean.proposal.customer.cpf > 0}">
-						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</p:inputMask>
 					
 					<p:commandButton value="Salvar" actionListener="#{proposalBean.save}"

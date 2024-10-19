@@ -1,7 +1,7 @@
 package bean;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.faces.view.ViewScoped;
@@ -41,8 +41,8 @@ public class ProposalBean implements Serializable{
 	private String searchTerm;
 	private String searchOption;
 	private String dateOption;
-	private Date beginDate;
-	private Date endDate;
+	private LocalDate beginDate;
+	private LocalDate endDate;
 	
 	public void findProposals() {
 		proposalList = findByOption();
@@ -110,7 +110,7 @@ public class ProposalBean implements Serializable{
 		proposal = new Proposal();
 		proposal.setStatus(ProposalStatus.SOLICITADA);
 		proposal.setCustomer(new Customer());
-		proposal.setGeneration(new Date());
+		proposal.setGeneration(LocalDate.now());
 	}
 	
 	private void findEmployees() {
@@ -169,19 +169,19 @@ public class ProposalBean implements Serializable{
 		this.dateOption = dateOption;
 	}
 
-	public Date getBeginDate() {
+	public LocalDate getBeginDate() {
 		return beginDate;
 	}
 
-	public void setBeginDate(Date beginDate) {
+	public void setBeginDate(LocalDate beginDate) {
 		this.beginDate = beginDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 }

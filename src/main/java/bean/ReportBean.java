@@ -1,8 +1,8 @@
 package bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,19 +33,23 @@ public class ReportBean implements Serializable{
 	private List<Team> teams;
 	private List<Proposal> proposals;
 	private List<Employee> employees;
-	//private Date today;
+	private LocalDate today;
 	
 	@PostConstruct
 	public void init() {
 		findTeams();
 		proposals = new ArrayList<>();
 		employees = new ArrayList<>();
-		//today
+		today = LocalDate.of(2024, 8, 15);
+	}
+	
+	public void findTeams() {
+		teams = teamService.findAll();
 	}
 	
 	public void findProposals() {
-		Date begin = new Date(124, 7, 1);
-		Date end = new Date(124, 7, 30);
+		LocalDate begin = LocalDate.of(2024, 8, 1);
+		LocalDate end = LocalDate.of(2024, 8, 30);
 		proposals = proposalService.findByGenerationDate(begin, end);
 		loadEmployees();
 	}
@@ -53,18 +57,15 @@ public class ReportBean implements Serializable{
 	public void loadEmployees() {
 		Map<String, Employee> map = new HashMap<>();
 		for(Proposal proposal : proposals) {
-			map.put(proposal.getEmployee().getCpf(), proposal.getEmployee());
+			if(!map.containsKey(proposal.getEmployee().getCpf())) {
+				map.put(proposal.getEmployee().getCpf(), proposal.getEmployee());
+			}
 		}
 		employees = map.values().stream().collect(Collectors.toList());
 	}
-	
-	public void findTeams() {
-		teams = teamService.findAll();
-	}
-	
+
 	public long count(Employee employee) {
 		long count = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getGeneration().equals(today) && proposal.getEmployee().equals(employee)) {
 				count = count + 1;
@@ -75,7 +76,6 @@ public class ReportBean implements Serializable{
 	
 	public double sumGeneration(Employee employee) {
 		double sum = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getGeneration().equals(today) && employee.equals(proposal.getEmployee())) {
 				sum = sum + proposal.getValue();
@@ -86,7 +86,6 @@ public class ReportBean implements Serializable{
 	
 	public double sumPayment(Employee employee) {
 		double sum = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getPayment().equals(today) && employee.equals(proposal.getEmployee())) {
 				sum = sum + proposal.getValue();
@@ -113,7 +112,6 @@ public class ReportBean implements Serializable{
 	
 	public long subtotalCount(Team team) {
 		long count = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team)) {
 				count = count + 1;
@@ -124,7 +122,6 @@ public class ReportBean implements Serializable{
 	
 	public double subtotalSumGeneration(Team team) {
 		double sum = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team)) {
 				sum = sum + proposal.getValue();
@@ -135,7 +132,6 @@ public class ReportBean implements Serializable{
 	
 	public double subtotalSumPayment(Team team) {
 		double sum = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getPayment().equals(today) && proposal.getEmployee().getTeam().equals(team)) {
 				sum = sum + proposal.getValue();
@@ -161,7 +157,6 @@ public class ReportBean implements Serializable{
 	
 	public long totalCount() {
 		long count = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getGeneration().equals(today)) {
 				count = count + 1;
@@ -172,7 +167,6 @@ public class ReportBean implements Serializable{
 	
 	public double totalSumGeneration() {
 		double sum = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getGeneration().equals(today)) {
 				sum = sum + proposal.getValue();
@@ -183,7 +177,6 @@ public class ReportBean implements Serializable{
 	
 	public double totalSumPayment() {
 		double sum = 0;
-		Date today = new Date(124, 7, 25);
 		for(Proposal proposal : proposals) {
 			if(proposal.getPayment().equals(today)) {
 				sum = sum + proposal.getValue();

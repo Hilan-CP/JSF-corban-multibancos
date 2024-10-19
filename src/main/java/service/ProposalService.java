@@ -1,7 +1,7 @@
 package service;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.enterprise.context.Dependent;
@@ -29,27 +29,27 @@ public class ProposalService implements Serializable{
 		return repository.findById(id);
 	}
 	
-	public List<Proposal> findByGenerationDate(Date beginDate, Date endDate){
+	public List<Proposal> findByGenerationDate(LocalDate beginDate, LocalDate endDate){
 		return repository.findByGenerationDate(beginDate, endDate);
 	}
 	
-	public List<Proposal> findByPaymentDate(Date beginDate, Date endDate){
+	public List<Proposal> findByPaymentDate(LocalDate beginDate, LocalDate endDate){
 		return repository.findByPaymentDate(beginDate, endDate);
 	}
 	
-	public List<Proposal> findByEmployeeNameAndGenerationDate(String name, Date beginDate, Date endDate){
+	public List<Proposal> findByEmployeeNameAndGenerationDate(String name, LocalDate beginDate, LocalDate endDate){
 		return repository.findByEmployeeNameAndGenerationDate(name, beginDate, endDate);
 	}
 	
-	public List<Proposal> findByEmployeeNameAndPaymentDate(String name, Date beginDate, Date endDate){
+	public List<Proposal> findByEmployeeNameAndPaymentDate(String name, LocalDate beginDate, LocalDate endDate){
 		return repository.findByEmployeeNameAndPaymentDate(name, beginDate, endDate);
 	}
 	
-	public List<Proposal> findByBankCodeAndGenerationDate(Long code, Date beginDate, Date endDate){
+	public List<Proposal> findByBankCodeAndGenerationDate(Long code, LocalDate beginDate, LocalDate endDate){
 		return repository.findByBankCodeAndGenerationDate(code, beginDate, endDate);
 	}
 	
-	public List<Proposal> findByBankCodeAndPaymentDate(Long code, Date beginDate, Date endDate){
+	public List<Proposal> findByBankCodeAndPaymentDate(Long code, LocalDate beginDate, LocalDate endDate){
 		return repository.findByBankCodeAndPaymentDate(code, beginDate, endDate);
 	}
 	
