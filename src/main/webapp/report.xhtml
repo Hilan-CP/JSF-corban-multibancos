@@ -26,7 +26,7 @@
 					expandable="true"
 					expanded="true">
 					<p:column>
-						<p:outputLabel value="#{employee.team.name}"/>
+						<h:outputText value="#{employee.team.name}"/>
 					</p:column>
 				</p:headerRow>
 				
@@ -37,16 +37,24 @@
 					<h:outputText value="#{reportBean.count(employee)}"/>
 				</p:column>
 				<p:column headerText="soma gerado">
-					<h:outputText value="#{reportBean.sumGeneration(employee)}"/>
+					<h:outputText value="#{reportBean.sumGeneration(employee)}">
+						<f:convertNumber type="currency" currencyCode="BRL"/>
+					</h:outputText>
 				</p:column>
 				<p:column headerText="soma pago">
-					<h:outputText value="#{reportBean.sumPayment(employee)}"/>
+					<h:outputText value="#{reportBean.sumPayment(employee)}">
+						<f:convertNumber type="currency" currencyCode="BRL"/>
+					</h:outputText>
 				</p:column>
 				<p:column headerText="resultado mês">
-					<h:outputText value="#{reportBean.monthlyResult(employee)}"/>
+					<h:outputText value="#{reportBean.monthlyResult(employee)}">
+						<f:convertNumber type="currency" currencyCode="BRL"/>
+					</h:outputText>
 				</p:column>
 				<p:column headerText="tendencia mês">
-					<h:outputText value="#{reportBean.monthlyTrend(employee)}"/>
+					<h:outputText value="#{reportBean.monthlyTrend(employee)}">
+						<f:convertNumber type="currency" currencyCode="BRL"/>
+					</h:outputText>
 				</p:column>
 				
 				<p:summaryRow>
@@ -57,16 +65,24 @@
 						<h:outputText value="#{reportBean.subtotalCount(employee.team)}"/>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalSumGeneration(employee.team)}"/>
+						<h:outputText value="#{reportBean.subtotalSumGeneration(employee.team)}">
+							<f:convertNumber type="currency" currencyCode="BRL"/>
+						</h:outputText>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalSumPayment(employee.team)}"/>
+						<h:outputText value="#{reportBean.subtotalSumPayment(employee.team)}">
+							<f:convertNumber type="currency" currencyCode="BRL"/>
+						</h:outputText>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalMonthlyResult(employee.team)}"/>
+						<h:outputText value="#{reportBean.subtotalMonthlyResult(employee.team)}">
+							<f:convertNumber type="currency" currencyCode="BRL"/>
+						</h:outputText>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalMonthlyTrend(employee.team)}"/>
+						<h:outputText value="#{reportBean.subtotalMonthlyTrend(employee.team)}">
+							<f:convertNumber type="currency" currencyCode="BRL"/>
+						</h:outputText>
 					</p:column>
 				</p:summaryRow>
 				
@@ -83,22 +99,30 @@
 					</p:column>
 					<p:column>
 						<f:facet name="footer">
-							<h:outputText value="#{reportBean.totalSumGeneration()}"/>
+							<h:outputText value="#{reportBean.totalSumGeneration()}">
+								<f:convertNumber type="currency" currencyCode="BRL"/>
+							</h:outputText>
 						</f:facet>
 					</p:column>
 					<p:column>
 						<f:facet name="footer">
-							<h:outputText value="#{reportBean.totalSumPayment()}"/>
+							<h:outputText value="#{reportBean.totalSumPayment()}">
+								<f:convertNumber type="currency" currencyCode="BRL"/>
+							</h:outputText>
 						</f:facet>
 					</p:column>
 					<p:column>
 						<f:facet name="footer">
-							<h:outputText value="#{reportBean.totalMonthlyResult()}"/>
+							<h:outputText value="#{reportBean.totalMonthlyResult()}">
+								<f:convertNumber type="currency" currencyCode="BRL"/>
+							</h:outputText>
 						</f:facet>
 					</p:column>
 					<p:column>
 						<f:facet name="footer">
-							<h:outputText value="#{reportBean.totalMonthlyTrend()}"/>
+							<h:outputText value="#{reportBean.totalMonthlyTrend()}">
+								<f:convertNumber type="currency" currencyCode="BRL"/>
+							</h:outputText>
 						</f:facet>
 					</p:column>
 				</p:columnGroup>

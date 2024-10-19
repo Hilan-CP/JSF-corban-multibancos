@@ -40,7 +40,7 @@ public class ReportBean implements Serializable{
 		findTeams();
 		proposals = new ArrayList<>();
 		employees = new ArrayList<>();
-		today = LocalDate.of(2024, 8, 15);
+		today = LocalDate.of(2024, 8, 25);
 	}
 	
 	private void findTeams() {
