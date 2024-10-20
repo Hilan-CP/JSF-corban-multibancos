@@ -26,12 +26,15 @@
 						actionListener="#{employeeBean.initializeForm}"
 						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
 						disabled="#{employeeBean.employee == null}"/>
+					<p:commandButton value="Exportar" icon="pi pi-download">
+						<p:dataExporter type="csv" target="employeeTable" fileName="funcionarios"/>
+					</p:commandButton>
 				</f:facet>
 			</p:toolbar>
 			
 			<p:dataTable id="employeeTable" value="#{employeeBean.employeeList}"
 				var="employee" selectionMode="single" selection="#{employeeBean.employee}"
-				rowKey="#{employee.cpf}" lazy="true">
+				rowKey="#{employee.cpf}" lazy="false">
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				

@@ -26,12 +26,15 @@
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('customerDialog').show()" update="customerDialog"
 						disabled="#{customerBean.customer == null}" />
+					<p:commandButton value="Exportar" icon="pi pi-download">
+						<p:dataExporter type="csv" target="customerTable" fileName="clientes"/>
+					</p:commandButton>
 				</f:facet>
 			</p:toolbar>
 			
 			<p:dataTable id="customerTable" value="#{customerBean.customerList}"
 				var="customer" selectionMode="single" selection="#{customerBean.customer}"
-				rowKey="#{customer.cpf}" lazy="true">
+				rowKey="#{customer.cpf}" lazy="false">
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				

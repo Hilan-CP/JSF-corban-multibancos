@@ -22,12 +22,15 @@
 					<p:commandButton value="Apagar" icon="pi pi-trash"
 						actionListener="#{teamBean.delete}"
 						disabled="#{teamBean.team == null}" />
+					<p:commandButton value="Exportar" icon="pi pi-download">
+						<p:dataExporter type="csv" target="teamTable" fileName="equipes"/>
+					</p:commandButton>
 				</f:facet>
 			</p:toolbar>
 			
 			<p:dataTable id="teamTable" value="#{teamBean.teamList}" var="team"
 				selectionMode="single" selection="#{teamBean.team}" rowKey="#{team.id}"
-				lazy="true" >
+				lazy="false" >
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				<p:column headerText="id">

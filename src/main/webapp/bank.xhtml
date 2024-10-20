@@ -19,12 +19,15 @@
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('bankDialog').show()" update="bankDialog"
 						disabled="#{bankBean.bank == null}"/>
+					<p:commandButton value="Exportar" icon="pi pi-download">
+						<p:dataExporter type="csv" target="bankTable" fileName="bancos"/>
+					</p:commandButton>
 				</f:facet>
 			</p:toolbar>
 			
 			<p:dataTable id="bankTable" value="#{bankBean.bankList}" var="bank"
 				selectionMode="single" selection="#{bankBean.bank}"
-				rowKey="#{bank.id}" lazy="true">
+				rowKey="#{bank.id}" lazy="false">
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				
