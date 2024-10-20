@@ -18,10 +18,12 @@
 						<f:selectItem itemLabel="Código proposta" itemValue="Proposal"/>
 					</p:selectOneMenu>
 					
-					<p:datePicker size="8" value="#{proposalBean.beginDate}"
-						pattern="dd/MM/yyyy"/>
-					<p:datePicker size="8" value="#{proposalBean.endDate}"
-						pattern="dd/MM/yyyy"/>
+					<p:datePicker size="8" value="#{proposalBean.beginDate}" pattern="dd/MM/yyyy">
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
+					</p:datePicker>
+					<p:datePicker size="8" value="#{proposalBean.endDate}" pattern="dd/MM/yyyy">
+						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
+					</p:datePicker>
 					<p:selectOneMenu value="#{proposalBean.dateOption}">
 						<f:selectItem itemLabel="Data gerado" itemValue="generation"/>
 						<f:selectItem itemLabel="Data pagamento" itemValue="payment"/>
@@ -91,7 +93,9 @@
 						disabled="#{proposalBean.proposal.id > 0}"/>
 					
 					<p:outputLabel value="Valor: "/>
-					<p:inputText size="45" value="#{proposalBean.proposal.value}"/>
+					<p:inputNumber size="45" value="#{proposalBean.proposal.value}"
+						symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator=".">
+					</p:inputNumber>
 					
 					<p:outputLabel value="Data gerado: "/>
 					<p:inputMask size="45" value="#{proposalBean.proposal.generation}"
