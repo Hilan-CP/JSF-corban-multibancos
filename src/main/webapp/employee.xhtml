@@ -21,11 +21,15 @@
 						actionListener="#{employeeBean.findEmployees}" update="employeeTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{employeeBean.initializeForm}"
-						oncomplete="PF('employeeDialog').show()" update="employeeDialog"/>
+						oncomplete="PF('employeeDialog').show()" update="employeeDialog">
+						<p:resetInput target="employeeDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						actionListener="#{employeeBean.initializeForm}"
 						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
-						disabled="#{employeeBean.employee == null}"/>
+						disabled="#{employeeBean.employee == null}">
+						<p:resetInput target="employeeDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Exportar" icon="pi pi-download">
 						<p:dataExporter type="csv" target="employeeTable" fileName="funcionarios"/>
 					</p:commandButton>
@@ -56,6 +60,7 @@
 		<p:dialog id="employeeDialog" header="Funcionário" widgetVar="employeeDialog"
 			resizable="false" modal="true" closeOnEscape="true">
 			<h:form>
+				<p:messages />
 				<h:panelGrid columns="2" rendered="#{employeeBean.employee != null}"
 					cellpadding="10">
 					<p:outputLabel value="CPF: "/>
@@ -80,7 +85,8 @@
 					</p:selectOneMenu>
 					
 					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
-						oncomplete="PF('employeeDialog').hide()"/>
+						oncomplete="if(!args.validationFailed) PF('employeeDialog').hide()"
+						update="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

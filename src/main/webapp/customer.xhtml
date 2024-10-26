@@ -22,10 +22,14 @@
 						actionListener="#{customerBean.find}" update="customerTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{customerBean.initializeCustomer}"
-						oncomplete="PF('customerDialog').show()" update="customerDialog"/>
+						oncomplete="PF('customerDialog').show()" update="customerDialog">
+						<p:resetInput target="customerDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('customerDialog').show()" update="customerDialog"
-						disabled="#{customerBean.customer == null}" />
+						disabled="#{customerBean.customer == null}">
+						<p:resetInput target="customerDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Exportar" icon="pi pi-download">
 						<p:dataExporter type="csv" target="customerTable" fileName="clientes"/>
 					</p:commandButton>
@@ -58,6 +62,7 @@
 		<p:dialog id="customerDialog" header="Cliente" widgetVar="customerDialog"
 			resizable="false" modal="true" closeOnEscape="true">
 			<h:form>
+				<p:messages />
 				<h:panelGrid columns="2" rendered="#{customerBean.customer != null}"
 					cellpadding="10">
 					<p:outputLabel value="CPF"/>
@@ -77,7 +82,8 @@
 					</p:inputMask>
 					
 					<p:commandButton value="Salvar" actionListener="#{customerBean.save}"
-						oncomplete="PF('customerDialog').hide()"/>
+						oncomplete="if(!args.validationFailed) PF('customerDialog').hide()"
+						update="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

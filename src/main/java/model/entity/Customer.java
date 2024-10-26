@@ -7,20 +7,27 @@ import java.util.Objects;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Customer implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	@NotBlank(message = "CPF deve ser informado")
 	@Id
 	@Column(length = 11)
 	private String cpf;
 	
+	@NotBlank(message = "nome deve ser informado")
 	private String name;
 	
+	@Size(min = 11, max = 11, message = "telefone deve ser informado com DDD+número")
 	@Column(length = 11)
 	private String phone;
 	
+	@NotNull(message = "data de nascimento deve ser informada")
 	private LocalDate birthDate;
 
 	public String getCpf() {

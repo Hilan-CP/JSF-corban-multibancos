@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Bank implements Serializable{
@@ -17,9 +19,11 @@ public class Bank implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotNull(message = "código bancário deve ser informado")
 	@Column(unique = true)
 	private Integer code;
 	
+	@NotBlank(message = "nome do banco deve ser informado")
 	private String shortName;
 
 	public Long getId() {

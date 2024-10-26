@@ -15,10 +15,14 @@
 						actionListener="#{bankBean.findAll}" update="bankTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus-circle"
 						actionListener="#{bankBean.initializeBank}"
-						oncomplete="PF('bankDialog').show()" update="bankDialog"/>
+						oncomplete="PF('bankDialog').show()" update="bankDialog">
+						<p:resetInput target="bankDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('bankDialog').show()" update="bankDialog"
-						disabled="#{bankBean.bank == null}"/>
+						disabled="#{bankBean.bank == null}">
+						<p:resetInput target="bankDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Exportar" icon="pi pi-download">
 						<p:dataExporter type="csv" target="bankTable" fileName="bancos"/>
 					</p:commandButton>
@@ -43,16 +47,18 @@
 		<p:dialog id="bankDialog" header="Banco" widgetVar="bankDialog"
 			resizable="false" modal="true" closeOnEscape="true">
 			<h:form>
+				<p:messages />
 				<h:panelGrid columns="2" rendered="#{bankBean.bank != null}"
 					cellpadding="10">
 					<p:outputLabel value="Código: "/>
-					<p:inputText size="45" value="#{bankBean.bank.code}"/>
+					<p:inputNumber size="45" value="#{bankBean.bank.code}" decimalPlaces="0"/>
 					
 					<p:outputLabel value="Nome: "/>
 					<p:inputText size="45" value="#{bankBean.bank.shortName}"/>
 					
 					<p:commandButton value="Salvar" actionListener="#{bankBean.save}"
-						oncomplete="PF('bankDialog').hide()"/>
+						oncomplete="if(!args.validationFailed) PF('bankDialog').hide()"
+						update="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

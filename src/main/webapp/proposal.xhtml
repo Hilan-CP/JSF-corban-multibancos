@@ -33,11 +33,15 @@
 						actionListener="#{proposalBean.findProposals}" update="proposalTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{proposalBean.initializeCreate}"
-						oncomplete="PF('proposalDialog').show()" update="proposalDialog"/>
+						oncomplete="PF('proposalDialog').show()" update="proposalDialog">
+						<p:resetInput target="proposalDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						actionListener="#{proposalBean.initializeUpdate}"
 						oncomplete="PF('proposalDialog').show()" update="proposalDialog"
-						disabled="#{proposalBean.proposal == null}"/>
+						disabled="#{proposalBean.proposal == null}">
+						<p:resetInput target="proposalDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Exportar" icon="pi pi-download">
 						<p:dataExporter type="csv" target="proposalTable" fileName="propostas"/>
 					</p:commandButton>
@@ -89,6 +93,7 @@
 		<p:dialog id="proposalDialog" header="Proposta" widgetVar="proposalDialog"
 			resizable="false" modal="true" closeOnEscape="true">
 			<h:form>
+				<p:messages />
 				<h:panelGrid columns="2" rendered="#{proposalBean.proposal != null}"
 					cellpadding="10">
 					<p:outputLabel value="Código: "/>
@@ -147,7 +152,8 @@
 					</p:inputMask>
 					
 					<p:commandButton value="Salvar" actionListener="#{proposalBean.save}"
-						oncomplete="PF('proposalDialog').hide()"/>
+						oncomplete="if(!args.validationFailed) PF('proposalDialog').hide()"
+						update="@form"/>
 				</h:panelGrid>
 			</h:form>	
 		</p:dialog>

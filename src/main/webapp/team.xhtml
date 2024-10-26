@@ -15,10 +15,14 @@
 						actionListener="#{teamBean.findAll}" update="teamTable" />
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{teamBean.initializeTeam}"
-						oncomplete="PF('teamDialog').show()" update="teamDialog" />
+						oncomplete="PF('teamDialog').show()" update="teamDialog">
+						<p:resetInput target="teamDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('teamDialog').show()" update="teamDialog"
-						disabled="#{teamBean.team == null}" />
+						disabled="#{teamBean.team == null}">
+						<p:resetInput target="teamDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Apagar" icon="pi pi-trash"
 						actionListener="#{teamBean.delete}"
 						disabled="#{teamBean.team == null}" />
@@ -43,14 +47,16 @@
 		</h:form>
 
 		<p:dialog id="teamDialog" header="Nova equipe" widgetVar="teamDialog"
-			resizable="false" modal="true" closeOnEscape="true" width="900">
+			resizable="false" modal="true" closeOnEscape="true">
 			<h:form>
+				<p:messages />
 				<h:panelGrid columns="2" rendered="#{teamBean.team != null}"
 					cellpadding="10">
 					<p:outputLabel value="Nome: " />
 					<p:inputText size="45" value="#{teamBean.team.name}" />
 					<p:commandButton value="Salvar" actionListener="#{teamBean.save}"
-						oncomplete="PF('teamDialog').hide()" />
+						oncomplete="if(!args.validationFailed) PF('teamDialog').hide()"
+						update="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

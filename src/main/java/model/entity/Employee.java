@@ -9,18 +9,23 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import model.enumeration.EmployeeType;
 
 @Entity
 public class Employee implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	@NotBlank(message = "CPF deve ser informado")
 	@Id
 	@Column(length = 11)
 	private String cpf;
 	
+	@NotBlank(message = "nome deve ser informado")
 	private String name;
 	
+	@NotNull(message = "tipo de funcionário de ser informado")
 	@Enumerated(EnumType.STRING)
 	private EmployeeType type;
 	
