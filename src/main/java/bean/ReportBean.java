@@ -55,9 +55,9 @@ public class ReportBean implements Serializable{
 	}
 	
 	private void findProposals() {
-		LocalDate begin = LocalDate.of(2024, 8, 1);
-		LocalDate end = LocalDate.of(2024, 8, 30);
-		proposals = proposalService.findByTeamAndDate(selectedTeams, begin, end);
+		LocalDate firstDayOfMonth = LocalDate.of(2024, 8, 1);
+		LocalDate lastDayOfMonth = LocalDate.of(2024, 8, 30);
+		proposals = proposalService.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
 	}
 	
 	private void loadEmployees() {
@@ -71,137 +71,101 @@ public class ReportBean implements Serializable{
 	}
 
 	public long count(Employee employee) {
-		long count = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getGeneration().equals(today) && proposal.getEmployee().equals(employee)) {
-				count = count + 1;
-			}
-		}
-		return count;
+		return proposals.stream()
+				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().equals(employee))
+				.count();
 	}
 	
 	public double sumGeneration(Employee employee) {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getGeneration().equals(today) && employee.equals(proposal.getEmployee())) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().equals(employee))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double sumPayment(Employee employee) {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getPayment().equals(today) && employee.equals(proposal.getEmployee())) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getPayment().equals(today) && proposal.getEmployee().equals(employee))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double monthlyResult(Employee employee) {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(employee.equals(proposal.getEmployee())) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getEmployee().equals(employee))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double monthlyTrend(Employee employee) {
-		double trend = monthlyResult(employee);
-		//TODO formula para calculo da tendencia
-		return trend*2;
+		return calculateTrend(monthlyResult(employee));
 	}
 	
 	public long subtotalCount(Team team) {
-		long count = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team)) {
-				count = count + 1;
-			}
-		}
-		return count;
+		return proposals.stream()
+				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team))
+				.count();
 	}
 	
 	public double subtotalSumGeneration(Team team) {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team)) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double subtotalSumPayment(Team team) {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getPayment().equals(today) && proposal.getEmployee().getTeam().equals(team)) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getPayment().equals(today) && proposal.getEmployee().getTeam().equals(team))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double subtotalMonthlyResult(Team team) {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getEmployee().getTeam().equals(team)) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getEmployee().getTeam().equals(team))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double subtotalMonthlyTrend(Team team) {
-		double trend = subtotalMonthlyResult(team);
-		return trend*2;
+		return calculateTrend(subtotalMonthlyResult(team));
 	}
 	
 	public long totalCount() {
-		long count = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getGeneration().equals(today)) {
-				count = count + 1;
-			}
-		}
-		return count;
+		return proposals.stream()
+				.filter(proposal -> proposal.getGeneration().equals(today))
+				.count();
 	}
 	
 	public double totalSumGeneration() {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getGeneration().equals(today)) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getGeneration().equals(today))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double totalSumPayment() {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			if(proposal.getPayment().equals(today)) {
-				sum = sum + proposal.getValue();
-			}
-		}
-		return sum;
+		return proposals.stream()
+				.filter(proposal -> proposal.getPayment().equals(today))
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double totalMonthlyResult() {
-		double sum = 0;
-		for(Proposal proposal : proposals) {
-			sum = sum + proposal.getValue();
-		}
-		return sum;
+		return proposals.stream()
+				.mapToDouble(proposal -> proposal.getValue())
+				.sum();
 	}
 	
 	public double totalMonthlyTrend() {
-		double trend = totalMonthlyResult();
-		return trend*2;
+		return calculateTrend(totalMonthlyResult());
+	}
+	
+	private double calculateTrend(double result){
+		int daysElapsed = today.getDayOfMonth() - 1; //current day is not over yet
+		int lengthOfMonth = today.lengthOfMonth();
+		return result / daysElapsed * lengthOfMonth;
 	}
 	
 	public List<Team> getSelectedTeams() {
