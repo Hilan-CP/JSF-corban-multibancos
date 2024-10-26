@@ -92,7 +92,24 @@ public class ProposalBean implements Serializable{
 	}
 	
 	public void save() {
+		changeStatusIfPaid();
 		proposalService.save(proposal);
+	}
+	
+	public void cancelAndSave() {
+		proposal.setStatus(ProposalStatus.CANCELADA);
+		proposal.setPayment(null);
+		proposalService.save(proposal);
+	}
+	
+	private void changeStatusIfPaid() {
+		if(isPaid()) {
+			proposal.setStatus(ProposalStatus.CONTRATADA);
+		}
+	}
+	
+	private boolean isPaid() {
+		return proposal.getPayment() != null;
 	}
 	
 	public void initializeCreate() {

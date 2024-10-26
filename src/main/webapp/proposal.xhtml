@@ -42,6 +42,9 @@
 						disabled="#{proposalBean.proposal == null}">
 						<p:resetInput target="proposalDialog"/>
 					</p:commandButton>
+					<p:commandButton value="Cancelar Proposta" icon="pi pi-times"
+						actionListener="#{proposalBean.cancelAndSave}" update="proposalTable"
+						disabled="#{proposalBean.proposal == null}"/>
 					<p:commandButton value="Exportar" icon="pi pi-download">
 						<p:dataExporter type="csv" target="proposalTable" fileName="propostas"/>
 					</p:commandButton>
