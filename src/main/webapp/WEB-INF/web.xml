@@ -5,6 +5,7 @@
 	version="6.0">
 	<display-name>jsf-corban</display-name>
 
+<!-- mime mapping for primefaces font and icons -->
 	<mime-mapping>
 		<extension>ttf</extension>
 		<mime-type>font/ttf</mime-type>
@@ -32,7 +33,6 @@
 		<servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>facesServlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
