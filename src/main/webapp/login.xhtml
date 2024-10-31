@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8" />
+</h:head>
+<h:body>
+	<h:form>
+		<p:outputLabel value="Usuário"/><br/>
+		<p:inputText value="#{loginBean.username}"/><br/>
+		<p:outputLabel value="Senha"/><br/>
+		<p:inputText value="#{loginBean.password}"/><br/>
+		<p:commandButton value="Entrar" action="#{loginBean.login}" ajax="false"/>
+<!-- 	ajax precisa ser falso para que FacesContext possa fazer o redirecionamento correto -->
+<!-- 	https://stackoverflow.com/questions/62523627/login-not-forwarding-correctly-with-customformauth-and-oform -->
+		<p:messages />
+	</h:form>
+</h:body>
+</html>

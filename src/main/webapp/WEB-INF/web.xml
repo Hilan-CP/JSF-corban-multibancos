@@ -41,4 +41,37 @@
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>admin</web-resource-name>
+			<url-pattern>/bank.xhtml</url-pattern>
+			<url-pattern>/employee.xhtml</url-pattern>
+			<url-pattern>/report.xhtml</url-pattern>
+			<url-pattern>/team.xhtml</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>GESTOR</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>common_user</web-resource-name>
+			<url-pattern>/index.xhtml</url-pattern>
+			<url-pattern>/customer.xhtml</url-pattern>
+			<url-pattern>/proposal.xhtml</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>CONSULTOR</role-name>
+			<role-name>GESTOR</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-role>
+		<role-name>GESTOR</role-name>
+	</security-role>
+	<security-role>
+		<role-name>CONSULTOR</role-name>
+	</security-role>
 </web-app>
