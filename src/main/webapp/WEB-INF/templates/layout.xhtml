@@ -13,12 +13,12 @@
 		<p><b>CENTRAL MULTIBANCOS</b></p>
 	</header>
 	<div class="sidemenu">
-		<p><p:link value="Equipes" outcome="team"/></p>
-		<p><p:link value="Funcionários" outcome="employee"/></p>
-		<p><p:link value="Bancos" outcome="bank"/></p>
+		<p><p:link value="Equipes" outcome="team" rendered="#{userUtil.admin}"/></p>
+		<p><p:link value="Funcionários" outcome="employee" rendered="#{userUtil.admin}"/></p>
+		<p><p:link value="Bancos" outcome="bank" rendered="#{userUtil.admin}"/></p>
 		<p><p:link value="Clientes" outcome="customer"/></p>
 		<p><p:link value="Propostas" outcome="proposal"/></p>
-		<p><p:link value="Relatório" outcome="report"/></p>
+		<p><p:link value="Relatório" outcome="report" rendered="#{userUtil.admin}"/></p>
 	</div>
 	<div class="content">
 		<ui:insert name="content" />

@@ -1,8 +1,9 @@
-package security;
+package model.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +22,7 @@ public class Group implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(unique = true)
 	private String username;
 	
 	@Enumerated(EnumType.STRING)

@@ -2,7 +2,6 @@ package security;
 
 import java.io.Serializable;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
@@ -22,9 +21,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestScoped
 public class LoginBean implements Serializable{
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private InsertUser insert;
 	
 	@Inject
 	private ExternalContext externalContext;
@@ -38,24 +34,18 @@ public class LoginBean implements Serializable{
 	private String username;
 	private String password;
 	
-	@PostConstruct
-	public void init() {
-		insert.insert();
-	}
-	
 	public void login() throws Exception {
 		Credential credential = new UsernamePasswordCredential(username, new Password(password));
 		HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 		HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
 		AuthenticationParameters parameters = AuthenticationParameters.withParams().credential(credential);
-		System.out.println(parameters.isNewAuthentication());
 		AuthenticationStatus status = securityContext.authenticate(request, response, parameters);
 
 		if(status.equals(AuthenticationStatus.SEND_CONTINUE)) {
 			facesContext.responseComplete();
 		}
 		if(status.equals(AuthenticationStatus.SEND_FAILURE)) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválidos", null);
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválido", null);
 			facesContext.addMessage(null, message);
 		}
 		if(status.equals(AuthenticationStatus.SUCCESS)) {

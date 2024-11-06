@@ -22,6 +22,6 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 	            "Pbkdf2PasswordHash.SaltSizeBytes=32",
 	            "Pbkdf2PasswordHash.KeySizeBytes=32"
 	    })
-public class IdentityStoreConfig {
+public class SecurityConfig {
 	
 }

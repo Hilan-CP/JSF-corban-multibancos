@@ -1,12 +1,14 @@
-package security;
+package model.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class User implements Serializable{
@@ -16,7 +18,11 @@ public class User implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank(message = "Usuário obrigatório")
+	@Column(unique = true)
 	private String name;
+	
+	@NotBlank(message = "Senha obrigatória")
 	private String password;
 	
 	public Long getId() {

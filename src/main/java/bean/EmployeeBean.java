@@ -60,7 +60,6 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void save() {
-		System.out.println("teste salvar");
 		employeeService.save(employee);
 	}
 	
