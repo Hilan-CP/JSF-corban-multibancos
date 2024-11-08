@@ -31,6 +31,8 @@ public class Employee implements Serializable{
 	
 	@ManyToOne
 	private Team team;
+	
+	private Boolean active;
 
 	public String getCpf() {
 		return cpf;
@@ -62,6 +64,14 @@ public class Employee implements Serializable{
 
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	@Override

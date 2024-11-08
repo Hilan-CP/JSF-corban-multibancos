@@ -27,8 +27,17 @@ public class UserService implements Serializable{
 		return repository.findById(id);
 	}
 	
+	public User findByName(String name) {
+		return repository.findByName(name);
+	}
+	
 	@Transaction
 	public void save(User user) {
 		repository.save(user);
+	}
+	
+	@Transaction
+	public void delete(User user) {
+		repository.delete(user);
 	}
 }

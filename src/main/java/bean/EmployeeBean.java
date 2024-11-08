@@ -23,11 +23,24 @@ public class EmployeeBean implements Serializable{
 	@Inject
 	private TeamService teamService;
 	
+	@Inject
+	private UserBean userBean;
+	
 	private Employee employee;
 	private List<Employee> employeeList;
 	private List<Team> allTeams;
 	private String searchTerm;
 	private String searchOption;
+	
+	public void changeLogin() {
+		userBean.setEmployee(employee);
+		userBean.findUser();
+	}
+	
+	public void deleteLogin() {
+		userBean.setEmployee(employee);
+		userBean.deleteLogin();
+	}
 	
 	public void findEmployees() {
 		if(searchTerm.equals("")) {
@@ -60,6 +73,7 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void save() {
+		employee.setActive(false);
 		employeeService.save(employee);
 	}
 	
@@ -114,5 +128,13 @@ public class EmployeeBean implements Serializable{
 
 	public List<Team> getAllTeams() {
 		return allTeams;
+	}
+
+	public UserBean getUserBean() {
+		return userBean;
+	}
+
+	public void setUserBean(UserBean userBean) {
+		this.userBean = userBean;
 	}
 }

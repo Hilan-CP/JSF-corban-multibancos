@@ -14,7 +14,7 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 @DatabaseIdentityStoreDefinition(
 		dataSourceLookup = "jdbc/jsfcorban",
 		callerQuery = "select password from user where name = ?",
-		groupsQuery = "select groupname from user_group where username = ?",
+		groupsQuery = "select type from employee where cpf = ?",
 		hashAlgorithm = Pbkdf2PasswordHash.class,
 		hashAlgorithmParameters = {
 	            "Pbkdf2PasswordHash.Iterations=2048",
