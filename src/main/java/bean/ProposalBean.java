@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -113,21 +115,14 @@ public class ProposalBean implements Serializable{
 	}
 	
 	public void initializeCreate() {
-		initializeProposal();
 		findEmployees();
 		findBanks();
+		initializeProposal();
 	}
 	
 	public void initializeUpdate() {
 		findEmployees();
 		findBanks();
-	}
-	
-	private void initializeProposal() {
-		proposal = new Proposal();
-		proposal.setStatus(ProposalStatus.SOLICITADA);
-		proposal.setCustomer(new Customer());
-		proposal.setGeneration(LocalDate.now());
 	}
 	
 	private void findEmployees() {
@@ -140,6 +135,25 @@ public class ProposalBean implements Serializable{
 		if(bankList == null) {
 			bankList = bankService.findAll();
 		}
+	}
+	
+	private void initializeProposal() {
+		proposal = new Proposal();
+		proposal.setStatus(ProposalStatus.SOLICITADA);
+		proposal.setCustomer(new Customer());
+		proposal.setGeneration(LocalDate.now());
+		proposal.setEmployee(currentUser());
+	}
+	
+	private Employee currentUser() {
+		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+		String name = context.getUserPrincipal().getName();
+		for(Employee employee : employeeList) {
+			if(employee.getCpf().equals(name)) {
+				return employee;
+			}
+		}
+		return new Employee();
 	}
 
 	public Proposal getProposal() {
