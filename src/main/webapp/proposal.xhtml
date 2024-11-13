@@ -96,7 +96,7 @@
 		
 		<p:dialog id="proposalDialog" header="Proposta" widgetVar="proposalDialog"
 			resizable="false" modal="true" closeOnEscape="true">
-			<h:form>
+			<h:form id="form">
 				<p:messages />
 				<h:panelGrid columns="2" rendered="#{proposalBean.proposal != null}"
 					cellpadding="10">
@@ -135,25 +135,33 @@
 							var="bank" itemLabel="#{bank.shortName}" itemValue="#{bank}"/>
 					</p:selectOneMenu>
 					
+					<!-- adicionado parametro para pular validacao de nome, telefone e nascimento durante a busca do cliente
+						https://stackoverflow.com/questions/8370675/how-to-let-validation-depend-on-the-pressed-button -->
 					<p:outputLabel value="CPF cliente: "/>
 					<p:inputText size="40" value="#{proposalBean.proposal.customer.cpf}">
-						<p:commandButton icon="pi pi-search" actionListener="#{proposalBean.findCustomer}"
-							update="@form">
+						<p:commandButton id="searchCustomer" icon="pi pi-search"
+							actionListener="#{proposalBean.findCustomer}" update="@form">
+							<f:param name="skipValidation" value="true"/>
 						</p:commandButton>
 					</p:inputText>
 
 					<p:outputLabel value="Nome cliente: "/>
 					<p:inputText size="45" value="#{proposalBean.proposal.customer.name}"
-						disabled="#{proposalBean.proposal.customer.cpf > 0}"/>
+						disabled="#{proposalBean.proposal.customer.cpf > 0}">
+						<f:validateBean disabled="#{param.skipValidation == true}"/>
+					</p:inputText>
 					
 					<p:outputLabel value="Telefone cliente: "/>
 					<p:inputText size="45" value="#{proposalBean.proposal.customer.phone}"
-						disabled="#{proposalBean.proposal.customer.cpf > 0}"/>
+						disabled="#{proposalBean.proposal.customer.cpf > 0}">
+						<f:validateBean disabled="#{param.skipValidation == true}"/>
+					</p:inputText>
 					
 					<p:outputLabel value="Nascimento cliente: "/>
 					<p:inputMask size="45" value="#{proposalBean.proposal.customer.birthDate}"
 						mask="99/99/9999" disabled="#{proposalBean.proposal.customer.cpf > 0}">
 						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
+						<f:validateBean disabled="#{param.skipValidation == true}"/>
 					</p:inputMask>
 					
 					<p:commandButton value="Salvar" actionListener="#{proposalBean.save}"
