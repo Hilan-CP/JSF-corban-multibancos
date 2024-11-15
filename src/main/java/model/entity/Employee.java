@@ -12,11 +12,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import model.enumeration.EmployeeType;
+import validator.CPF;
 
 @Entity
 public class Employee implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	@CPF
 	@NotBlank(message = "CPF deve ser informado")
 	@Id
 	@Column(length = 11)

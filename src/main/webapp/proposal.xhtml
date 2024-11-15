@@ -135,8 +135,8 @@
 							var="bank" itemLabel="#{bank.shortName}" itemValue="#{bank}"/>
 					</p:selectOneMenu>
 					
-					<!-- adicionado parametro para pular validacao de nome, telefone e nascimento durante a busca do cliente
-						https://stackoverflow.com/questions/8370675/how-to-let-validation-depend-on-the-pressed-button -->
+<!-- 				adicionado parametro para pular validacao de nome, telefone e nascimento durante a busca do cliente -->
+<!-- 				https://stackoverflow.com/questions/8370675/how-to-let-validation-depend-on-the-pressed-button -->
 					<p:outputLabel value="CPF cliente: "/>
 					<p:inputText size="40" value="#{proposalBean.proposal.customer.cpf}">
 						<p:commandButton id="searchCustomer" icon="pi pi-search"
