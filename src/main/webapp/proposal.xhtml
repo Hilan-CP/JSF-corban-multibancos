@@ -13,10 +13,10 @@
 				<f:facet name="left">
 					<p:inputText size="20" value="#{proposalBean.searchTerm}"/>
 					<p:selectOneMenu value="#{proposalBean.searchOption}">
-						<f:selectItem itemLabel="Nome funcionário" itemValue="Employee"
+						<f:selectItem itemLabel="Nome funcionário" itemValue="employee"
 							itemDisabled="#{!userUtil.admin}"/>
-						<f:selectItem itemLabel="Código banco" itemValue="Bank"/>
-						<f:selectItem itemLabel="Código proposta" itemValue="Proposal"/>
+						<f:selectItem itemLabel="Código banco" itemValue="bank"/>
+						<f:selectItem itemLabel="Código proposta" itemValue="proposal"/>
 					</p:selectOneMenu>
 					
 					<p:datePicker size="8" value="#{proposalBean.beginDate}" pattern="dd/MM/yyyy">
@@ -38,13 +38,12 @@
 						<p:resetInput target="proposalDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
-						actionListener="#{proposalBean.initializeUpdate}"
 						oncomplete="PF('proposalDialog').show()" update="proposalDialog"
 						disabled="#{proposalBean.proposal == null}">
 						<p:resetInput target="proposalDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Cancelar Proposta" icon="pi pi-times"
-						actionListener="#{proposalBean.cancelAndSave}" update="proposalTable"
+						actionListener="#{proposalBean.cancelProposal}" update="proposalTable"
 						disabled="#{proposalBean.proposal == null}"/>
 					<p:commandButton value="Exportar" icon="pi pi-download">
 						<p:dataExporter type="csv" target="proposalTable" fileName="propostas"/>

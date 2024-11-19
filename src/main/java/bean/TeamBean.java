@@ -32,7 +32,7 @@ public class TeamBean implements Serializable{
 		service.remove(team);
 	}
 	
-	public void initializeTeam() {
+	public void initializeCreate() {
 		team = new Team();
 	}
 	

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -46,33 +47,32 @@ public class ProposalBean implements Serializable{
 	private LocalDate beginDate;
 	private LocalDate endDate;
 	
+	@PostConstruct
+	public void init() {
+		employeeList = employeeService.findAll();
+		bankList = bankService.findAll();
+	}
+	
 	public void findProposals() {
 		proposalList = findByOption();
 	}
 	
 	private List<Proposal> findByOption() {
-		if(searchTerm.equals("") && dateOption.equals("generation")) {
-			return proposalService.findByGenerationDate(beginDate, endDate);
+		if(searchTerm.isBlank()) {
+			return generalSearchByDate();
 		}
-		if(searchTerm.equals("") && dateOption.equals("payment")) {
-			return proposalService.findByPaymentDate(beginDate, endDate);
-		}
-		if(searchOption.equals("Proposal")) {
+		else if(searchOption.equals("proposal")) {
 			return findById();
 		}
-		if(searchOption.equals("Employee") && dateOption.equals("generation")) {
-			return proposalService.findByEmployeeNameAndGenerationDate(searchTerm, beginDate, endDate);
+		else if(searchOption.equals("employee")) {
+			return employeeSearchByDate();
 		}
-		if(searchOption.equals("Employee") && dateOption.equals("payment")) {
-			return proposalService.findByEmployeeNameAndPaymentDate(searchTerm, beginDate, endDate);
+		else if(searchOption.equals("bank")) {
+			return bankSearchByDate();
 		}
-		if(searchOption.equals("Bank") && dateOption.equals("generation")) {
-			return proposalService.findByBankCodeAndGenerationDate(Long.parseLong(searchTerm), beginDate, endDate);
+		else {
+			return List.of();
 		}
-		if(searchOption.equals("Bank") && dateOption.equals("payment")) {
-			return proposalService.findByBankCodeAndPaymentDate(Long.parseLong(searchTerm), beginDate, endDate);
-		}
-		return null;
 	}
 	
 	private List<Proposal> findById(){
@@ -82,6 +82,33 @@ public class ProposalBean implements Serializable{
 			list = List.of(result);
 		}
 		return list;
+	}
+	
+	private List<Proposal> generalSearchByDate(){
+		if(dateOption.equals("generation")) {
+			return proposalService.findByGenerationDate(beginDate, endDate);
+		}
+		else {
+			return proposalService.findByPaymentDate(beginDate, endDate);
+		}
+	}
+	
+	private List<Proposal> employeeSearchByDate(){
+		if(dateOption.equals("generation")) {
+			return proposalService.findByEmployeeNameAndGenerationDate(searchTerm, beginDate, endDate);
+		}
+		else {
+			return proposalService.findByEmployeeNameAndPaymentDate(searchTerm, beginDate, endDate);
+		}
+	}
+	
+	private List<Proposal> bankSearchByDate(){
+		if(dateOption.equals("generation")) {
+			return proposalService.findByBankCodeAndGenerationDate(Long.parseLong(searchTerm), beginDate, endDate);
+		}
+		else {
+			return proposalService.findByBankCodeAndPaymentDate(Long.parseLong(searchTerm), beginDate, endDate);
+		}
 	}
 	
 	public void findCustomer(){
@@ -98,7 +125,7 @@ public class ProposalBean implements Serializable{
 		proposalService.save(proposal);
 	}
 	
-	public void cancelAndSave() {
+	public void cancelProposal() {
 		proposal.setStatus(ProposalStatus.CANCELADA);
 		proposal.setPayment(null);
 		proposalService.save(proposal);
@@ -115,29 +142,6 @@ public class ProposalBean implements Serializable{
 	}
 	
 	public void initializeCreate() {
-		findEmployees();
-		findBanks();
-		initializeProposal();
-	}
-	
-	public void initializeUpdate() {
-		findEmployees();
-		findBanks();
-	}
-	
-	private void findEmployees() {
-		if(employeeList == null) {
-			employeeList = employeeService.findAll();
-		}
-	}
-	
-	private void findBanks() {
-		if(bankList == null) {
-			bankList = bankService.findAll();
-		}
-	}
-	
-	private void initializeProposal() {
 		proposal = new Proposal();
 		proposal.setStatus(ProposalStatus.SOLICITADA);
 		proposal.setCustomer(new Customer());
@@ -147,9 +151,9 @@ public class ProposalBean implements Serializable{
 	
 	private Employee currentUser() {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-		String name = context.getUserPrincipal().getName();
+		String username = context.getUserPrincipal().getName();
 		for(Employee employee : employeeList) {
-			if(employee.getCpf().equals(name)) {
+			if(employee.getCpf().equals(username)) {
 				return employee;
 			}
 		}

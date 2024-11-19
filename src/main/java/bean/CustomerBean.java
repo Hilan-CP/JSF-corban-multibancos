@@ -22,12 +22,8 @@ public class CustomerBean implements Serializable{
 	private String searchTerm;
 	private String searchOption;
 	
-	public void save() {
-		service.save(customer);
-	}
-	
 	public void find() {
-		if(searchTerm.equals("")) {
+		if(searchTerm.isBlank()) {
 			customerList = service.findAll();
 		}
 		else {
@@ -37,13 +33,13 @@ public class CustomerBean implements Serializable{
 	
 	private void findByOption() {
 		switch(searchOption) {
-			case "CPF":
+			case "cpf":
 				findByCpf();
 				break;
-			case "Nome":
+			case "name":
 				customerList = service.findByName(searchTerm);
 				break;
-			case "Telefone":
+			case "phone":
 				customerList = service.findByPhone(searchTerm);
 				break;
 			default:
@@ -59,7 +55,11 @@ public class CustomerBean implements Serializable{
 		}
 	}
 	
-	public void initializeCustomer() {
+	public void save() {
+		service.save(customer);
+	}
+	
+	public void initializeCreate() {
 		customer = new Customer();
 	}
 

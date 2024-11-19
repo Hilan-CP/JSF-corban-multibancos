@@ -42,7 +42,6 @@ public class UserBean implements Serializable{
 	public void deleteLogin() {
 		findUser();
 		userService.delete(user);
-		
 		employee.setActive(false);
 		employeeService.save(employee);
 	}
@@ -52,7 +51,6 @@ public class UserBean implements Serializable{
 		char[] password = user.getPassword().toCharArray();
 		user.setPassword(passwordHash.generate(password));
 		userService.save(user);
-		
 		employee.setActive(true);
 		employeeService.save(employee);
 	}

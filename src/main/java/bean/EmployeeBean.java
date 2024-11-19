@@ -3,6 +3,7 @@ package bean;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -26,9 +27,14 @@ public class EmployeeBean implements Serializable{
 	@Inject
 	private UserBean userBean;
 	
+	@PostConstruct
+	public void init() {
+		teamList = teamService.findAll();
+	}
+	
 	private Employee employee;
 	private List<Employee> employeeList;
-	private List<Team> allTeams;
+	private List<Team> teamList;
 	private String searchTerm;
 	private String searchOption;
 	
@@ -43,7 +49,7 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void findEmployees() {
-		if(searchTerm.equals("")) {
+		if(searchTerm.isBlank()) {
 			employeeList = employeeService.findAll();
 		}
 		else {
@@ -53,10 +59,10 @@ public class EmployeeBean implements Serializable{
 	
 	private void findByOption() {
 		switch(searchOption) {
-			case "CPF":
+			case "cpf":
 				findByCpf();
 				break;
-			case "Nome":
+			case "name":
 				employeeList = employeeService.findByName(searchTerm);
 				break;
 			default:
@@ -77,21 +83,8 @@ public class EmployeeBean implements Serializable{
 		employeeService.save(employee);
 	}
 	
-	public void initializeForm() {
-		initializeEmployee();
-		findAllTeams();
-	}
-	
-	private void initializeEmployee() {
-		if(employee == null) {
-			employee = new Employee();
-		}
-	}
-	
-	private void findAllTeams() {
-		if(allTeams == null) {
-			allTeams = teamService.findAll();
-		}
+	public void initializeCreate() {
+		employee = new Employee();
 	}
 	
 	public Employee getEmployee() {
@@ -126,8 +119,8 @@ public class EmployeeBean implements Serializable{
 		return EmployeeType.values();
 	}
 
-	public List<Team> getAllTeams() {
-		return allTeams;
+	public List<Team> getTeamList() {
+		return teamList;
 	}
 
 	public UserBean getUserBean() {

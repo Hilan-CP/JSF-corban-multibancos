@@ -13,15 +13,15 @@
 				<f:facet name="left">
 					<p:inputText size="20" value="#{customerBean.searchTerm}"/>
 					<p:selectOneMenu value="#{customerBean.searchOption}">
-						<f:selectItem itemLabel="CPF" itemValue="CPF"/>
-						<f:selectItem itemLabel="Nome" itemValue="Nome"/>
-						<f:selectItem itemLabel="Telefone" itemValue="Telefone"/>
+						<f:selectItem itemLabel="CPF" itemValue="cpf"/>
+						<f:selectItem itemLabel="Nome" itemValue="name"/>
+						<f:selectItem itemLabel="Telefone" itemValue="phone"/>
 					</p:selectOneMenu>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{customerBean.find}" update="customerTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
-						actionListener="#{customerBean.initializeCustomer}"
+						actionListener="#{customerBean.initializeCreate}"
 						oncomplete="PF('customerDialog').show()" update="customerDialog">
 						<p:resetInput target="customerDialog"/>
 					</p:commandButton>

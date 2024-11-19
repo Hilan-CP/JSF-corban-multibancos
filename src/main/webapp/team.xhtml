@@ -14,7 +14,7 @@
 					<p:commandButton value="Buscar" icon="pi pi-search" 
 						actionListener="#{teamBean.findAll}" update="teamTable" />
 					<p:commandButton value="Criar" icon="pi pi-plus"
-						actionListener="#{teamBean.initializeTeam}"
+						actionListener="#{teamBean.initializeCreate}"
 						oncomplete="PF('teamDialog').show()" update="teamDialog">
 						<p:resetInput target="teamDialog"/>
 					</p:commandButton>

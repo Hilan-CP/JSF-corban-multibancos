@@ -13,19 +13,18 @@
 				<f:facet name="left">
 					<p:inputText size="20" value="#{employeeBean.searchTerm}"/>
 					<p:selectOneMenu value="#{employeeBean.searchOption}">
-						<f:selectItem itemLabel="CPF" itemValue="CPF"/>
-						<f:selectItem itemLabel="Nome" itemValue="Nome"/>
+						<f:selectItem itemLabel="CPF" itemValue="cpf"/>
+						<f:selectItem itemLabel="Nome" itemValue="name"/>
 					</p:selectOneMenu>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{employeeBean.findEmployees}" update="employeeTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
-						actionListener="#{employeeBean.initializeForm}"
+						actionListener="#{employeeBean.initializeCreate}"
 						oncomplete="PF('employeeDialog').show()" update="employeeDialog">
 						<p:resetInput target="employeeDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
-						actionListener="#{employeeBean.initializeForm}"
 						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
 						disabled="#{employeeBean.employee == null}">
 						<p:resetInput target="employeeDialog"/>
@@ -92,7 +91,7 @@
 					<p:selectOneMenu value="#{employeeBean.employee.team}"
 						converter="teamConverter">
 						<f:selectItem itemLabel="Nenhum"/>
-						<f:selectItems value="#{employeeBean.allTeams}"
+						<f:selectItems value="#{employeeBean.teamList}"
 							var="team" itemLabel="#{team.name}" itemValue="#{team}"/>
 					</p:selectOneMenu>
 					

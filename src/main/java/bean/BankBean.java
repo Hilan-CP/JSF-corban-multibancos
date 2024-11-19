@@ -28,7 +28,7 @@ public class BankBean implements Serializable{
 		service.save(bank);
 	}
 	
-	public void initializeBank() {
+	public void initializeCreate() {
 		bank = new Bank();
 	}
 	

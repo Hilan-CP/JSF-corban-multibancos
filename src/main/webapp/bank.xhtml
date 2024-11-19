@@ -14,7 +14,7 @@
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{bankBean.findAll}" update="bankTable"/>
 					<p:commandButton value="Criar" icon="pi pi-plus-circle"
-						actionListener="#{bankBean.initializeBank}"
+						actionListener="#{bankBean.initializeCreate}"
 						oncomplete="PF('bankDialog').show()" update="bankDialog">
 						<p:resetInput target="bankDialog"/>
 					</p:commandButton>
