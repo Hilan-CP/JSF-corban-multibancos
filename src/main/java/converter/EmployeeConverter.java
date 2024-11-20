@@ -20,7 +20,6 @@ public class EmployeeConverter implements Converter<Employee>{
 			return service.findByCpf(value);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -31,7 +30,6 @@ public class EmployeeConverter implements Converter<Employee>{
 			return value.getCpf();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

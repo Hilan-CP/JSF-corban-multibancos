@@ -7,14 +7,14 @@ public class CPFValidator implements ConstraintValidator<CPF, String>{
 
 	@Override
 	public boolean isValid(String cpf, ConstraintValidatorContext context) {
-		if(cpf.length() != 11) {
-			return false;
+		try {
+			//calcula e concatena o décimo digito e o décimo primeiro digito
+			String validatorDigits = calculateDigit(10, cpf) + calculateDigit(11, cpf);
+			if(cpf.endsWith(validatorDigits)) {
+				return true;
+			}
 		}
-		String validatorDigits;
-		//calcula e concatena o décimo digito e o décimo primeiro digito
-		validatorDigits = calculateDigit(10, cpf) + calculateDigit(11, cpf);
-		if(cpf.endsWith(validatorDigits)) {
-			return true;
+		catch(Exception e) {
 		}
 		return false;
 	}

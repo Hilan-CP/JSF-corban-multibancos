@@ -28,7 +28,7 @@ public class TransactionInterceptor implements Serializable {
 	@AroundInvoke
 	public Object invoke(InvocationContext context) throws Exception {
 		EntityTransaction transaction = entityManager.getTransaction();
-		boolean owner = false;
+		boolean startedByInterceptor = false;
 
 		try {
 			if (!transaction.isActive()) {
@@ -39,16 +39,16 @@ public class TransactionInterceptor implements Serializable {
 
 				// agora sim inicia a transação
 				transaction.begin();
-				owner = true;
+				startedByInterceptor = true;
 			}
 			return context.proceed();
 		} catch (Exception e) {
-			if (transaction != null && owner) {
+			if (transaction != null && startedByInterceptor) {
 				transaction.rollback();
 			}
 			throw e;
 		} finally {
-			if (transaction != null && transaction.isActive() && owner) {
+			if (transaction != null && transaction.isActive() && startedByInterceptor) {
 				transaction.commit();
 			}
 		}

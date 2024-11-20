@@ -33,15 +33,15 @@
 				<p:column headerText="funcionário">
 					<h:outputText value="#{employee.name}"/>
 				</p:column>
-				<p:column headerText="quantidade">
-					<h:outputText value="#{reportBean.count(employee)}"/>
+				<p:column headerText="quantidade gerado">
+					<h:outputText value="#{reportBean.countGeneration(employee)}"/>
 				</p:column>
-				<p:column headerText="soma gerado">
+				<p:column headerText="valor gerado">
 					<h:outputText value="#{reportBean.sumGeneration(employee)}">
 						<f:convertNumber type="currency" currencyCode="BRL"/>
 					</h:outputText>
 				</p:column>
-				<p:column headerText="soma pago">
+				<p:column headerText="valor pago">
 					<h:outputText value="#{reportBean.sumPayment(employee)}">
 						<f:convertNumber type="currency" currencyCode="BRL"/>
 					</h:outputText>
@@ -62,7 +62,7 @@
 						<h:outputText value="Subtotal"/>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalCount(employee.team)}"/>
+						<h:outputText value="#{reportBean.subtotalCountGeneration(employee.team)}"/>
 					</p:column>
 					<p:column>
 						<h:outputText value="#{reportBean.subtotalSumGeneration(employee.team)}">
@@ -94,7 +94,7 @@
 					</p:column>
 					<p:column>
 						<f:facet name="footer">
-							<h:outputText value="#{reportBean.totalCount()}"/>
+							<h:outputText value="#{reportBean.totalCountGeneration()}"/>
 						</f:facet>
 					</p:column>
 					<p:column>

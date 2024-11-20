@@ -15,6 +15,7 @@ import jakarta.inject.Named;
 import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
+import model.enumeration.ProposalStatus;
 import service.ProposalService;
 import service.TeamService;
 
@@ -37,14 +38,10 @@ public class ReportBean implements Serializable{
 	
 	@PostConstruct
 	public void init() {
-		findTeams();
+		teams = teamService.findAll();
 		proposals = new ArrayList<>();
 		employees = new ArrayList<>();
 		today = LocalDate.of(2024, 8, 25);
-	}
-	
-	private void findTeams() {
-		teams = teamService.findAll();
 	}
 	
 	public void find() {
@@ -70,30 +67,30 @@ public class ReportBean implements Serializable{
 		employees = map.values().stream().collect(Collectors.toList());
 	}
 
-	public long count(Employee employee) {
+	public long countGeneration(Employee employee) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().equals(employee))
+				.filter(proposal -> isGeneratedToday(proposal) && isFromEmployee(proposal, employee))
 				.count();
 	}
 	
 	public double sumGeneration(Employee employee) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().equals(employee))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isGeneratedToday(proposal) && isFromEmployee(proposal, employee))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
 	public double sumPayment(Employee employee) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getPayment().equals(today) && proposal.getEmployee().equals(employee))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isPaidToday(proposal) && isFromEmployee(proposal, employee))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
 	public double monthlyResult(Employee employee) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getEmployee().equals(employee))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isPaid(proposal) && isFromEmployee(proposal, employee))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
@@ -101,30 +98,30 @@ public class ReportBean implements Serializable{
 		return calculateTrend(monthlyResult(employee));
 	}
 	
-	public long subtotalCount(Team team) {
+	public long subtotalCountGeneration(Team team) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team))
+				.filter(proposal -> isGeneratedToday(proposal) && isFromTeam(proposal, team))
 				.count();
 	}
 	
 	public double subtotalSumGeneration(Team team) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getGeneration().equals(today) && proposal.getEmployee().getTeam().equals(team))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isGeneratedToday(proposal) && isFromTeam(proposal, team))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
 	public double subtotalSumPayment(Team team) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getPayment().equals(today) && proposal.getEmployee().getTeam().equals(team))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isPaidToday(proposal) && isFromTeam(proposal, team))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
 	public double subtotalMonthlyResult(Team team) {
 		return proposals.stream()
-				.filter(proposal -> proposal.getEmployee().getTeam().equals(team))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isPaid(proposal) && isFromTeam(proposal, team))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
@@ -132,29 +129,30 @@ public class ReportBean implements Serializable{
 		return calculateTrend(subtotalMonthlyResult(team));
 	}
 	
-	public long totalCount() {
+	public long totalCountGeneration() {
 		return proposals.stream()
-				.filter(proposal -> proposal.getGeneration().equals(today))
+				.filter(proposal -> isGeneratedToday(proposal))
 				.count();
 	}
 	
 	public double totalSumGeneration() {
 		return proposals.stream()
-				.filter(proposal -> proposal.getGeneration().equals(today))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isGeneratedToday(proposal))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
 	public double totalSumPayment() {
 		return proposals.stream()
-				.filter(proposal -> proposal.getPayment().equals(today))
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isPaidToday(proposal))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
 	public double totalMonthlyResult() {
 		return proposals.stream()
-				.mapToDouble(proposal -> proposal.getValue())
+				.filter(proposal -> isPaid(proposal))
+				.mapToDouble(Proposal::getValue)
 				.sum();
 	}
 	
@@ -166,6 +164,26 @@ public class ReportBean implements Serializable{
 		int daysElapsed = today.getDayOfMonth() - 1; //current day is not over yet
 		int lengthOfMonth = today.lengthOfMonth();
 		return result / daysElapsed * lengthOfMonth;
+	}
+	
+	private boolean isGeneratedToday(Proposal proposal) {
+		return today.equals(proposal.getGeneration());
+	}
+	
+	private boolean isPaidToday(Proposal proposal) {
+		return today.equals(proposal.getPayment());
+	}
+	
+	private boolean isFromEmployee(Proposal proposal, Employee employee) {
+		return proposal.getEmployee().equals(employee);
+	}
+	
+	private boolean isFromTeam(Proposal proposal, Team team) {
+		return proposal.getEmployee().getTeam().equals(team);
+	}
+	
+	private boolean isPaid(Proposal proposal) {
+		return proposal.getStatus().equals(ProposalStatus.CONTRATADA);
 	}
 	
 	public List<Team> getSelectedTeams() {

@@ -20,7 +20,6 @@ public class BankConverter implements Converter<Bank>{
 			return service.findById(Long.parseLong(value));
 		}
 		catch(Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -31,7 +30,6 @@ public class BankConverter implements Converter<Bank>{
 			return value.getId().toString();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
