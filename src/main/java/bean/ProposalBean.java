@@ -85,30 +85,15 @@ public class ProposalBean implements Serializable{
 	}
 	
 	private List<Proposal> generalSearchByDate(){
-		if(dateOption.equals("generation")) {
-			return proposalService.findByGenerationDate(beginDate, endDate);
-		}
-		else {
-			return proposalService.findByPaymentDate(beginDate, endDate);
-		}
+		return proposalService.findByDate(dateOption, beginDate, endDate);
 	}
 	
 	private List<Proposal> employeeSearchByDate(){
-		if(dateOption.equals("generation")) {
-			return proposalService.findByEmployeeNameAndGenerationDate(searchTerm, beginDate, endDate);
-		}
-		else {
-			return proposalService.findByEmployeeNameAndPaymentDate(searchTerm, beginDate, endDate);
-		}
+		return proposalService.findByEmployeeAndDate(searchTerm, dateOption, beginDate, endDate);
 	}
 	
 	private List<Proposal> bankSearchByDate(){
-		if(dateOption.equals("generation")) {
-			return proposalService.findByBankCodeAndGenerationDate(Long.parseLong(searchTerm), beginDate, endDate);
-		}
-		else {
-			return proposalService.findByBankCodeAndPaymentDate(Long.parseLong(searchTerm), beginDate, endDate);
-		}
+		return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate);
 	}
 	
 	public void findCustomer(){

@@ -8,6 +8,13 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import model.entity.Bank;
+import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
 
@@ -30,59 +37,46 @@ public class ProposalRepository implements Serializable{
 		return entityManager.find(Proposal.class, id);
 	}
 	
-	public List<Proposal> findByGenerationDate(LocalDate beginDate, LocalDate endDate) {
-		String jpql = "SELECT p FROM Proposal p WHERE p.generation BETWEEN :beginDate AND :endDate";
-		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("beginDate", beginDate);
-		query.setParameter("endDate", endDate);
-		return query.getResultList();
-	}
-	
-	public List<Proposal> findByPaymentDate(LocalDate beginDate, LocalDate endDate) {
-		String jpql = "SELECT p FROM Proposal p WHERE p.payment BETWEEN :beginDate AND :endDate";
-		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("beginDate", beginDate);
-		query.setParameter("endDate", endDate);
-		return query.getResultList();
-	}
-	
-	public List<Proposal> findByEmployeeNameAndGenerationDate(String name, LocalDate beginDate, LocalDate endDate){
+	public Proposal findByIdAndEmployee(Long id, String cpf) {
 		String jpql = "SELECT p FROM Proposal p JOIN p.employee e"
-					+ " WHERE e.name LIKE :name AND p.generation BETWEEN :beginDate AND :endDate";
+					+ " WHERE p.id = :id AND e.cpf = :cpf";
 		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("name", "%"+name+"%");
-		query.setParameter("beginDate", beginDate);
-		query.setParameter("endDate", endDate);
+		query.setParameter("id", id);
+		query.setParameter("cpf", cpf);
+		return query.getSingleResult();
+	}
+	
+	public List<Proposal> findByDate(String dateField, LocalDate beginDate, LocalDate endDate){
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
+		criteria.where(betweenDate);
+		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
 		return query.getResultList();
 	}
 	
-	public List<Proposal> findByEmployeeNameAndPaymentDate(String name, LocalDate beginDate, LocalDate endDate){
-		String jpql = "SELECT p FROM Proposal p JOIN p.employee e"
-					+ " WHERE e.name LIKE :name AND p.payment BETWEEN :beginDate AND :endDate";
-		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("name", "%"+name+"%");
-		query.setParameter("beginDate", beginDate);
-		query.setParameter("endDate", endDate);
+	public List<Proposal> findByEmployeeAndDate(String employeeName, String dateField, LocalDate beginDate, LocalDate endDate){
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		Join<Proposal, Employee> employee = proposal.join("employee");
+		Predicate likeName = builder.like(employee.get("name"), "%"+employeeName+"%");
+		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
+		criteria.where(builder.and(likeName, betweenDate));
+		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
 		return query.getResultList();
 	}
 	
-	public List<Proposal> findByBankCodeAndGenerationDate(Long code, LocalDate beginDate, LocalDate endDate){
-		String jpql = "SELECT p FROM Proposal p JOIN p.bank b"
-					+ " WHERE b.code = :code AND p.generation BETWEEN :beginDate AND :endDate";
-		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("code", code);
-		query.setParameter("beginDate", beginDate);
-		query.setParameter("endDate", endDate);
-		return query.getResultList();
-	}
-	
-	public List<Proposal> findByBankCodeAndPaymentDate(Long code, LocalDate beginDate, LocalDate endDate){
-		String jpql = "SELECT p FROM Proposal p JOIN p.bank b"
-					+ " WHERE b.code = :code AND p.payment BETWEEN :beginDate AND :endDate";
-		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("code", code);
-		query.setParameter("beginDate", beginDate);
-		query.setParameter("endDate", endDate);
+	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate){
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		Join<Proposal, Bank> bank = proposal.join("bank");
+		Predicate equalCode = builder.equal(bank.get("code"), bankCode);
+		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
+		criteria.where(builder.and(equalCode, betweenDate));
+		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
 		return query.getResultList();
 	}
 	

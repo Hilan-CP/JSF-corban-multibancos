@@ -30,28 +30,20 @@ public class ProposalService implements Serializable{
 		return repository.findById(id);
 	}
 	
-	public List<Proposal> findByGenerationDate(LocalDate beginDate, LocalDate endDate){
-		return repository.findByGenerationDate(beginDate, endDate);
+	public Proposal findByIdAndEmployee(Long id, String cpf) {
+		return repository.findByIdAndEmployee(id, cpf);
 	}
 	
-	public List<Proposal> findByPaymentDate(LocalDate beginDate, LocalDate endDate){
-		return repository.findByPaymentDate(beginDate, endDate);
+	public List<Proposal> findByDate(String dateField, LocalDate beginDate, LocalDate endDate){
+		return repository.findByDate(dateField, beginDate, endDate);
 	}
 	
-	public List<Proposal> findByEmployeeNameAndGenerationDate(String name, LocalDate beginDate, LocalDate endDate){
-		return repository.findByEmployeeNameAndGenerationDate(name, beginDate, endDate);
+	public List<Proposal> findByEmployeeAndDate(String employeeName, String dateField, LocalDate beginDate, LocalDate endDate){
+		return repository.findByEmployeeAndDate(employeeName, dateField, beginDate, endDate);
 	}
 	
-	public List<Proposal> findByEmployeeNameAndPaymentDate(String name, LocalDate beginDate, LocalDate endDate){
-		return repository.findByEmployeeNameAndPaymentDate(name, beginDate, endDate);
-	}
-	
-	public List<Proposal> findByBankCodeAndGenerationDate(Long code, LocalDate beginDate, LocalDate endDate){
-		return repository.findByBankCodeAndGenerationDate(code, beginDate, endDate);
-	}
-	
-	public List<Proposal> findByBankCodeAndPaymentDate(Long code, LocalDate beginDate, LocalDate endDate){
-		return repository.findByBankCodeAndPaymentDate(code, beginDate, endDate);
+	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate){
+		return repository.findByBankAndDate(bankCode, dateField, beginDate, endDate);
 	}
 	
 	public List<Proposal> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
