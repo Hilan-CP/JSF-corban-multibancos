@@ -42,8 +42,8 @@ public class ProposalService implements Serializable{
 		return repository.findByEmployeeAndDate(employeeName, dateField, beginDate, endDate);
 	}
 	
-	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate){
-		return repository.findByBankAndDate(bankCode, dateField, beginDate, endDate);
+	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate, String cpf){
+		return repository.findByBankAndDate(bankCode, dateField, beginDate, endDate, cpf);
 	}
 	
 	public List<Proposal> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){

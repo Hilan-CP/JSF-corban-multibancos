@@ -2,6 +2,7 @@ package repository;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.enterprise.context.Dependent;
@@ -68,16 +69,25 @@ public class ProposalRepository implements Serializable{
 		return query.getResultList();
 	}
 	
-	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate){
+	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate, String cpf){
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
 		Root<Proposal> proposal = criteria.from(Proposal.class);
 		Join<Proposal, Bank> bank = proposal.join("bank");
-		Predicate equalCode = builder.equal(bank.get("code"), bankCode);
-		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
-		criteria.where(builder.and(equalCode, betweenDate));
+		List<Predicate> predicates = new ArrayList<>();
+		buildEmployeePredicate(builder, proposal, predicates, cpf);
+		predicates.add(builder.equal(bank.get("code"), bankCode));
+		predicates.add(builder.between(proposal.get(dateField), beginDate, endDate));
+		criteria.where(predicates.toArray(new Predicate[0]));
 		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
 		return query.getResultList();
+	}
+	
+	private void buildEmployeePredicate(CriteriaBuilder builder, Root<Proposal> proposal, List<Predicate> predicates, String cpf) {
+		if(cpf != null) {
+			Join<Proposal, Employee> employee =  proposal.join("employee");
+			predicates.add(builder.equal(employee.get("cpf"), cpf));
+		}
 	}
 	
 	public List<Proposal> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){

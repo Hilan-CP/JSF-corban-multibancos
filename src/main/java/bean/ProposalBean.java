@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.context.ExternalContext;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -19,6 +17,7 @@ import service.BankService;
 import service.CustomerService;
 import service.EmployeeService;
 import service.ProposalService;
+import util.UserUtil;
 
 @Named
 @ViewScoped
@@ -37,6 +36,9 @@ public class ProposalBean implements Serializable{
 	@Inject
 	private CustomerService customerService;
 	
+	@Inject
+	private UserUtil util;
+	
 	private Proposal proposal;
 	private List<Proposal> proposalList;
 	private List<Employee> employeeList;
@@ -54,21 +56,46 @@ public class ProposalBean implements Serializable{
 	}
 	
 	public void findProposals() {
-		proposalList = findByOption();
+		proposalList = findByUserRole();
 	}
 	
-	private List<Proposal> findByOption() {
+	private List<Proposal> findByUserRole() {
+		if(util.isAdmin()) {
+			return adminSearch();
+		}
+		else {
+			return nonAdminSearch();
+		}
+	}
+	
+	private List<Proposal> adminSearch(){
 		if(searchTerm.isBlank()) {
-			return generalSearchByDate();
+			return proposalService.findByDate(dateOption, beginDate, endDate);
 		}
 		else if(searchOption.equals("proposal")) {
 			return findById();
 		}
 		else if(searchOption.equals("employee")) {
-			return employeeSearchByDate();
+			return proposalService.findByEmployeeAndDate(searchTerm, dateOption, beginDate, endDate);
 		}
 		else if(searchOption.equals("bank")) {
-			return bankSearchByDate();
+			return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, null);
+		}
+		else {
+			return List.of();
+		}
+	}
+	
+	private List<Proposal> nonAdminSearch(){
+		if(searchTerm.isBlank()) {
+			Employee employee = employeeService.findByCpf(util.getUsername());
+			return proposalService.findByEmployeeAndDate(employee.getName(), dateOption, beginDate, endDate);
+		}
+		else if(searchOption.equals("proposal")) {
+			return findByIdAndEmployee();
+		}
+		else if(searchOption.equals("bank")) {
+			return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, util.getUsername());
 		}
 		else {
 			return List.of();
@@ -84,16 +111,14 @@ public class ProposalBean implements Serializable{
 		return list;
 	}
 	
-	private List<Proposal> generalSearchByDate(){
-		return proposalService.findByDate(dateOption, beginDate, endDate);
-	}
-	
-	private List<Proposal> employeeSearchByDate(){
-		return proposalService.findByEmployeeAndDate(searchTerm, dateOption, beginDate, endDate);
-	}
-	
-	private List<Proposal> bankSearchByDate(){
-		return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate);
+	private List<Proposal> findByIdAndEmployee(){
+		try {
+			Proposal result = proposalService.findByIdAndEmployee(Long.parseLong(searchTerm), util.getUsername());
+			return List.of(result);
+		}
+		catch(Exception e) {
+		}
+		return List.of();
 	}
 	
 	public void findCustomer(){
@@ -135,8 +160,7 @@ public class ProposalBean implements Serializable{
 	}
 	
 	private Employee currentUser() {
-		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-		String username = context.getUserPrincipal().getName();
+		String username = util.getUsername();
 		for(Employee employee : employeeList) {
 			if(employee.getCpf().equals(username)) {
 				return employee;

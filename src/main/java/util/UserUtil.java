@@ -14,14 +14,21 @@ public class UserUtil implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private boolean admin;
+	private String username;
 	
 	@PostConstruct
 	public void init() {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 		admin = context.isUserInRole("GESTOR");
+		username = context.getUserPrincipal().getName();
+		
 	}
 
 	public boolean isAdmin() {
 		return admin;
+	}
+	
+	public String getUsername() {
+		return username;
 	}
 }
