@@ -19,9 +19,11 @@
 						<f:selectItem itemLabel="Código proposta" itemValue="proposal"/>
 					</p:selectOneMenu>
 					
+					<h:outputText value="de"/>
 					<p:datePicker size="8" value="#{proposalBean.beginDate}" pattern="dd/MM/yyyy">
 						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</p:datePicker>
+					<h:outputText value="até"/>
 					<p:datePicker size="8" value="#{proposalBean.endDate}" pattern="dd/MM/yyyy">
 						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</p:datePicker>

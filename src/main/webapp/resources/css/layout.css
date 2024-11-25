@@ -5,31 +5,41 @@ header{
 	width: 100%;
 	top: 0;
 	left: 0;
-	background-color: #000080;
+	background-color: #1c1e26;
 	position: fixed;
 }
 
-header p{
+header div{
 	padding-top: 5px;
 	padding-left: 15px;
 	font-size: medium;
 	color: white;
+	font-weight: bold;
+	word-spacing: 2pt;
+	img{
+		vertical-align: middle;
+	}
 }
 
-.sidemenu{
+.sidebar{
 	height: 100%;
 	width: 120px;
 	margin-top: 50px;
-	background-color: #0000a0;
+	background-color: #313443;
 	top: 0;
 	left: 0;
-	overflow-x: hidden;
 	position: fixed;
 }
 
-.sidemenu p{
-	padding-left: 10px;
+.sidebar a{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 12px;
 	color: white;
+	display: block;
+	&:hover{
+		background-color: #22252E;
+	}
 }
 
 .content{

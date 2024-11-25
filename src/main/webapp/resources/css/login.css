@@ -1,0 +1,19 @@
+@charset "ISO-8859-1";
+
+body, html {
+	margin: 0;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+}
+
+form{
+	margin: auto;
+	padding: 20px;
+	border: 2px solid #ccc;
+}
+
+input{
+	margin-bottom: 15px !important;
+}

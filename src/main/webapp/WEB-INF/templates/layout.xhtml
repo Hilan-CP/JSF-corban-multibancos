@@ -7,18 +7,22 @@
 <h:head>
 	<meta charset="UTF-8" />
 	<h:outputStylesheet library="css" name="layout.css"/>
+	<h:outputStylesheet library="css" name="content.css"/>
 </h:head>
 <h:body>
 	<header>
-		<p><b>CENTRAL MULTIBANCOS</b></p>
+		<div>
+			<p:graphicImage name="logomarca.png" library="images" alt="logo" width="40px"/>
+			<span>CENTRAL MULTIBANCOS</span>
+		</div>
 	</header>
-	<div class="sidemenu">
-		<p><p:link value="Equipes" outcome="team" rendered="#{userUtil.admin}"/></p>
-		<p><p:link value="Funcionários" outcome="employee" rendered="#{userUtil.admin}"/></p>
-		<p><p:link value="Bancos" outcome="bank" rendered="#{userUtil.admin}"/></p>
-		<p><p:link value="Clientes" outcome="customer"/></p>
-		<p><p:link value="Propostas" outcome="proposal"/></p>
-		<p><p:link value="Relatório" outcome="report" rendered="#{userUtil.admin}"/></p>
+	<div class="sidebar">
+		<p:link value="Equipes" outcome="team" rendered="#{userUtil.admin}"/>
+		<p:link value="Funcionários" outcome="employee" rendered="#{userUtil.admin}"/>
+		<p:link value="Bancos" outcome="bank" rendered="#{userUtil.admin}"/>
+		<p:link value="Clientes" outcome="customer"/>
+		<p:link value="Propostas" outcome="proposal"/>
+		<p:link value="Relatório" outcome="report" rendered="#{userUtil.admin}"/>
 	</div>
 	<div class="content">
 		<ui:insert name="content" />

@@ -1,0 +1,14 @@
+@charset "ISO-8859-1";
+
+.ui-toolbar button{
+	margin-right: 5px;
+}
+
+.ui-toolbar .ui-selectonemenu{
+	margin-right: 12px;
+}
+
+h3{
+	margin: 5px;
+	padding-top: 5px;
+}
