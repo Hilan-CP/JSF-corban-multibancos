@@ -12,21 +12,23 @@
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:commandButton value="Buscar" icon="pi pi-search" 
-						actionListener="#{teamBean.findAll}" update="teamTable" />
+						actionListener="#{teamBean.findAll}" update="teamTable"
+						process="@this"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{teamBean.initializeCreate}"
-						oncomplete="PF('teamDialog').show()" update="teamDialog">
+						oncomplete="PF('teamDialog').show()" update="teamDialog"
+						process="@this">
 						<p:resetInput target="teamDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('teamDialog').show()" update="teamDialog"
-						disabled="#{teamBean.team == null}">
+						disabled="#{teamBean.team == null}" process="@this">
 						<p:resetInput target="teamDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Apagar" icon="pi pi-trash"
 						actionListener="#{teamBean.delete}"
-						disabled="#{teamBean.team == null}" />
-					<p:commandButton value="Exportar" icon="pi pi-download">
+						disabled="#{teamBean.team == null}" process="@this"/>
+					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="teamTable" fileName="equipes"/>
 					</p:commandButton>
 				</f:facet>
@@ -56,7 +58,7 @@
 					<p:inputText size="45" value="#{teamBean.team.name}" />
 					<p:commandButton value="Salvar" actionListener="#{teamBean.save}"
 						oncomplete="if(!args.validationFailed) PF('teamDialog').hide()"
-						update="@form"/>
+						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

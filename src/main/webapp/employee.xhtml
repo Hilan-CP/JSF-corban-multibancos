@@ -11,36 +11,38 @@
 		<h:form id="contentForm">
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:inputText size="20" value="#{employeeBean.searchTerm}"/>
-					<p:selectOneMenu value="#{employeeBean.searchOption}">
+					<p:inputText id="search" size="20" value="#{employeeBean.searchTerm}"/>
+					<p:selectOneMenu id="option" value="#{employeeBean.searchOption}">
 						<f:selectItem itemLabel="CPF" itemValue="cpf"/>
 						<f:selectItem itemLabel="Nome" itemValue="name"/>
 					</p:selectOneMenu>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
-						actionListener="#{employeeBean.findEmployees}" update="employeeTable"/>
+						actionListener="#{employeeBean.findEmployees}" update="employeeTable"
+						process="@this search option"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{employeeBean.initializeCreate}"
-						oncomplete="PF('employeeDialog').show()" update="employeeDialog">
+						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
+						process="@this">
 						<p:resetInput target="employeeDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
-						disabled="#{employeeBean.employee == null}">
+						disabled="#{employeeBean.employee == null}" process="@this">
 						<p:resetInput target="employeeDialog"/>
 					</p:commandButton>
-					<p:commandButton value="Exportar" icon="pi pi-download">
+					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="employeeTable" fileName="funcionarios"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar login" icon="pi pi-user-edit"
 						actionListener="#{employeeBean.changeLogin}"
 						oncomplete="PF('userDialog').show()" update="userDialog"
-						disabled="#{employeeBean.employee == null}">
+						disabled="#{employeeBean.employee == null}" process="@this">
 						<p:resetInput target="userDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Apagar login" icon="pi pi-user-minus"
 						actionListener="#{employeeBean.deleteLogin}"
-						disabled="#{employeeBean.employee == null}"/>
+						disabled="#{employeeBean.employee == null}" process="@this"/>
 				</f:facet>
 			</p:toolbar>
 			
@@ -97,7 +99,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
 						oncomplete="if(!args.validationFailed) PF('employeeDialog').hide()"
-						update="@form"/>
+						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>
@@ -117,7 +119,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{employeeBean.userBean.save}"
 						oncomplete="if(!args.validationFailed) PF('userDialog').hide()"
-						update="@form"/>
+						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

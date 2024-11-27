@@ -9,7 +9,7 @@
 	<ui:define name="content">
 		<h3>RELATÓRIO</h3>
 		<h:form>
-			<p:toolbar>
+			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:selectCheckboxMenu multiple="true" converter="teamConverter"
 						value="#{reportBean.selectedTeams}">
@@ -17,7 +17,7 @@
 							itemLabel="#{team.name}" itemValue="#{team}"/>
 					</p:selectCheckboxMenu>
 					<p:commandButton value="Buscar" update="reportTable"
-						actionListener="#{reportBean.find}" />
+						actionListener="#{reportBean.find}" process="toolbar"/>
 				</f:facet>
 			</p:toolbar>
 

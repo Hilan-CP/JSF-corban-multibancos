@@ -33,21 +33,25 @@
 					</p:selectOneMenu>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
-						actionListener="#{proposalBean.findProposals}" update="proposalTable"/>
+						actionListener="#{proposalBean.findProposals}" update="proposalTable"
+						process="toolbar"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{proposalBean.initializeCreate}"
-						oncomplete="PF('proposalDialog').show()" update="proposalDialog">
+						oncomplete="PF('proposalDialog').show()" update="proposalDialog"
+						process="@this">
 						<p:resetInput target="proposalDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('proposalDialog').show()" update="proposalDialog"
-						disabled="#{proposalBean.proposal == null}">
+						disabled="#{proposalBean.proposal == null}"
+						process="@this">
 						<p:resetInput target="proposalDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Cancelar Proposta" icon="pi pi-times"
 						actionListener="#{proposalBean.cancelProposal}" update="proposalTable"
-						disabled="#{proposalBean.proposal == null}"/>
-					<p:commandButton value="Exportar" icon="pi pi-download">
+						disabled="#{proposalBean.proposal == null}"
+						process="@this"/>
+					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="proposalTable" fileName="propostas"/>
 					</p:commandButton>
 				</f:facet>
@@ -141,7 +145,8 @@
 					<p:outputLabel value="CPF cliente: "/>
 					<p:inputText size="40" value="#{proposalBean.proposal.customer.cpf}">
 						<p:commandButton id="searchCustomer" icon="pi pi-search"
-							actionListener="#{proposalBean.findCustomer}" update="@form">
+							actionListener="#{proposalBean.findCustomer}" update="@form"
+							process="@form">
 							<f:param name="skipValidation" value="true"/>
 						</p:commandButton>
 					</p:inputText>
@@ -167,7 +172,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{proposalBean.save}"
 						oncomplete="if(!args.validationFailed) PF('proposalDialog').hide()"
-						update="@form"/>
+						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>	
 		</p:dialog>

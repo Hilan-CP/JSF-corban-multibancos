@@ -12,18 +12,21 @@
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:commandButton value="Buscar" icon="pi pi-search"
-						actionListener="#{bankBean.findAll}" update="bankTable"/>
+						actionListener="#{bankBean.findAll}" update="bankTable"
+						process="@this"/>
 					<p:commandButton value="Criar" icon="pi pi-plus-circle"
 						actionListener="#{bankBean.initializeCreate}"
-						oncomplete="PF('bankDialog').show()" update="bankDialog">
+						oncomplete="PF('bankDialog').show()" update="bankDialog"
+						process="@this">
 						<p:resetInput target="bankDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('bankDialog').show()" update="bankDialog"
-						disabled="#{bankBean.bank == null}">
+						disabled="#{bankBean.bank == null}" process="@this">
 						<p:resetInput target="bankDialog"/>
 					</p:commandButton>
-					<p:commandButton value="Exportar" icon="pi pi-download">
+					<p:commandButton value="Exportar" icon="pi pi-download"
+						process="@this">
 						<p:dataExporter type="csv" target="bankTable" fileName="bancos"/>
 					</p:commandButton>
 				</f:facet>
@@ -58,7 +61,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{bankBean.save}"
 						oncomplete="if(!args.validationFailed) PF('bankDialog').hide()"
-						update="@form"/>
+						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

@@ -11,26 +11,29 @@
 		<h:form id="contentForm">
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					<p:inputText size="20" value="#{customerBean.searchTerm}"/>
-					<p:selectOneMenu value="#{customerBean.searchOption}">
+					<p:inputText id="search" size="20" value="#{customerBean.searchTerm}"/>
+					<p:selectOneMenu id="option" value="#{customerBean.searchOption}">
 						<f:selectItem itemLabel="CPF" itemValue="cpf"/>
 						<f:selectItem itemLabel="Nome" itemValue="name"/>
 						<f:selectItem itemLabel="Telefone" itemValue="phone"/>
 					</p:selectOneMenu>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
-						actionListener="#{customerBean.find}" update="customerTable"/>
+						actionListener="#{customerBean.find}" update="customerTable"
+						process="@this search option"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{customerBean.initializeCreate}"
-						oncomplete="PF('customerDialog').show()" update="customerDialog">
+						oncomplete="PF('customerDialog').show()" update="customerDialog"
+						process="@this">
 						<p:resetInput target="customerDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
 						oncomplete="PF('customerDialog').show()" update="customerDialog"
-						disabled="#{customerBean.customer == null}">
+						disabled="#{customerBean.customer == null}"
+						process="@this">
 						<p:resetInput target="customerDialog"/>
 					</p:commandButton>
-					<p:commandButton value="Exportar" icon="pi pi-download">
+					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="customerTable" fileName="clientes"/>
 					</p:commandButton>
 				</f:facet>
@@ -83,7 +86,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{customerBean.save}"
 						oncomplete="if(!args.validationFailed) PF('customerDialog').hide()"
-						update="@form"/>
+						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

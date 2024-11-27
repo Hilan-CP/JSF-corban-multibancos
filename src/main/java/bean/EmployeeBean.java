@@ -79,12 +79,12 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void save() {
-		employee.setActive(false);
 		employeeService.save(employee);
 	}
 	
 	public void initializeCreate() {
 		employee = new Employee();
+		employee.setActive(false);
 	}
 	
 	public Employee getEmployee() {
