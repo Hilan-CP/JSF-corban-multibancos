@@ -41,7 +41,7 @@ public class ReportBean implements Serializable{
 		teams = teamService.findAll();
 		proposals = new ArrayList<>();
 		employees = new ArrayList<>();
-		today = LocalDate.of(2024, 8, 25);
+		today = LocalDate.now();
 	}
 	
 	public void find() {
@@ -52,8 +52,9 @@ public class ReportBean implements Serializable{
 	}
 	
 	private void findProposals() {
-		LocalDate firstDayOfMonth = LocalDate.of(2024, 8, 1);
-		LocalDate lastDayOfMonth = LocalDate.of(2024, 8, 30);
+		LocalDate firstDayOfMonth = today.withDayOfMonth(1);
+		int lastDay = today.lengthOfMonth();
+		LocalDate lastDayOfMonth = today.withDayOfMonth(lastDay);
 		proposals = proposalService.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
 	}
 	

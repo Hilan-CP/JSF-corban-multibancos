@@ -15,23 +15,24 @@ public class TeamConverter implements Converter<Team>{
 
 	@Override
 	public Team getAsObject(FacesContext context, UIComponent component, String value) {
+		if(value == null) {
+			return null;
+		}
 		try {
 			service = CDI.current().select(TeamService.class).get();
 			return service.findById(Long.parseLong(value));
 		}
-		catch(Exception e) {
+		catch(NumberFormatException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Team value) {
-		try {
-			return value.getId().toString();
-		}
-		catch(Exception e) {
+		if(value == null) {
 			return null;
 		}
+		return value.getId().toString();
 	}
-
 }

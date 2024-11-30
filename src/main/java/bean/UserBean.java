@@ -6,6 +6,8 @@ import java.util.Map;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import model.entity.Employee;
 import model.entity.User;
@@ -33,7 +35,7 @@ public class UserBean implements Serializable{
 			user = userService.findByName(employee.getCpf());
 			user.setPassword("");
 		}
-		catch(Exception e) {
+		catch(NoResultException | NonUniqueResultException e) {
 			user = new User();
 			user.setName(employee.getCpf());
 		}

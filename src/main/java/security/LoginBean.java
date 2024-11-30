@@ -3,7 +3,6 @@ package security;
 import java.io.Serializable;
 
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -16,6 +15,7 @@ import jakarta.security.enterprise.credential.Password;
 import jakarta.security.enterprise.credential.UsernamePasswordCredential;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.Message;
 
 @Named
 @RequestScoped
@@ -45,8 +45,7 @@ public class LoginBean implements Serializable{
 			facesContext.responseComplete();
 		}
 		if(status.equals(AuthenticationStatus.SEND_FAILURE)) {
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválido", null);
-			facesContext.addMessage(null, message);
+			Message.error("Usuário ou senha inválido");
 		}
 		if(status.equals(AuthenticationStatus.SUCCESS)) {
 			externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");

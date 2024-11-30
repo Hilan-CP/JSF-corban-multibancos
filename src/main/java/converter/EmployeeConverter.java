@@ -15,23 +15,18 @@ public class EmployeeConverter implements Converter<Employee>{
 
 	@Override
 	public Employee getAsObject(FacesContext context, UIComponent component, String value) {
-		try {
-			service = CDI.current().select(EmployeeService.class).get();
-			return service.findByCpf(value);
-		}
-		catch(Exception e) {
+		if(value == null) {
 			return null;
 		}
+		service = CDI.current().select(EmployeeService.class).get();
+		return service.findByCpf(value);
 	}
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Employee value) {
-		try {
-			return value.getCpf();
-		}
-		catch(Exception e) {
+		if(value == null) {
 			return null;
 		}
+		return value.getCpf();
 	}
-
 }

@@ -15,23 +15,24 @@ public class BankConverter implements Converter<Bank>{
 
 	@Override
 	public Bank getAsObject(FacesContext context, UIComponent component, String value) {
+		if(value == null) {
+			return null;
+		}
 		try {
 			service = CDI.current().select(BankService.class).get();
 			return service.findById(Long.parseLong(value));
 		}
-		catch(Exception e) {
+		catch(NumberFormatException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Bank value) {
-		try {
-			return value.getId().toString();
-		}
-		catch(Exception e) {
+		if(value == null) {
 			return null;
 		}
+		return value.getId().toString();
 	}
-
 }

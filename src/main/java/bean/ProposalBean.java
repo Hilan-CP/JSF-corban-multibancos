@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.NoResultException;
 import model.entity.Bank;
 import model.entity.Customer;
 import model.entity.Employee;
@@ -116,9 +117,9 @@ public class ProposalBean implements Serializable{
 			Proposal result = proposalService.findByIdAndEmployee(Long.parseLong(searchTerm), util.getUsername());
 			return List.of(result);
 		}
-		catch(Exception e) {
+		catch(NoResultException | NumberFormatException e) {
+			return List.of();
 		}
-		return List.of();
 	}
 	
 	public void findCustomer(){
