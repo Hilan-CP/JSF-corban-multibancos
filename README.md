@@ -5,7 +5,7 @@ A empresa Corban Multibancos atua como correspondente bancário na oferta de emp
 
 
 ## Diagrama de caso de uso
-![caso de uso](documents/diagrama de caso de uso.png) 
+![caso de uso](documents/diagrama_de_caso_de_uso.png) 
 
 O sistema possui dois tipos de usuários: gestor e consultor.
 
@@ -17,7 +17,7 @@ Ambos os usuários podem exportar os resultados de buscas para arquivo de extens
 
 
 ## Diagrama de classes
-![classes](documents/diagrama de classe.png)
+![classes](documents/diagrama_de_classe.png)
 
 - As enumerações são armazenadas como texto para facilitar a manipulação.
 - As equipes podem ser cadastradas livremente. Pode haver equipe sem funcionários.
