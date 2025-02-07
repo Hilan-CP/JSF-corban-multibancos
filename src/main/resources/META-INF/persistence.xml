@@ -4,21 +4,6 @@
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
 	version="3.0">
 	
-	<persistence-unit name="jtaPU" transaction-type="JTA">
-		<description>Persistence Unit de desenvolvimento</description>
-		<jta-data-source>jdbc/mysql</jta-data-source>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
-		
-		<properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
-            <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
-            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/sql/insert.sql"/>
-            
-            <property name="eclipselink.logging.level.sql" value="FINE" />
-            <property name="eclipselink.logging.parameters" value="true" />
-		</properties>
-	</persistence-unit>
-	
 	<persistence-unit name="nonjtaPU" transaction-type="RESOURCE_LOCAL">
 		<description>Persistence Unit de desenvolvimento</description>
 		<non-jta-data-source>jdbc/jsfcorban</non-jta-data-source>
@@ -27,7 +12,7 @@
 		<properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
             <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
-            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/sql/insert.sql"/>
+            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/sql/big_insert.sql"/>
             
             <property name="eclipselink.logging.level.sql" value="FINE" />
             <property name="eclipselink.logging.parameters" value="true" />

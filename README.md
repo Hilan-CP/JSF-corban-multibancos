@@ -38,3 +38,38 @@ Os requisitos funcionais do sistema podem ser encontrados no <a href="./document
 - Jakarta Bean Validation
 - Jakarta Security
 - PrimeFaces
+
+## Imagens do projeto em execução
+Todos os dados utilizados foram gerados aleatoriamente usando ferramentas online e editores de planilha. Logomarca gerada por inteligência artificial.
+
+Tela de login
+
+![login](documents/run_images/login.png)
+
+Página inicial
+
+![index](documents/run_images/index.png)
+
+Tela de equipes
+
+![equipes](documents/run_images/equipes.png)
+
+Tela de funcionários
+
+![funcionario](documents/run_images/funcionarios.png)
+
+Tela de bancos
+
+![bancos](documents/run_images/bancos.png)
+
+Tela de clientes
+
+![clientes](documents/run_images/clientes.png)
+
+Tela de propostas
+
+![propostas](documents/run_images/propostas.png)
+
+Tela de relatório
+
+![relatorio](documents/run_images/relatorio.png)
