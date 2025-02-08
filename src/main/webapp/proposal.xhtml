@@ -15,7 +15,7 @@
 					<p:inputText size="20" value="#{proposalBean.searchTerm}"/>
 					<p:selectOneMenu value="#{proposalBean.searchOption}">
 						<f:selectItem itemLabel="Nome funcionário" itemValue="employee"
-							itemDisabled="#{!userUtil.admin}"/>
+							itemDisabled="#{!loggedUserBean.admin}"/>
 						<f:selectItem itemLabel="Código banco" itemValue="bank"/>
 						<f:selectItem itemLabel="Código proposta" itemValue="proposal"/>
 					</p:selectOneMenu>
@@ -129,7 +129,7 @@
 					
 					<p:outputLabel value="Funcionário: "/>
 					<p:selectOneMenu value="#{proposalBean.proposal.employee}"
-						converter="employeeConverter" disabled="#{!userUtil.admin}">
+						converter="employeeConverter" disabled="#{!loggedUserBean.admin}">
 						<f:selectItems value="#{proposalBean.employeeList}"
 							var="employee" itemLabel="#{employee.name}" itemValue="#{employee}"/>
 					</p:selectOneMenu>

@@ -1,11 +1,11 @@
-package util;
+package projection;
 
 import java.time.LocalDate;
 
 import model.entity.Employee;
 import model.enumeration.ProposalStatus;
 
-public class ProposalReport {
+public class ProposalReportProjection {
 
 	private Double value;
 	private LocalDate generation;
@@ -13,10 +13,10 @@ public class ProposalReport {
 	private ProposalStatus status;
 	private Employee employee;
 	
-	public ProposalReport() {
+	public ProposalReportProjection() {
 	}
 	
-	public ProposalReport(Double value, LocalDate generation, LocalDate payment, ProposalStatus status, Employee employee) {
+	public ProposalReportProjection(Double value, LocalDate generation, LocalDate payment, ProposalStatus status, Employee employee) {
 		this.value = value;
 		this.generation = generation;
 		this.payment = payment;

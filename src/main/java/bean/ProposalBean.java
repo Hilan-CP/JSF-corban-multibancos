@@ -14,11 +14,11 @@ import model.entity.Customer;
 import model.entity.Employee;
 import model.entity.Proposal;
 import model.enumeration.ProposalStatus;
+import security.LoggedUserBean;
 import service.BankService;
 import service.CustomerService;
 import service.EmployeeService;
 import service.ProposalService;
-import util.UserUtil;
 
 @Named
 @ViewScoped
@@ -38,7 +38,7 @@ public class ProposalBean implements Serializable{
 	private CustomerService customerService;
 	
 	@Inject
-	private UserUtil util;
+	private LoggedUserBean currentUser;
 	
 	private Proposal proposal;
 	private List<Proposal> proposalList;
@@ -61,7 +61,7 @@ public class ProposalBean implements Serializable{
 	}
 	
 	private List<Proposal> findByUserRole() {
-		if(util.isAdmin()) {
+		if(currentUser.isAdmin()) {
 			return adminSearch();
 		}
 		else {
@@ -89,14 +89,14 @@ public class ProposalBean implements Serializable{
 	
 	private List<Proposal> nonAdminSearch(){
 		if(searchTerm.isBlank()) {
-			Employee employee = employeeService.findByCpf(util.getUsername());
+			Employee employee = employeeService.findByCpf(currentUser.getUsername());
 			return proposalService.findByEmployeeAndDate(employee.getName(), dateOption, beginDate, endDate);
 		}
 		else if(searchOption.equals("proposal")) {
 			return findByIdAndEmployee();
 		}
 		else if(searchOption.equals("bank")) {
-			return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, util.getUsername());
+			return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, currentUser.getUsername());
 		}
 		else {
 			return List.of();
@@ -114,7 +114,7 @@ public class ProposalBean implements Serializable{
 	
 	private List<Proposal> findByIdAndEmployee(){
 		try {
-			Proposal result = proposalService.findByIdAndEmployee(Long.parseLong(searchTerm), util.getUsername());
+			Proposal result = proposalService.findByIdAndEmployee(Long.parseLong(searchTerm), currentUser.getUsername());
 			return List.of(result);
 		}
 		catch(NoResultException | NumberFormatException e) {
@@ -161,7 +161,7 @@ public class ProposalBean implements Serializable{
 	}
 	
 	private Employee currentUser() {
-		String username = util.getUsername();
+		String username = currentUser.getUsername();
 		for(Employee employee : employeeList) {
 			if(employee.getCpf().equals(username)) {
 				return employee;

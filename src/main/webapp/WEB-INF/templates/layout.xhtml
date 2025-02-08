@@ -17,12 +17,12 @@
 		</div>
 	</header>
 	<div class="sidebar">
-		<p:link value="Equipes" outcome="team" rendered="#{userUtil.admin}"/>
-		<p:link value="Funcionários" outcome="employee" rendered="#{userUtil.admin}"/>
-		<p:link value="Bancos" outcome="bank" rendered="#{userUtil.admin}"/>
+		<p:link value="Equipes" outcome="team" rendered="#{loggedUserBean.admin}"/>
+		<p:link value="Funcionários" outcome="employee" rendered="#{loggedUserBean.admin}"/>
+		<p:link value="Bancos" outcome="bank" rendered="#{loggedUserBean.admin}"/>
 		<p:link value="Clientes" outcome="customer"/>
 		<p:link value="Propostas" outcome="proposal"/>
-		<p:link value="Relatório" outcome="report" rendered="#{userUtil.admin}"/>
+		<p:link value="Relatório" outcome="report" rendered="#{loggedUserBean.admin}"/>
 	</div>
 	<div class="content">
 		<ui:insert name="content" />

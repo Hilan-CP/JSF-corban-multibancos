@@ -15,9 +15,9 @@ import jakarta.inject.Named;
 import model.entity.Employee;
 import model.entity.Team;
 import model.enumeration.ProposalStatus;
+import projection.ProposalReportProjection;
 import service.ProposalService;
 import service.TeamService;
-import util.ProposalReport;
 
 @Named
 @ViewScoped
@@ -32,7 +32,7 @@ public class ReportBean implements Serializable{
 	
 	private List<Team> selectedTeams;
 	private List<Team> teams;
-	private List<ProposalReport> proposals;
+	private List<ProposalReportProjection> proposals;
 	private List<Employee> employees;
 	private LocalDate today;
 	
@@ -60,7 +60,7 @@ public class ReportBean implements Serializable{
 	
 	private void loadEmployees() {
 		Map<String, Employee> map = new HashMap<>();
-		for(ProposalReport proposal : proposals) {
+		for(ProposalReportProjection proposal : proposals) {
 			if(!map.containsKey(proposal.getEmployee().getCpf())) {
 				map.put(proposal.getEmployee().getCpf(), proposal.getEmployee());
 			}
@@ -167,23 +167,23 @@ public class ReportBean implements Serializable{
 		return result / daysElapsed * lengthOfMonth;
 	}
 	
-	private boolean isGeneratedToday(ProposalReport proposal) {
+	private boolean isGeneratedToday(ProposalReportProjection proposal) {
 		return today.equals(proposal.getGeneration());
 	}
 	
-	private boolean isPaidToday(ProposalReport proposal) {
+	private boolean isPaidToday(ProposalReportProjection proposal) {
 		return today.equals(proposal.getPayment());
 	}
 	
-	private boolean isFromEmployee(ProposalReport proposal, Employee employee) {
+	private boolean isFromEmployee(ProposalReportProjection proposal, Employee employee) {
 		return proposal.getEmployee().equals(employee);
 	}
 	
-	private boolean isFromTeam(ProposalReport proposal, Team team) {
+	private boolean isFromTeam(ProposalReportProjection proposal, Team team) {
 		return proposal.getEmployee().getTeam().equals(team);
 	}
 	
-	private boolean isPaid(ProposalReport proposal) {
+	private boolean isPaid(ProposalReportProjection proposal) {
 		return proposal.getStatus().equals(ProposalStatus.CONTRATADA);
 	}
 	

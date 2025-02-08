@@ -8,8 +8,8 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Proposal;
 import model.entity.Team;
+import projection.ProposalReportProjection;
 import repository.ProposalRepository;
-import util.ProposalReport;
 import util.Transaction;
 
 @Dependent
@@ -47,7 +47,7 @@ public class ProposalService implements Serializable{
 		return repository.findByBankAndDate(bankCode, dateField, beginDate, endDate, cpf);
 	}
 	
-	public List<ProposalReport> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
+	public List<ProposalReportProjection> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
 		return repository.findByTeamAndDate(teams, beginDate, endDate);
 	}
 	

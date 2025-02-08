@@ -18,7 +18,7 @@ import model.entity.Bank;
 import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
-import util.ProposalReport;
+import projection.ProposalReportProjection;
 
 @Dependent
 public class ProposalRepository implements Serializable{
@@ -91,11 +91,11 @@ public class ProposalRepository implements Serializable{
 		}
 	}
 	
-	public List<ProposalReport> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
-		String jpql = "SELECT NEW util.ProposalReport(p.value, p.generation, p.payment, p.status, p.employee)"
+	public List<ProposalReportProjection> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
+		String jpql = "SELECT NEW projection.ProposalReportProjection(p.value, p.generation, p.payment, p.status, p.employee)"
 					+ " FROM Proposal p JOIN p.employee e"
 					+ " WHERE e.team IN :teams AND p.generation BETWEEN :beginDate AND :endDate";
-		TypedQuery<ProposalReport> query = entityManager.createQuery(jpql, ProposalReport.class);
+		TypedQuery<ProposalReportProjection> query = entityManager.createQuery(jpql, ProposalReportProjection.class);
 		query.setParameter("teams", teams);
 		query.setParameter("beginDate", beginDate);
 		query.setParameter("endDate", endDate);

@@ -1,4 +1,4 @@
-package util;
+package security;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import jakarta.inject.Named;
 
 @Named
 @SessionScoped
-public class UserUtil implements Serializable{
+public class LoggedUserBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private boolean admin;
@@ -21,7 +21,6 @@ public class UserUtil implements Serializable{
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 		admin = context.isUserInRole("GESTOR");
 		username = context.getUserPrincipal().getName();
-		
 	}
 
 	public boolean isAdmin() {
