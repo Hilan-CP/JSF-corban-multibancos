@@ -39,13 +39,13 @@ public class ProposalRepository implements Serializable{
 		return entityManager.find(Proposal.class, id);
 	}
 	
-	public Proposal findByIdAndEmployee(Long id, String cpf) {
+	public List<Proposal> findByIdAndEmployee(Long id, String cpf) {
 		String jpql = "SELECT p FROM Proposal p JOIN p.employee e"
 					+ " WHERE p.id = :id AND e.cpf = :cpf";
 		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
 		query.setParameter("id", id);
 		query.setParameter("cpf", cpf);
-		return query.getSingleResult();
+		return query.getResultList();
 	}
 	
 	public List<Proposal> findByDate(String dateField, LocalDate beginDate, LocalDate endDate){

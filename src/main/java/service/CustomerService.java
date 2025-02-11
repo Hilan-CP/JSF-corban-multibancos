@@ -24,20 +24,38 @@ public class CustomerService implements Serializable{
 		this.repository = repository;
 	}
 	
-	public Customer findByCpf(String cpf) {
-		return repository.findByCpf(cpf);
+	public List<Customer> findByOption(String searchTerm, String searchOption){
+		if(searchTerm.isBlank()) {
+			return repository.findAll();
+		}
+		else if(searchOption.equals("cpf")) {
+			return listOfSingleCustomer(searchTerm);
+		}
+		else if(searchOption.equals("name")) {
+			return repository.findByName(searchTerm);
+		}
+		else if(searchOption.equals("phone")) {
+			return repository.findByPhone(searchTerm);
+		}
+		else {
+			return List.of();
+		}
 	}
 	
-	public List<Customer> findByName(String name) {
-		return repository.findByName(name);
+	private List<Customer> listOfSingleCustomer(String searchTerm){
+		Customer customer = repository.findByCpf(searchTerm);
+		if(customer == null) {
+			return List.of();
+		}
+		return List.of(customer);
 	}
-	
-	public List<Customer> findByPhone(String phone) {
-		return repository.findByPhone(phone);
-	}
-	
-	public List<Customer> findAll(){
-		return repository.findAll();
+
+	public Customer findByCpfOrDefault(String cpf) {
+		Customer customer = repository.findByCpf(cpf);
+		if(customer == null) {
+			return new Customer();
+		}
+		return customer;
 	}
 	
 	@Transaction

@@ -24,16 +24,35 @@ public class EmployeeService implements Serializable{
 		this.repository = repository;
 	}
 	
-	public Employee findByCpf(String cpf) {
-		return repository.findByCpf(cpf);
+	public List<Employee> findByOption(String searchTerm, String searchOption){
+		if(searchTerm.isBlank()) {
+			return repository.findAll();
+		}
+		else if(searchOption.equals("cpf")) {
+			return listOfSingleEmployee(searchTerm);
+		}
+		else if(searchOption.equals("name")) {
+			return repository.findByName(searchTerm);
+		}
+		else {
+			return List.of();
+		}
 	}
 	
-	public List<Employee> findByName(String name) {
-		return repository.findByName(name);
+	private List<Employee> listOfSingleEmployee(String searchTerm) {
+		Employee employee = repository.findByCpf(searchTerm);
+		if(employee == null) {
+			return List.of();
+		}
+		return List.of(employee);
 	}
 	
 	public List<Employee> findAll(){
 		return repository.findAll();
+	}
+	
+	public Employee findByCpf(String cpf) {
+		return repository.findByCpf(cpf);
 	}
 	
 	@Transaction

@@ -3,9 +3,9 @@ package bean;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.PostConstruct;
@@ -53,19 +53,14 @@ public class ReportBean implements Serializable{
 	
 	private void findProposals() {
 		LocalDate firstDayOfMonth = today.withDayOfMonth(1);
-		int lastDay = today.lengthOfMonth();
-		LocalDate lastDayOfMonth = today.withDayOfMonth(lastDay);
+		LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth());
 		proposals = proposalService.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
 	}
 	
 	private void loadEmployees() {
-		Map<String, Employee> map = new HashMap<>();
-		for(ProposalReportProjection proposal : proposals) {
-			if(!map.containsKey(proposal.getEmployee().getCpf())) {
-				map.put(proposal.getEmployee().getCpf(), proposal.getEmployee());
-			}
-		}
-		employees = map.values().stream().collect(Collectors.toList());
+		Set<Employee> employeeSet = new HashSet<>();
+		proposals.forEach(proposal -> employeeSet.add(proposal.getEmployee()));
+		employees = employeeSet.stream().collect(Collectors.toList());
 	}
 
 	public long countGeneration(Employee employee) {
@@ -162,7 +157,7 @@ public class ReportBean implements Serializable{
 	}
 	
 	private double calculateTrend(double result){
-		int daysElapsed = today.getDayOfMonth() - 1; //current day is not over yet
+		int daysElapsed = today.getDayOfMonth() - 1; //dia atual não acabou
 		int lengthOfMonth = today.lengthOfMonth();
 		return result / daysElapsed * lengthOfMonth;
 	}

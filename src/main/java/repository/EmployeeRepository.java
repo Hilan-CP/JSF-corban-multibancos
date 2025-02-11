@@ -36,7 +36,7 @@ public class EmployeeRepository implements Serializable{
 	}
 	
 	public List<Employee> findAll(){
-		String jpql = "SELECT e FROM Employee e";
+		String jpql = "SELECT e FROM Employee e JOIN FETCH e.team";
 		TypedQuery<Employee> query = entityManager.createQuery(jpql, Employee.class);
 		return query.getResultList();
 	}

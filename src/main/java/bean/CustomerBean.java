@@ -23,36 +23,7 @@ public class CustomerBean implements Serializable{
 	private String searchOption;
 	
 	public void find() {
-		if(searchTerm.isBlank()) {
-			customerList = service.findAll();
-		}
-		else {
-			findByOption();
-		}
-	}
-	
-	private void findByOption() {
-		switch(searchOption) {
-			case "cpf":
-				findByCpf();
-				break;
-			case "name":
-				customerList = service.findByName(searchTerm);
-				break;
-			case "phone":
-				customerList = service.findByPhone(searchTerm);
-				break;
-			default:
-				break;
-		}
-	}
-	
-	private void findByCpf() {
-		customerList = List.of();
-		Customer result = service.findByCpf(searchTerm);
-		if(result != null) {
-			customerList = List.of(result);
-		}
+		customerList = service.findByOption(searchTerm, searchOption);
 	}
 	
 	public void save() {

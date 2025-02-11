@@ -8,7 +8,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.NoResultException;
 import model.entity.Bank;
 import model.entity.Customer;
 import model.entity.Employee;
@@ -38,7 +37,7 @@ public class ProposalBean implements Serializable{
 	private CustomerService customerService;
 	
 	@Inject
-	private LoggedUserBean currentUser;
+	private LoggedUserBean loggedUser;
 	
 	private Proposal proposal;
 	private List<Proposal> proposalList;
@@ -57,99 +56,21 @@ public class ProposalBean implements Serializable{
 	}
 	
 	public void findProposals() {
-		proposalList = findByUserRole();
-	}
-	
-	private List<Proposal> findByUserRole() {
-		if(currentUser.isAdmin()) {
-			return adminSearch();
-		}
-		else {
-			return nonAdminSearch();
-		}
-	}
-	
-	private List<Proposal> adminSearch(){
-		if(searchTerm.isBlank()) {
-			return proposalService.findByDate(dateOption, beginDate, endDate);
-		}
-		else if(searchOption.equals("proposal")) {
-			return findById();
-		}
-		else if(searchOption.equals("employee")) {
-			return proposalService.findByEmployeeAndDate(searchTerm, dateOption, beginDate, endDate);
-		}
-		else if(searchOption.equals("bank")) {
-			return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, null);
-		}
-		else {
-			return List.of();
-		}
-	}
-	
-	private List<Proposal> nonAdminSearch(){
-		if(searchTerm.isBlank()) {
-			Employee employee = employeeService.findByCpf(currentUser.getUsername());
-			return proposalService.findByEmployeeAndDate(employee.getName(), dateOption, beginDate, endDate);
-		}
-		else if(searchOption.equals("proposal")) {
-			return findByIdAndEmployee();
-		}
-		else if(searchOption.equals("bank")) {
-			return proposalService.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, currentUser.getUsername());
-		}
-		else {
-			return List.of();
-		}
-	}
-	
-	private List<Proposal> findById(){
-		List<Proposal> list = List.of();
-		Proposal result = proposalService.findById(Long.parseLong(searchTerm));
-		if(result != null) {
-			list = List.of(result);
-		}
-		return list;
-	}
-	
-	private List<Proposal> findByIdAndEmployee(){
-		try {
-			Proposal result = proposalService.findByIdAndEmployee(Long.parseLong(searchTerm), currentUser.getUsername());
-			return List.of(result);
-		}
-		catch(NoResultException | NumberFormatException e) {
-			return List.of();
-		}
+		proposalList = proposalService.findByOptionAndRole(searchTerm, searchOption, dateOption, beginDate, endDate);
 	}
 	
 	public void findCustomer(){
 		String cpf = proposal.getCustomer().getCpf();
-		Customer result = customerService.findByCpf(cpf);
-		if(result == null) {
-			result = new Customer();
-		}
+		Customer result = customerService.findByCpfOrDefault(cpf);
 		proposal.setCustomer(result);
 	}
 	
 	public void save() {
-		changeStatusIfPaid();
 		proposalService.save(proposal);
 	}
 	
 	public void cancelProposal() {
-		proposal.setStatus(ProposalStatus.CANCELADA);
-		proposal.setPayment(null);
-		proposalService.save(proposal);
-	}
-	
-	private void changeStatusIfPaid() {
-		if(isPaid()) {
-			proposal.setStatus(ProposalStatus.CONTRATADA);
-		}
-	}
-	
-	private boolean isPaid() {
-		return proposal.getPayment() != null;
+		proposalService.cancelProposal(proposal);
 	}
 	
 	public void initializeCreate() {
@@ -157,11 +78,11 @@ public class ProposalBean implements Serializable{
 		proposal.setStatus(ProposalStatus.SOLICITADA);
 		proposal.setCustomer(new Customer());
 		proposal.setGeneration(LocalDate.now());
-		proposal.setEmployee(currentUser());
+		proposal.setEmployee(getLoggedUser());
 	}
 	
-	private Employee currentUser() {
-		String username = currentUser.getUsername();
+	private Employee getLoggedUser() {
+		String username = loggedUser.getUsername();
 		for(Employee employee : employeeList) {
 			if(employee.getCpf().equals(username)) {
 				return employee;

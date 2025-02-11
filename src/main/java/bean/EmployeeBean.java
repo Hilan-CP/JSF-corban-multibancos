@@ -27,16 +27,16 @@ public class EmployeeBean implements Serializable{
 	@Inject
 	private UserBean userBean;
 	
-	@PostConstruct
-	public void init() {
-		teamList = teamService.findAll();
-	}
-	
 	private Employee employee;
 	private List<Employee> employeeList;
 	private List<Team> teamList;
 	private String searchTerm;
 	private String searchOption;
+	
+	@PostConstruct
+	public void init() {
+		teamList = teamService.findAll();
+	}
 	
 	public void changeLogin() {
 		userBean.setEmployee(employee);
@@ -49,33 +49,7 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void findEmployees() {
-		if(searchTerm.isBlank()) {
-			employeeList = employeeService.findAll();
-		}
-		else {
-			findByOption();
-		}
-	}
-	
-	private void findByOption() {
-		switch(searchOption) {
-			case "cpf":
-				findByCpf();
-				break;
-			case "name":
-				employeeList = employeeService.findByName(searchTerm);
-				break;
-			default:
-				break;
-		}
-	}
-	
-	private void findByCpf() {
-		employeeList = List.of();
-		Employee result  = employeeService.findByCpf(searchTerm);
-		if(result != null) {
-			employeeList = List.of(result);
-		}
+		employeeList = employeeService.findByOption(searchTerm, searchOption);
 	}
 	
 	public void save() {
