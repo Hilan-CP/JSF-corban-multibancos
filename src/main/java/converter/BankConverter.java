@@ -23,7 +23,6 @@ public class BankConverter implements Converter<Bank>{
 			return service.findById(Long.parseLong(value));
 		}
 		catch(NumberFormatException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

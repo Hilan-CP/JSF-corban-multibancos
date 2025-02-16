@@ -1,10 +1,13 @@
 package service;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import model.entity.Employee;
 import repository.EmployeeRepository;
 import util.Transaction;
@@ -15,6 +18,9 @@ public class EmployeeService implements Serializable{
 	
 	@Inject
 	private EmployeeRepository repository;
+	
+	@Inject
+	private Pbkdf2PasswordHash passwordHash;
 	
 	public EmployeeService() {
 		
@@ -56,7 +62,25 @@ public class EmployeeService implements Serializable{
 	}
 	
 	@Transaction
-	public void save(Employee employee) {
+	public void save(Employee employee, boolean passwordChanged) {
+		changePassword(employee, passwordChanged);
 		repository.save(employee);
+	}
+	
+	private void changePassword(Employee employee, boolean passwordChanged) {
+		if(passwordChanged) {
+			initializeHashAlgorithm();
+			char[] password = employee.getPassword().toCharArray();
+			employee.setPassword(passwordHash.generate(password));
+		}
+	}
+	
+	private void initializeHashAlgorithm() {
+		Map<String, String> parameters = new HashMap<>();
+        parameters.put("Pbkdf2PasswordHash.Iterations", "2048");
+        parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA256");
+        parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "32");
+        parameters.put("Pbkdf2PasswordHash.KeySizeBytes", "32");
+		passwordHash.initialize(parameters);
 	}
 }

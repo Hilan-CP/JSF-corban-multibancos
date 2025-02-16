@@ -27,14 +27,14 @@ public class Employee implements Serializable{
 	@NotBlank(message = "nome deve ser informado")
 	private String name;
 	
+	private String password;
+	
 	@NotNull(message = "tipo de funcionário de ser informado")
 	@Enumerated(EnumType.STRING)
 	private EmployeeType type;
 	
 	@ManyToOne
 	private Team team;
-	
-	private Boolean active;
 
 	public String getCpf() {
 		return cpf;
@@ -67,13 +67,13 @@ public class Employee implements Serializable{
 	public void setTeam(Team team) {
 		this.team = team;
 	}
-
-	public Boolean getActive() {
-		return active;
+	
+	public String getPassword() {
+		return password;
 	}
 
-	public void setActive(Boolean active) {
-		this.active = active;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override

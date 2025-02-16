@@ -13,7 +13,7 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 		loginToContinue = @LoginToContinue(loginPage = "/login.xhtml", errorPage = ""))
 @DatabaseIdentityStoreDefinition(
 		dataSourceLookup = "jdbc/jsfcorban",
-		callerQuery = "select password from user where name = ?",
+		callerQuery = "select password from employee where cpf = ?",
 		groupsQuery = "select type from employee where cpf = ?",
 		hashAlgorithm = Pbkdf2PasswordHash.class,
 		hashAlgorithmParameters = {

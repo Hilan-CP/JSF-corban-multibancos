@@ -32,18 +32,14 @@
 						disabled="#{employeeBean.employee == null}" process="@this">
 						<p:resetInput target="employeeDialog"/>
 					</p:commandButton>
+					<p:commandButton value="Alterar Senha" icon="pi pi-key"
+						oncomplete="PF('passwordDialog').show()" update="passwordDialog"
+						disabled="#{employeeBean.employee == null}" process="@this">
+						<p:resetInput target="passwordDialog"/>
+					</p:commandButton>
 					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="employeeTable" fileName="funcionarios"/>
 					</p:commandButton>
-					<p:commandButton value="Alterar login" icon="pi pi-user-edit"
-						actionListener="#{employeeBean.changeLogin}"
-						oncomplete="PF('userDialog').show()" update="userDialog"
-						disabled="#{employeeBean.employee == null}" process="@this">
-						<p:resetInput target="userDialog"/>
-					</p:commandButton>
-					<p:commandButton value="Apagar login" icon="pi pi-user-minus"
-						actionListener="#{employeeBean.deleteLogin}"
-						disabled="#{employeeBean.employee == null}" process="@this"/>
 				</f:facet>
 			</p:toolbar>
 			
@@ -64,9 +60,6 @@
 				</p:column>
 				<p:column headerText="equipe">
 					<h:outputText value="#{employee.team.name}" />
-				</p:column>
-				<p:column headerText="ativo">
-					<h:outputText value="#{employee.active}"/>
 				</p:column>
 			</p:dataTable>
 		</h:form>
@@ -105,21 +98,25 @@
 			</h:form>
 		</p:dialog>
 		
-		<p:dialog id="userDialog" header="Usuário" widgetVar="userDialog"
+		<p:dialog id="passwordDialog" header="Alterar senha" widgetVar="passwordDialog"
 			resizable="false" modal="true" closeOnEscape="true">
 			<h:form>
 				<p:messages />
-				<h:panelGrid columns="2" rendered="#{employeeBean.userBean.user != null}"
-					cellpading="10">
-					<p:outputLabel value="Usuário: "/>
-					<p:inputText size="45" value="#{employeeBean.userBean.user.name}"
+				<h:panelGrid columns="2" rendered="#{employeeBean.employee != null}"
+					cellpadding="10">
+					<p:outputLabel value="CPF: "/>
+					<p:inputText size="45" value="#{employeeBean.employee.cpf}"
+						disabled="true"/>
+					
+					<p:outputLabel value="Nome: "/>
+					<p:inputText size="45" value="#{employeeBean.employee.name}"
 						disabled="true"/>
 					
 					<p:outputLabel value="Senha: "/>
-					<p:inputText size="45" value="#{employeeBean.userBean.user.password}"/>
-					
-					<p:commandButton value="Salvar" actionListener="#{employeeBean.userBean.save}"
-						oncomplete="if(!args.validationFailed) PF('userDialog').hide()"
+					<p:password size="45" value="#{employeeBean.employee.password}"/>
+
+					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
+						oncomplete="PF('passwordDialog').hide()"
 						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>

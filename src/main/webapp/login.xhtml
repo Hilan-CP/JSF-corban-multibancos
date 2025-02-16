@@ -11,7 +11,7 @@
 		<p:outputLabel value="Usuário"/><br/>
 		<p:inputText value="#{loginBean.username}" placeHolder="CPF"/><br/>
 		<p:outputLabel value="Senha"/><br/>
-		<p:inputText value="#{loginBean.password}" placeHolder="Senha"/><br/>
+		<p:password value="#{loginBean.password}" placeHolder="Senha"/><br/>
 		<p:commandButton value="Entrar" action="#{loginBean.login}" ajax="false"/>
 <!-- 	ajax precisa ser falso para que FacesContext possa fazer o redirecionamento correto -->
 <!-- 	https://stackoverflow.com/questions/62523627/login-not-forwarding-correctly-with-customformauth-and-oform -->

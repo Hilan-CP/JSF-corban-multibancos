@@ -24,28 +24,16 @@ public class EmployeeBean implements Serializable{
 	@Inject
 	private TeamService teamService;
 	
-	@Inject
-	private UserBean userBean;
-	
 	private Employee employee;
 	private List<Employee> employeeList;
 	private List<Team> teamList;
 	private String searchTerm;
 	private String searchOption;
+	private String oldPassword;
 	
 	@PostConstruct
 	public void init() {
 		teamList = teamService.findAll();
-	}
-	
-	public void changeLogin() {
-		userBean.setEmployee(employee);
-		userBean.findUser();
-	}
-	
-	public void deleteLogin() {
-		userBean.setEmployee(employee);
-		userBean.deleteLogin();
 	}
 	
 	public void findEmployees() {
@@ -53,12 +41,23 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void save() {
-		employeeService.save(employee);
+		employeeService.save(employee, isPasswordChanged());
+		oldPassword = employee.getPassword();
+	}
+	
+	private boolean isPasswordChanged() {
+		if(employee.getPassword() != null) {
+			return !employee.getPassword().equals(oldPassword);
+		}
+		return false;
+	}
+	
+	public void preparePasswordChange() {
+		oldPassword = employee.getPassword();
 	}
 	
 	public void initializeCreate() {
 		employee = new Employee();
-		employee.setActive(false);
 	}
 	
 	public Employee getEmployee() {
@@ -95,13 +94,5 @@ public class EmployeeBean implements Serializable{
 
 	public List<Team> getTeamList() {
 		return teamList;
-	}
-
-	public UserBean getUserBean() {
-		return userBean;
-	}
-
-	public void setUserBean(UserBean userBean) {
-		this.userBean = userBean;
 	}
 }

@@ -23,7 +23,6 @@ public class TeamConverter implements Converter<Team>{
 			return service.findById(Long.parseLong(value));
 		}
 		catch(NumberFormatException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
