@@ -17,14 +17,6 @@ public class EmployeeRepository implements Serializable{
 	@Inject
 	private EntityManager entityManager;
 	
-	public EmployeeRepository() {
-		
-	}
-
-	public EmployeeRepository(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-	
 	public Employee findByCpf(String cpf) {
 		return entityManager.find(Employee.class, cpf);
 	}

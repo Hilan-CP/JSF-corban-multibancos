@@ -15,14 +15,6 @@ public class TeamRepository implements Serializable{
 	
 	@Inject
 	private EntityManager entityManager;
-
-	public TeamRepository() {
-
-	}
-
-	public TeamRepository(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
 	
 	public Team findById(Long id){
 		return entityManager.find(Team.class, id);

@@ -27,14 +27,6 @@ public class ProposalRepository implements Serializable{
 	@Inject
 	private EntityManager entityManager;
 	
-	public ProposalRepository() {
-		
-	}
-
-	public ProposalRepository(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-	
 	public Proposal findById(Long id) {
 		return entityManager.find(Proposal.class, id);
 	}

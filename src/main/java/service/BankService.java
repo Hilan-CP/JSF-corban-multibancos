@@ -16,14 +16,6 @@ public class BankService implements Serializable{
 	@Inject
 	private BankRepository repository;
 	
-	public BankService() {
-		
-	}
-
-	public BankService(BankRepository repository) {
-		this.repository = repository;
-	}
-	
 	public List<Bank> findAll() {
 		return repository.findAll();
 	}

@@ -16,14 +16,6 @@ public class CustomerService implements Serializable{
 	@Inject
 	private CustomerRepository repository;
 	
-	public CustomerService() {
-		
-	}
-
-	public CustomerService(CustomerRepository repository) {
-		this.repository = repository;
-	}
-	
 	public List<Customer> findByOption(String searchTerm, String searchOption){
 		if(searchTerm.isBlank()) {
 			return repository.findAll();

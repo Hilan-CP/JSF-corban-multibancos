@@ -22,14 +22,6 @@ public class EmployeeService implements Serializable{
 	@Inject
 	private Pbkdf2PasswordHash passwordHash;
 	
-	public EmployeeService() {
-		
-	}
-
-	public EmployeeService(EmployeeRepository repository) {
-		this.repository = repository;
-	}
-	
 	public List<Employee> findByOption(String searchTerm, String searchOption){
 		if(searchTerm.isBlank()) {
 			return repository.findAll();

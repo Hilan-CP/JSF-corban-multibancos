@@ -16,14 +16,6 @@ public class CustomerRepository implements Serializable{
 	@Inject
 	private EntityManager entityManager;
 	
-	public CustomerRepository() {
-		
-	}
-
-	public CustomerRepository(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-	
 	public Customer findByCpf(String cpf) {
 		return entityManager.find(Customer.class, cpf);
 	}

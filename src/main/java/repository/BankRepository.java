@@ -16,14 +16,6 @@ public class BankRepository implements Serializable{
 	@Inject
 	private EntityManager entityManager;
 	
-	public BankRepository() {
-		
-	}
-
-	public BankRepository(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-	
 	public Bank findById(Long id) {
 		return entityManager.find(Bank.class, id);
 	}

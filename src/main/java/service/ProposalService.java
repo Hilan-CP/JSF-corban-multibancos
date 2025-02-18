@@ -29,14 +29,6 @@ public class ProposalService implements Serializable{
 	@Inject
 	private LoggedUserBean loggedUser;
 	
-	public ProposalService() {
-		
-	}
-
-	public ProposalService(ProposalRepository repository) {
-		this.repository = repository;
-	}
-	
 	public List<Proposal> findByOptionAndRole(String searchTerm, String searchOption, String dateOption,
 			LocalDate beginDate, LocalDate endDate) {
 		if(loggedUser.isAdmin()) {

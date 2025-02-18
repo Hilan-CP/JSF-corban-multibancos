@@ -15,14 +15,6 @@ public class TeamService implements Serializable{
 	
 	@Inject
 	private TeamRepository repository;
-
-	public TeamService() {
-
-	}
-
-	public TeamService(TeamRepository repository) {
-		this.repository = repository;
-	}
 	
 	public Team findById(Long id) {
 		return repository.findById(id);
