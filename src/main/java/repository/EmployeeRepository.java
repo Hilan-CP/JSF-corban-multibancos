@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import model.entity.Employee;
 
@@ -39,6 +40,13 @@ public class EmployeeRepository implements Serializable{
 		String jpql = "SELECT e FROM Employee e JOIN FETCH e.team";
 		TypedQuery<Employee> query = entityManager.createQuery(jpql, Employee.class);
 		return query.getResultList();
+	}
+	
+	public String findPasswordHash(String cpf) {
+		String sql = "SELECT e.password FROM Employee e WHERE e.cpf = ?";
+		Query query =  entityManager.createNativeQuery(sql);
+		query.setParameter(1, cpf);
+		return (String) query.getSingleResult();
 	}
 	
 	public Employee save(Employee employee) {

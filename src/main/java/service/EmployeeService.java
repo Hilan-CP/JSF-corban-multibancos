@@ -62,16 +62,25 @@ public class EmployeeService implements Serializable{
 	}
 	
 	@Transaction
-	public void save(Employee employee, boolean passwordChanged) {
-		changePassword(employee, passwordChanged);
+	public void save(Employee employee) {
+		verifyPasswordChange(employee);
 		repository.save(employee);
 	}
 	
-	private void changePassword(Employee employee, boolean passwordChanged) {
-		if(passwordChanged) {
+	private void verifyPasswordChange(Employee employee) {
+		String oldPassword = repository.findPasswordHash(employee.getCpf());
+		if(employee.getPassword().isBlank()) {
+			employee.setPassword(oldPassword);
+		}
+		else {
 			initializeHashAlgorithm();
-			char[] password = employee.getPassword().toCharArray();
-			employee.setPassword(passwordHash.generate(password));
+			char[] newPassword = employee.getPassword().toCharArray();
+			if(passwordHash.verify(newPassword, oldPassword)) {
+				employee.setPassword(oldPassword);
+			}
+			else {
+				employee.setPassword(passwordHash.generate(newPassword));
+			}
 		}
 	}
 	

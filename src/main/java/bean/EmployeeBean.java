@@ -29,7 +29,6 @@ public class EmployeeBean implements Serializable{
 	private List<Team> teamList;
 	private String searchTerm;
 	private String searchOption;
-	private String oldPassword;
 	
 	@PostConstruct
 	public void init() {
@@ -41,23 +40,17 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void save() {
-		employeeService.save(employee, isPasswordChanged());
-		oldPassword = employee.getPassword();
-	}
-	
-	private boolean isPasswordChanged() {
-		if(employee.getPassword() != null) {
-			return !employee.getPassword().equals(oldPassword);
-		}
-		return false;
-	}
-	
-	public void preparePasswordChange() {
-		oldPassword = employee.getPassword();
+		employeeService.save(employee);
 	}
 	
 	public void initializeCreate() {
 		employee = new Employee();
+		Long tempPassword = Math.round(Math.random()*10000);
+		employee.setPassword(tempPassword.toString());
+	}
+	
+	public void prepareUpdate() {
+		employee.setPassword("");
 	}
 	
 	public Employee getEmployee() {

@@ -28,14 +28,10 @@
 						<p:resetInput target="employeeDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Alterar" icon="pi pi-pencil"
+						actionListener="#{employeeBean.prepareUpdate}"
 						oncomplete="PF('employeeDialog').show()" update="employeeDialog"
 						disabled="#{employeeBean.employee == null}" process="@this">
 						<p:resetInput target="employeeDialog"/>
-					</p:commandButton>
-					<p:commandButton value="Alterar Senha" icon="pi pi-key"
-						oncomplete="PF('passwordDialog').show()" update="passwordDialog"
-						disabled="#{employeeBean.employee == null}" process="@this">
-						<p:resetInput target="passwordDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="employeeTable" fileName="funcionarios"/>
@@ -91,32 +87,11 @@
 							var="team" itemLabel="#{team.name}" itemValue="#{team}"/>
 					</p:selectOneMenu>
 					
-					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
-						oncomplete="if(!args.validationFailed) PF('employeeDialog').hide()"
-						update="@form" process="@form"/>
-				</h:panelGrid>
-			</h:form>
-		</p:dialog>
-		
-		<p:dialog id="passwordDialog" header="Alterar senha" widgetVar="passwordDialog"
-			resizable="false" modal="true" closeOnEscape="true">
-			<h:form>
-				<p:messages />
-				<h:panelGrid columns="2" rendered="#{employeeBean.employee != null}"
-					cellpadding="10">
-					<p:outputLabel value="CPF: "/>
-					<p:inputText size="45" value="#{employeeBean.employee.cpf}"
-						disabled="true"/>
-					
-					<p:outputLabel value="Nome: "/>
-					<p:inputText size="45" value="#{employeeBean.employee.name}"
-						disabled="true"/>
-					
 					<p:outputLabel value="Senha: "/>
 					<p:password size="45" value="#{employeeBean.employee.password}"/>
-
+					
 					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
-						oncomplete="PF('passwordDialog').hide()"
+						oncomplete="if(!args.validationFailed) PF('employeeDialog').hide()"
 						update="@form" process="@form"/>
 				</h:panelGrid>
 			</h:form>
