@@ -54,6 +54,8 @@ public class ProposalBean implements Serializable{
 	public void init() {
 		employeeList = employeeService.findAll();
 		bankList = bankService.findAll();
+		beginDate = LocalDate.now();
+		endDate = LocalDate.now();
 	}
 	
 	public void findProposals() {
@@ -83,7 +85,7 @@ public class ProposalBean implements Serializable{
 	
 	public void initializeCreate() {
 		proposal = new Proposal();
-		proposal.setStatus(ProposalStatus.SOLICITADA);
+		proposal.setStatus(ProposalStatus.GERADA);
 		proposal.setCustomer(new Customer());
 		proposal.setGeneration(LocalDate.now());
 		proposal.setEmployee(getLoggedUser());
