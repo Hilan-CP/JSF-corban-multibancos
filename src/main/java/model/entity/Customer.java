@@ -9,7 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import validator.CPF;
 
 @Entity
@@ -25,7 +25,7 @@ public class Customer implements Serializable{
 	@NotBlank(message = "nome deve ser informado")
 	private String name;
 	
-	@Size(min = 11, max = 11, message = "telefone deve ser informado com DDD+número")
+	@Pattern(regexp = "\\d{11}", message = "telefone móvel deve ser informado com DDD+número")
 	@Column(length = 11)
 	private String phone;
 	

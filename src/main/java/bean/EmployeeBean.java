@@ -12,6 +12,7 @@ import model.entity.Team;
 import model.enumeration.EmployeeType;
 import service.EmployeeService;
 import service.TeamService;
+import util.Message;
 
 @Named
 @ViewScoped
@@ -40,13 +41,17 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void save() {
-		employeeService.save(employee);
+		try {
+			employeeService.save(employee);
+			Message.info("Funcionário salvo com sucesso");
+		}
+		catch(IllegalArgumentException e) {
+			Message.error(e.getMessage());
+		}
 	}
 	
 	public void initializeCreate() {
 		employee = new Employee();
-		Long tempPassword = Math.round(Math.random()*10000);
-		employee.setPassword(tempPassword.toString());
 	}
 	
 	public void prepareUpdate() {

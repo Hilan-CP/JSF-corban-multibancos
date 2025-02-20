@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import model.entity.Bank;
 import service.BankService;
+import util.Message;
 
 @Named
 @ViewScoped
@@ -26,6 +27,7 @@ public class BankBean implements Serializable{
 	
 	public void save() {
 		service.save(bank);
+		Message.info("Banco salvo com sucesso");
 	}
 	
 	public void initializeCreate() {

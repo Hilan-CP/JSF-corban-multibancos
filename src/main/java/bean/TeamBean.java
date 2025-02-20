@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import model.entity.Team;
 import service.TeamService;
+import util.Message;
 
 @Named
 @ViewScoped
@@ -26,6 +27,7 @@ public class TeamBean implements Serializable{
 	
 	public void save() {
 		service.save(team);
+		Message.info("Equipe salva com sucesso");
 	}
 	
 	public void delete() {

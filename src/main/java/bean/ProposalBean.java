@@ -18,6 +18,7 @@ import service.BankService;
 import service.CustomerService;
 import service.EmployeeService;
 import service.ProposalService;
+import util.Message;
 
 @Named
 @ViewScoped
@@ -56,7 +57,12 @@ public class ProposalBean implements Serializable{
 	}
 	
 	public void findProposals() {
-		proposalList = proposalService.findByOptionAndRole(searchTerm, searchOption, dateOption, beginDate, endDate);
+		try {
+			proposalList = proposalService.findByOptionAndRole(searchTerm, searchOption, dateOption, beginDate, endDate);
+		}
+		catch(NumberFormatException e) {
+			Message.error("Código de busca inválido");
+		}
 	}
 	
 	public void findCustomer(){
@@ -67,10 +73,12 @@ public class ProposalBean implements Serializable{
 	
 	public void save() {
 		proposalService.save(proposal);
+		Message.info("Proposta cadastrada com sucesso");
 	}
 	
 	public void cancelProposal() {
 		proposalService.cancelProposal(proposal);
+		Message.info("Proposta cancelada");
 	}
 	
 	public void initializeCreate() {

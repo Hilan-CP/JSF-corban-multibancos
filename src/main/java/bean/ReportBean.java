@@ -18,6 +18,7 @@ import model.enumeration.ProposalStatus;
 import projection.ProposalReportProjection;
 import service.ProposalService;
 import service.TeamService;
+import util.Message;
 
 @Named
 @ViewScoped
@@ -48,6 +49,9 @@ public class ReportBean implements Serializable{
 		if(!selectedTeams.isEmpty()) {
 			findProposals();
 			loadEmployees();
+		}
+		else {
+			Message.info("Nenhum time selecionado");
 		}
 	}
 	

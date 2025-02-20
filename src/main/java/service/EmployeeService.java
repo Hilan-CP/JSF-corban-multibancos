@@ -7,6 +7,7 @@ import java.util.Map;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import model.entity.Employee;
 import repository.EmployeeRepository;
@@ -60,19 +61,27 @@ public class EmployeeService implements Serializable{
 	}
 	
 	private void verifyPasswordChange(Employee employee) {
-		String oldPassword = repository.findPasswordHash(employee.getCpf());
-		if(employee.getPassword().isBlank()) {
-			employee.setPassword(oldPassword);
-		}
-		else {
-			initializeHashAlgorithm();
-			char[] newPassword = employee.getPassword().toCharArray();
-			if(passwordHash.verify(newPassword, oldPassword)) {
+		initializeHashAlgorithm();
+		try {
+			String oldPassword = repository.findPasswordHash(employee.getCpf());
+			if(employee.getPassword().isBlank()) {
 				employee.setPassword(oldPassword);
 			}
 			else {
-				employee.setPassword(passwordHash.generate(newPassword));
+				char[] newPassword = employee.getPassword().toCharArray();
+				if(passwordHash.verify(newPassword, oldPassword)) {
+					employee.setPassword(oldPassword);
+				}
+				else {
+					employee.setPassword(passwordHash.generate(newPassword));
+				}
 			}
+		}
+		catch(NoResultException e) {
+			if(employee.getPassword().isBlank()) {
+				throw new IllegalArgumentException("Não foi possível criar funcionário: senha inválida");
+			}
+			employee.setPassword(passwordHash.generate(employee.getPassword().toCharArray()));
 		}
 	}
 	

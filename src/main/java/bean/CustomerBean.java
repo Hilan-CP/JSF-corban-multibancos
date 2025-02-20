@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import model.entity.Customer;
 import service.CustomerService;
+import util.Message;
 
 @Named
 @ViewScoped
@@ -28,6 +29,7 @@ public class CustomerBean implements Serializable{
 	
 	public void save() {
 		service.save(customer);
+		Message.info("Cliente salvo com sucesso");
 	}
 	
 	public void initializeCreate() {
