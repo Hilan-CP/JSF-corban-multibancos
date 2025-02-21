@@ -32,7 +32,7 @@ public class ProposalRepository implements Serializable{
 	}
 	
 	public List<Proposal> findByIdAndEmployee(Long id, String cpf) {
-		String jpql = "SELECT p FROM Proposal p JOIN p.employee e"
+		String jpql = "SELECT p FROM Proposal p JOIN p.employee e JOIN FETCH p.customer c"
 					+ " WHERE p.id = :id AND e.cpf = :cpf";
 		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
 		query.setParameter("id", id);
@@ -44,6 +44,7 @@ public class ProposalRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
 		Root<Proposal> proposal = criteria.from(Proposal.class);
+		proposal.fetch("customer");
 		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
 		criteria.where(betweenDate);
 		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
@@ -55,6 +56,7 @@ public class ProposalRepository implements Serializable{
 		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
 		Root<Proposal> proposal = criteria.from(Proposal.class);
 		Join<Proposal, Employee> employee = proposal.join("employee");
+		proposal.fetch("customer");
 		Predicate likeName = builder.like(employee.get("name"), "%"+employeeName+"%");
 		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
 		criteria.where(builder.and(likeName, betweenDate));
@@ -67,6 +69,7 @@ public class ProposalRepository implements Serializable{
 		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
 		Root<Proposal> proposal = criteria.from(Proposal.class);
 		Join<Proposal, Bank> bank = proposal.join("bank");
+		proposal.fetch("customer");
 		List<Predicate> predicates = new ArrayList<>();
 		buildEmployeePredicate(builder, proposal, predicates, cpf);
 		predicates.add(builder.equal(bank.get("code"), bankCode));
