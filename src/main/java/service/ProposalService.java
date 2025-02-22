@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import dto.ProposalReportDTO;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
 import model.enumeration.ProposalStatus;
-import projection.ProposalReportProjection;
 import repository.EmployeeRepository;
 import repository.ProposalRepository;
 import security.LoggedUserBean;
@@ -102,7 +102,7 @@ public class ProposalService implements Serializable{
 		repository.save(proposal);
 	}
 
-	public List<ProposalReportProjection> findByTeamAndDate(List<Team> selectedTeams, LocalDate firstDayOfMonth,
+	public List<ProposalReportDTO> findByTeamAndDate(List<Team> selectedTeams, LocalDate firstDayOfMonth,
 			LocalDate lastDayOfMonth) {
 		return repository.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
 	}

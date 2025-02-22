@@ -1,22 +1,17 @@
 package bean;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import dto.EmployeeDTO;
+import dto.ProposalReportDTO;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import model.entity.Employee;
 import model.entity.Team;
-import model.enumeration.ProposalStatus;
-import projection.ProposalReportProjection;
-import service.ProposalService;
+import service.ReportService;
 import service.TeamService;
 import util.Message;
 
@@ -26,164 +21,93 @@ public class ReportBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private ProposalService proposalService;
+	private ReportService reportService;
 	
 	@Inject
 	private TeamService teamService;
 	
 	private List<Team> selectedTeams;
 	private List<Team> teams;
-	private List<ProposalReportProjection> proposals;
-	private List<Employee> employees;
-	private LocalDate today;
+	private List<ProposalReportDTO> proposals;
+	private List<EmployeeDTO> employees;
 	
 	@PostConstruct
 	public void init() {
 		teams = teamService.findAll();
+		
+		//proposals / employees precisam estar inicializados para evitar erros na página
 		proposals = new ArrayList<>();
 		employees = new ArrayList<>();
-		today = LocalDate.now();
 	}
 	
 	public void find() {
 		if(!selectedTeams.isEmpty()) {
-			findProposals();
-			loadEmployees();
+			proposals = reportService.findProposals(selectedTeams);
+			employees = reportService.loadEmployees(proposals);
 		}
 		else {
 			Message.info("Nenhum time selecionado");
 		}
 	}
-	
-	private void findProposals() {
-		LocalDate firstDayOfMonth = today.withDayOfMonth(1);
-		LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth());
-		proposals = proposalService.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
-	}
-	
-	private void loadEmployees() {
-		Set<Employee> employeeSet = new HashSet<>();
-		proposals.forEach(proposal -> employeeSet.add(proposal.getEmployee()));
-		employees = employeeSet.stream().collect(Collectors.toList());
-	}
 
-	public long countGeneration(Employee employee) {
-		return proposals.stream()
-				.filter(proposal -> isGeneratedToday(proposal) && isFromEmployee(proposal, employee))
-				.count();
+	public long countGeneration(EmployeeDTO employee) {
+		return reportService.countGeneration(proposals, employee);
 	}
 	
-	public double sumGeneration(Employee employee) {
-		return proposals.stream()
-				.filter(proposal -> isGeneratedToday(proposal) && isFromEmployee(proposal, employee))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+	public double sumGeneration(EmployeeDTO employee) {
+		return reportService.sumGeneration(proposals, employee);
 	}
 	
-	public double sumPayment(Employee employee) {
-		return proposals.stream()
-				.filter(proposal -> isPaidToday(proposal) && isFromEmployee(proposal, employee))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+	public double sumPayment(EmployeeDTO employee) {
+		return reportService.sumPayment(proposals, employee);
 	}
 	
-	public double monthlyResult(Employee employee) {
-		return proposals.stream()
-				.filter(proposal -> isPaid(proposal) && isFromEmployee(proposal, employee))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+	public double monthlyResult(EmployeeDTO employee) {
+		return reportService.monthlyResult(proposals, employee);
 	}
 	
-	public double monthlyTrend(Employee employee) {
-		return calculateTrend(monthlyResult(employee));
+	public double monthlyTrend(EmployeeDTO employee) {
+		return reportService.monthlyTrend(proposals, employee);
 	}
 	
-	public long subtotalCountGeneration(Team team) {
-		return proposals.stream()
-				.filter(proposal -> isGeneratedToday(proposal) && isFromTeam(proposal, team))
-				.count();
+	public long subtotalCountGeneration(String teamName) {
+		return reportService.subtotalCountGeneration(proposals, teamName);
 	}
 	
-	public double subtotalSumGeneration(Team team) {
-		return proposals.stream()
-				.filter(proposal -> isGeneratedToday(proposal) && isFromTeam(proposal, team))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+	public double subtotalSumGeneration(String teamName) {
+		return reportService.subtotalSumGeneration(proposals, teamName);
 	}
 	
-	public double subtotalSumPayment(Team team) {
-		return proposals.stream()
-				.filter(proposal -> isPaidToday(proposal) && isFromTeam(proposal, team))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+	public double subtotalSumPayment(String teamName) {
+		return reportService.subtotalSumPayment(proposals, teamName);
 	}
 	
-	public double subtotalMonthlyResult(Team team) {
-		return proposals.stream()
-				.filter(proposal -> isPaid(proposal) && isFromTeam(proposal, team))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+	public double subtotalMonthlyResult(String teamName) {
+		return reportService.subtotalMonthlyResult(proposals, teamName);
 	}
 	
-	public double subtotalMonthlyTrend(Team team) {
-		return calculateTrend(subtotalMonthlyResult(team));
+	public double subtotalMonthlyTrend(String teamName) {
+		return reportService.subtotalMonthlyTrend(proposals, teamName);
 	}
 	
 	public long totalCountGeneration() {
-		return proposals.stream()
-				.filter(proposal -> isGeneratedToday(proposal))
-				.count();
+		return reportService.totalCountGeneration(proposals);
 	}
 	
 	public double totalSumGeneration() {
-		return proposals.stream()
-				.filter(proposal -> isGeneratedToday(proposal))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+		return reportService.totalSumGeneration(proposals);
 	}
 	
 	public double totalSumPayment() {
-		return proposals.stream()
-				.filter(proposal -> isPaidToday(proposal))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+		return reportService.totalSumPayment(proposals);
 	}
 	
 	public double totalMonthlyResult() {
-		return proposals.stream()
-				.filter(proposal -> isPaid(proposal))
-				.mapToDouble(proposal -> proposal.getValue())
-				.sum();
+		return reportService.totalMonthlyResult(proposals);
 	}
 	
 	public double totalMonthlyTrend() {
-		return calculateTrend(totalMonthlyResult());
-	}
-	
-	private double calculateTrend(double result){
-		int daysElapsed = today.getDayOfMonth() - 1; //dia atual não acabou
-		int lengthOfMonth = today.lengthOfMonth();
-		return result / daysElapsed * lengthOfMonth;
-	}
-	
-	private boolean isGeneratedToday(ProposalReportProjection proposal) {
-		return today.equals(proposal.getGeneration());
-	}
-	
-	private boolean isPaidToday(ProposalReportProjection proposal) {
-		return today.equals(proposal.getPayment());
-	}
-	
-	private boolean isFromEmployee(ProposalReportProjection proposal, Employee employee) {
-		return proposal.getEmployee().equals(employee);
-	}
-	
-	private boolean isFromTeam(ProposalReportProjection proposal, Team team) {
-		return proposal.getEmployee().getTeam().equals(team);
-	}
-	
-	private boolean isPaid(ProposalReportProjection proposal) {
-		return proposal.getStatus().equals(ProposalStatus.CONTRATADA);
+		return reportService.totalMonthlyTrend(proposals);
 	}
 	
 	public List<Team> getSelectedTeams() {
@@ -198,7 +122,7 @@ public class ReportBean implements Serializable{
 		return teams;
 	}
 
-	public List<Employee> getEmployees() {
+	public List<EmployeeDTO> getEmployees() {
 		return employees;
 	}
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.ProposalReportDTO;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -18,7 +19,6 @@ import model.entity.Bank;
 import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
-import projection.ProposalReportProjection;
 
 @Dependent
 public class ProposalRepository implements Serializable{
@@ -86,11 +86,11 @@ public class ProposalRepository implements Serializable{
 		}
 	}
 	
-	public List<ProposalReportProjection> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
-		String jpql = "SELECT NEW projection.ProposalReportProjection(p.value, p.generation, p.payment, p.status, p.employee)"
+	public List<ProposalReportDTO> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
+		String jpql = "SELECT NEW dto.ProposalReportDTO(p.value, p.generation, p.payment, p.status, e.cpf, e.name, e.team.name)"
 					+ " FROM Proposal p JOIN p.employee e"
 					+ " WHERE e.team IN :teams AND p.generation BETWEEN :beginDate AND :endDate";
-		TypedQuery<ProposalReportProjection> query = entityManager.createQuery(jpql, ProposalReportProjection.class);
+		TypedQuery<ProposalReportDTO> query = entityManager.createQuery(jpql, ProposalReportDTO.class);
 		query.setParameter("teams", teams);
 		query.setParameter("beginDate", beginDate);
 		query.setParameter("endDate", endDate);

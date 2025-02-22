@@ -27,11 +27,11 @@
 
 			<p:dataTable id="reportTable" value="#{reportBean.employees}" var="employee"
 				lazy="false">
-				<p:headerRow groupBy="#{employee.team}"
+				<p:headerRow groupBy="#{employee.teamName}"
 					expandable="true"
 					expanded="true">
 					<p:column>
-						<h:outputText value="#{employee.team.name}"/>
+						<h:outputText value="#{employee.teamName}"/>
 					</p:column>
 				</p:headerRow>
 				
@@ -67,25 +67,25 @@
 						<h:outputText value="Subtotal"/>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalCountGeneration(employee.team)}"/>
+						<h:outputText value="#{reportBean.subtotalCountGeneration(employee.teamName)}"/>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalSumGeneration(employee.team)}">
+						<h:outputText value="#{reportBean.subtotalSumGeneration(employee.teamName)}">
 							<f:convertNumber type="currency" currencyCode="BRL"/>
 						</h:outputText>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalSumPayment(employee.team)}">
+						<h:outputText value="#{reportBean.subtotalSumPayment(employee.teamName)}">
 							<f:convertNumber type="currency" currencyCode="BRL"/>
 						</h:outputText>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalMonthlyResult(employee.team)}">
+						<h:outputText value="#{reportBean.subtotalMonthlyResult(employee.teamName)}">
 							<f:convertNumber type="currency" currencyCode="BRL"/>
 						</h:outputText>
 					</p:column>
 					<p:column>
-						<h:outputText value="#{reportBean.subtotalMonthlyTrend(employee.team)}">
+						<h:outputText value="#{reportBean.subtotalMonthlyTrend(employee.teamName)}">
 							<f:convertNumber type="currency" currencyCode="BRL"/>
 						</h:outputText>
 					</p:column>
