@@ -88,17 +88,7 @@ public class ProposalBean implements Serializable{
 		proposal.setStatus(ProposalStatus.GERADA);
 		proposal.setCustomer(new Customer());
 		proposal.setGeneration(LocalDate.now());
-		proposal.setEmployee(getLoggedUser());
-	}
-	
-	private Employee getLoggedUser() {
-		String username = loggedUser.getUsername();
-		for(Employee employee : employeeList) {
-			if(employee.getCpf().equals(username)) {
-				return employee;
-			}
-		}
-		return new Employee();
+		proposal.setEmployee(loggedUser.getLoggedUser());
 	}
 
 	public Proposal getProposal() {

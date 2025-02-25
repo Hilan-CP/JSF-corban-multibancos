@@ -11,7 +11,6 @@ import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
 import model.enumeration.ProposalStatus;
-import repository.EmployeeRepository;
 import repository.ProposalRepository;
 import security.LoggedUserBean;
 import util.Transaction;
@@ -22,9 +21,6 @@ public class ProposalService implements Serializable{
 	
 	@Inject
 	private ProposalRepository repository;
-	
-	@Inject
-	private EmployeeRepository employeeRepository;
 	
 	@Inject
 	private LoggedUserBean loggedUser;
@@ -60,15 +56,15 @@ public class ProposalService implements Serializable{
 	
 	private List<Proposal> nonAdminSearch(String searchTerm, String searchOption, String dateOption,
 			LocalDate beginDate, LocalDate endDate){
+		Employee employee = loggedUser.getLoggedUser();
 		if(searchTerm.isBlank()) {
-			Employee employee = employeeRepository.findByCpf(loggedUser.getUsername());
 			return repository.findByEmployeeAndDate(employee.getName(), dateOption, beginDate, endDate);
 		}
 		else if(searchOption.equals("proposal")) {
-			return repository.findByIdAndEmployee(Long.parseLong(searchTerm), loggedUser.getUsername());
+			return repository.findByIdAndEmployee(Long.parseLong(searchTerm), employee.getCpf());
 		}
 		else if(searchOption.equals("bank")) {
-			return repository.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, loggedUser.getUsername());
+			return repository.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, employee.getCpf());
 		}
 		else {
 			return List.of();
