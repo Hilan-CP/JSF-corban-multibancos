@@ -40,7 +40,11 @@
 			
 			<p:dataTable id="teamTable" value="#{teamBean.teamList}" var="team"
 				selectionMode="single" selection="#{teamBean.team}" rowKey="#{team.id}"
-				lazy="false" >
+				lazy="false"
+				paginator="true" paginatorPosition="bottom" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">
+				
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				<p:column headerText="id">

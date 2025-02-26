@@ -44,7 +44,11 @@
 			
 			<p:dataTable id="employeeTable" value="#{employeeBean.employeeList}"
 				var="employee" selectionMode="single" selection="#{employeeBean.employee}"
-				rowKey="#{employee.cpf}" lazy="false">
+				rowKey="#{employee.cpf}" lazy="false"
+				paginator="true" paginatorPosition="bottom" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">
+				
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				

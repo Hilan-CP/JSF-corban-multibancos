@@ -45,7 +45,11 @@
 			
 			<p:dataTable id="customerTable" value="#{customerBean.customerList}"
 				var="customer" selectionMode="single" selection="#{customerBean.customer}"
-				rowKey="#{customer.cpf}" lazy="false">
+				rowKey="#{customer.cpf}" lazy="false"
+				paginator="true" paginatorPosition="bottom" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">
+				
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				

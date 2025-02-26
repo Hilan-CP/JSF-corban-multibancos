@@ -63,7 +63,11 @@
 			
 			<p:dataTable id="proposalTable" value="#{proposalBean.proposalList}"
 				var="proposal" selectionMode="single" selection="#{proposalBean.proposal}"
-				rowKey="#{proposal.id}" lazy="false">
+				rowKey="#{proposal.id}" lazy="false"
+				paginator="true" paginatorPosition="bottom" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">
+				
 				<p:ajax event="rowSelect" update="contentForm:toolbar"/>
 				<p:ajax event="rowUnselect" update="contentForm:toolbar"/>
 				
