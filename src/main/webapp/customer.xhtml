@@ -24,6 +24,7 @@
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{customerBean.find}" update="customerTable"
+						onstart="PF('customerTable').getPaginator().setPage(0)"
 						process="@this search option"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{customerBean.initializeCreate}"
@@ -43,9 +44,10 @@
 				</f:facet>
 			</p:toolbar>
 			
-			<p:dataTable id="customerTable" value="#{customerBean.customerList}"
-				var="customer" selectionMode="single" selection="#{customerBean.customer}"
-				rowKey="#{customer.cpf}" lazy="false"
+			<p:dataTable id="customerTable" widgetVar="customerTable"
+				value="#{customerBean.customerLazyModel}" var="customer" 
+				selectionMode="single" selection="#{customerBean.customer}"
+				rowKey="#{customer.cpf}" lazy="true"
 				paginator="true" paginatorPosition="bottom" rows="10"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">

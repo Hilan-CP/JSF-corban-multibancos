@@ -1,8 +1,11 @@
 package bean;
 
 import java.io.Serializable;
-import java.util.List;
 
+import org.primefaces.model.LazyDataModel;
+
+import bean.model.CustomerLazyDataModel;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,13 +21,23 @@ public class CustomerBean implements Serializable{
 	@Inject
 	private CustomerService service;
 	
+	@Inject
+	private CustomerLazyDataModel customerLazyModel;
+	
 	private Customer customer;
-	private List<Customer> customerList;
 	private String searchTerm;
 	private String searchOption;
 	
+	@PostConstruct
+	public void init() {
+		searchTerm = "";
+		customerLazyModel.setSearchTerm(searchTerm);
+		customerLazyModel.setSearchOption(searchOption);
+	}
+	
 	public void find() {
-		customerList = service.findByOption(searchTerm, searchOption);
+		customerLazyModel.setSearchTerm(searchTerm);
+		customerLazyModel.setSearchOption(searchOption);
 	}
 	
 	public void save() {
@@ -44,8 +57,8 @@ public class CustomerBean implements Serializable{
 		this.customer = customer;
 	}
 
-	public List<Customer> getCustomerList() {
-		return customerList;
+	public LazyDataModel<Customer> getCustomerLazyModel() {
+		return customerLazyModel;
 	}
 
 	public String getSearchTerm() {

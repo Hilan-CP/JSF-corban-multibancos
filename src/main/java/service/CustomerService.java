@@ -16,30 +16,12 @@ public class CustomerService implements Serializable{
 	@Inject
 	private CustomerRepository repository;
 	
-	public List<Customer> findByOption(String searchTerm, String searchOption){
-		if(searchTerm.isBlank()) {
-			return repository.findAll();
-		}
-		else if(searchOption.equals("cpf")) {
-			return listOfSingleCustomer(searchTerm);
-		}
-		else if(searchOption.equals("name")) {
-			return repository.findByName(searchTerm);
-		}
-		else if(searchOption.equals("phone")) {
-			return repository.findByPhone(searchTerm);
-		}
-		else {
-			return List.of();
-		}
+	public List<Customer> findByOption(int startPosition, int pageSize, String searchTerm, String searchOption){
+		return repository.findByOption(startPosition, pageSize, searchTerm, searchOption);
 	}
 	
-	private List<Customer> listOfSingleCustomer(String searchTerm){
-		Customer customer = repository.findByCpf(searchTerm);
-		if(customer == null) {
-			return List.of();
-		}
-		return List.of(customer);
+	public Long countByOption(String searchTerm, String searchOption){
+		return repository.countByOption(searchTerm, searchOption);
 	}
 
 	public Customer findByCpfOrDefault(String cpf) {
