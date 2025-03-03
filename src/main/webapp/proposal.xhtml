@@ -38,6 +38,7 @@
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{proposalBean.findProposals}" update="proposalTable"
+						onstart="PF('proposalTable').getPaginator().setPage(0)"
 						process="toolbar"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{proposalBean.initializeCreate}"
@@ -61,9 +62,9 @@
 				</f:facet>
 			</p:toolbar>
 			
-			<p:dataTable id="proposalTable" value="#{proposalBean.proposalList}"
-				var="proposal" selectionMode="single" selection="#{proposalBean.proposal}"
-				rowKey="#{proposal.id}" lazy="false"
+			<p:dataTable id="proposalTable" widgetVar="proposalTable"
+				value="#{proposalBean.proposalLazyModel}" var="proposal"
+				selectionMode="single" selection="#{proposalBean.proposal}" rowKey="#{proposal.id}" lazy="true"
 				paginator="true" paginatorPosition="bottom" rows="10"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">

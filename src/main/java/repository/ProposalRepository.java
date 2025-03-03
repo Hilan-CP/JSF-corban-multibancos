@@ -31,70 +31,129 @@ public class ProposalRepository implements Serializable{
 		return entityManager.find(Proposal.class, id);
 	}
 	
-	public List<Proposal> findByIdAndEmployee(Long id, String cpf) {
-		String jpql = "SELECT p FROM Proposal p JOIN p.employee e JOIN FETCH p.customer c"
-					+ " WHERE p.id = :id AND e.cpf = :cpf";
-		TypedQuery<Proposal> query = entityManager.createQuery(jpql, Proposal.class);
-		query.setParameter("id", id);
-		query.setParameter("cpf", cpf);
-		return query.getResultList();
-	}
-	
-	public List<Proposal> findByDate(String dateField, LocalDate beginDate, LocalDate endDate){
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
-		Root<Proposal> proposal = criteria.from(Proposal.class);
-		proposal.fetch("customer");
-		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
-		criteria.where(betweenDate);
-		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
-		return query.getResultList();
-	}
-	
-	public List<Proposal> findByEmployeeAndDate(String employeeName, String dateField, LocalDate beginDate, LocalDate endDate){
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
-		Root<Proposal> proposal = criteria.from(Proposal.class);
-		Join<Proposal, Employee> employee = proposal.join("employee");
-		proposal.fetch("customer");
-		Predicate likeName = builder.like(employee.get("name"), "%"+employeeName+"%");
-		Predicate betweenDate = builder.between(proposal.get(dateField), beginDate, endDate);
-		criteria.where(builder.and(likeName, betweenDate));
-		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
-		return query.getResultList();
-	}
-	
-	public List<Proposal> findByBankAndDate(Long bankCode, String dateField, LocalDate beginDate, LocalDate endDate, String cpf){
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
-		Root<Proposal> proposal = criteria.from(Proposal.class);
-		Join<Proposal, Bank> bank = proposal.join("bank");
-		proposal.fetch("customer");
-		List<Predicate> predicates = new ArrayList<>();
-		buildEmployeePredicate(builder, proposal, predicates, cpf);
-		predicates.add(builder.equal(bank.get("code"), bankCode));
-		predicates.add(builder.between(proposal.get(dateField), beginDate, endDate));
-		criteria.where(predicates.toArray(new Predicate[0]));
-		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
-		return query.getResultList();
-	}
-	
-	private void buildEmployeePredicate(CriteriaBuilder builder, Root<Proposal> proposal, List<Predicate> predicates, String cpf) {
-		if(cpf != null) {
-			Join<Proposal, Employee> employee =  proposal.join("employee");
-			predicates.add(builder.equal(employee.get("cpf"), cpf));
-		}
-	}
-	
 	public List<ProposalReportDTO> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
-		String jpql = "SELECT NEW dto.ProposalReportDTO(p.value, p.generation, p.payment, p.status, e.cpf, e.name, e.team.name)"
-					+ " FROM Proposal p JOIN p.employee e"
-					+ " WHERE e.team IN :teams AND p.generation BETWEEN :beginDate AND :endDate";
+		String jpql = "SELECT NEW dto.ProposalReportDTO(p.value, p.generation, p.payment, p.status, e.cpf, e.name, e.team.name) "
+					+ "FROM Proposal p JOIN p.employee e "
+					+ "WHERE e.team IN :teams AND p.generation BETWEEN :beginDate AND :endDate";
 		TypedQuery<ProposalReportDTO> query = entityManager.createQuery(jpql, ProposalReportDTO.class);
 		query.setParameter("teams", teams);
 		query.setParameter("beginDate", beginDate);
 		query.setParameter("endDate", endDate);
 		return query.getResultList();
+	}
+	
+	public List<Proposal> findByOption(int startPosition, int pageSize, String searchTerm, String searchOption,
+			String dateOption, LocalDate beginDate, LocalDate endDate) {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		proposal.fetch("customer");
+		List<Predicate> clauses = new ArrayList<>();
+		if(searchTerm.isBlank()) {
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		else if(searchOption.equals("proposal")) {
+			clauses.add(builder.equal(proposal.get("id"), Long.parseLong(searchTerm)));
+		}
+		else if(searchOption.equals("employee")) {
+			Join<Proposal, Employee> employee = proposal.join("employee");
+			clauses.add(builder.like(employee.get("name"), "%"+searchTerm+"%"));
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		else {
+			Join<Proposal, Bank> bank = proposal.join("bank");
+			clauses.add(builder.equal(bank.get("code"), Long.parseLong(searchTerm)));
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		criteria.where(clauses.toArray(new Predicate[0]));
+		criteria.orderBy(builder.asc(proposal.get("generation")));
+		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
+		query.setFirstResult(startPosition);
+		query.setMaxResults(pageSize);
+		return query.getResultList();
+	}
+
+	public Long countByOption(String searchTerm, String searchOption, String dateOption, LocalDate beginDate,
+			LocalDate endDate) {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		proposal.fetch("customer");
+		List<Predicate> clauses = new ArrayList<>();
+		if(searchTerm.isBlank()) {
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		else if(searchOption.equals("proposal")) {
+			clauses.add(builder.equal(proposal.get("id"), Long.parseLong(searchTerm)));
+		}
+		else if(searchOption.equals("employee")) {
+			Join<Proposal, Employee> employee = proposal.join("employee");
+			clauses.add(builder.like(employee.get("name"), "%"+searchTerm+"%"));
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		else if(searchOption.equals("bank")) {
+			Join<Proposal, Bank> bank = proposal.join("bank");
+			clauses.add(builder.equal(bank.get("code"), Long.parseLong(searchTerm)));
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		criteria.where(clauses.toArray(new Predicate[0]));
+		criteria.select(builder.count(proposal));
+		TypedQuery<Long> query = entityManager.createQuery(criteria);
+		return query.getSingleResult();
+	}
+
+	public List<Proposal> findByOption(int startPosition, int pageSize, String searchTerm, String searchOption,
+			String dateOption, LocalDate beginDate, LocalDate endDate, String employeeCpf) {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Proposal> criteria = builder.createQuery(Proposal.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		Join<Proposal, Employee> employee = proposal.join("employee");
+		proposal.fetch("customer");
+		List<Predicate> clauses = new ArrayList<>();
+		clauses.add(builder.equal(employee.get("cpf"), employeeCpf));
+		if(searchTerm.isBlank()) {
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		else if(searchOption.equals("proposal")) {
+			clauses.add(builder.equal(proposal.get("id"), Long.parseLong(searchTerm)));
+		}
+		else if(searchOption.equals("bank")) {
+			Join<Proposal, Bank> bank = proposal.join("bank");
+			clauses.add(builder.equal(bank.get("code"), Long.parseLong(searchTerm)));
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		criteria.where(clauses.toArray(new Predicate[0]));
+		criteria.orderBy(builder.asc(proposal.get("generation")));
+		TypedQuery<Proposal> query = entityManager.createQuery(criteria);
+		query.setFirstResult(startPosition);
+		query.setMaxResults(pageSize);
+		return query.getResultList();
+	}
+
+	public Long countByOption(String searchTerm, String searchOption, String dateOption, LocalDate beginDate,
+			LocalDate endDate, String employeeCpf) {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+		Root<Proposal> proposal = criteria.from(Proposal.class);
+		Join<Proposal, Employee> employee = proposal.join("employee");
+		proposal.fetch("customer");
+		List<Predicate> clauses = new ArrayList<>();
+		clauses.add(builder.equal(employee.get("cpf"), employeeCpf));
+		if(searchTerm.isBlank()) {
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		else if(searchOption.equals("proposal")) {
+			clauses.add(builder.equal(proposal.get("id"), Long.parseLong(searchTerm)));
+		}
+		else if(searchOption.equals("bank")) {
+			Join<Proposal, Bank> bank = proposal.join("bank");
+			clauses.add(builder.equal(bank.get("code"), Long.parseLong(searchTerm)));
+			clauses.add(builder.between(proposal.get(dateOption), beginDate, endDate));
+		}
+		criteria.where(clauses.toArray(new Predicate[0]));
+		criteria.select(builder.count(proposal));
+		TypedQuery<Long> query = entityManager.createQuery(criteria);
+		return query.getSingleResult();
 	}
 	
 	public Proposal save(Proposal proposal) {

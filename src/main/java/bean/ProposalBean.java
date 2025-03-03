@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.primefaces.model.LazyDataModel;
+
+import bean.model.ProposalLazyModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -40,8 +43,10 @@ public class ProposalBean implements Serializable{
 	@Inject
 	private LoggedUserBean loggedUser;
 	
+	@Inject
+	private ProposalLazyModel proposalLazyModel;
+	
 	private Proposal proposal;
-	private List<Proposal> proposalList;
 	private List<Employee> employeeList;
 	private List<Bank> bankList;
 	private String searchTerm;
@@ -56,14 +61,34 @@ public class ProposalBean implements Serializable{
 		bankList = bankService.findAll();
 		beginDate = LocalDate.now();
 		endDate = LocalDate.now();
+		searchTerm = "";
+		dateOption = "generation";
+		proposalLazyModel.setSearchTerm(searchTerm);
+		proposalLazyModel.setSearchOption(searchOption);
+		proposalLazyModel.setDateOption(dateOption);
+		proposalLazyModel.setBeginDate(beginDate);
+		proposalLazyModel.setEndDate(endDate);
 	}
 	
 	public void findProposals() {
 		try {
-			proposalList = proposalService.findByOptionAndRole(searchTerm, searchOption, dateOption, beginDate, endDate);
+			checkSearchOptions();
+			proposalLazyModel.setSearchTerm(searchTerm);
+			proposalLazyModel.setSearchOption(searchOption);
+			proposalLazyModel.setDateOption(dateOption);
+			proposalLazyModel.setBeginDate(beginDate);
+			proposalLazyModel.setEndDate(endDate);
 		}
 		catch(NumberFormatException e) {
 			Message.error("Código de busca inválido");
+		}
+	}
+	
+	private void checkSearchOptions() {
+		if(!searchTerm.isBlank()) {
+			if(searchOption.equals("proposal") || searchOption.equals("bank")) {
+				Long.parseLong(searchTerm);
+			}
 		}
 	}
 	
@@ -99,8 +124,8 @@ public class ProposalBean implements Serializable{
 		this.proposal = proposal;
 	}
 
-	public List<Proposal> getProposalList() {
-		return proposalList;
+	public LazyDataModel<Proposal> getProposalLazyModel() {
+		return proposalLazyModel;
 	}
 
 	public List<Employee> getEmployeeList() {

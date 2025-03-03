@@ -7,7 +7,6 @@ import java.util.List;
 import dto.ProposalReportDTO;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
-import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
 import model.enumeration.ProposalStatus;
@@ -25,67 +24,38 @@ public class ProposalService implements Serializable{
 	@Inject
 	private LoggedUserBean loggedUser;
 	
-	public List<Proposal> findByOptionAndRole(String searchTerm, String searchOption, String dateOption,
-			LocalDate beginDate, LocalDate endDate) {
+	public List<ProposalReportDTO> findByTeamAndDate(List<Team> selectedTeams, LocalDate firstDayOfMonth,
+			LocalDate lastDayOfMonth) {
+		return repository.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
+	}
+
+	public List<Proposal> findByOption(int startPosition, int pageSize, String searchTerm, String searchOption,
+			String dateOption, LocalDate beginDate, LocalDate endDate) {
 		if(loggedUser.isAdmin()) {
-			return adminSearch(searchTerm, searchOption, dateOption, beginDate, endDate);
+			return repository.findByOption(startPosition, pageSize, searchTerm, searchOption, dateOption, beginDate, endDate);
 		}
 		else {
-			return nonAdminSearch(searchTerm, searchOption, dateOption, beginDate, endDate);
+			return repository.findByOption(startPosition, pageSize, searchTerm, searchOption, dateOption, beginDate, endDate, loggedUser.getUsername());
 		}
 	}
-	
-	private List<Proposal> adminSearch(String searchTerm, String searchOption, String dateOption,
-			LocalDate beginDate, LocalDate endDate){
-		if(searchTerm.isBlank()) {
-			return repository.findByDate(dateOption, beginDate, endDate);
-		}
-		else if(searchOption.equals("proposal")) {
-			return listOfSingleProposal(searchTerm);
-		}
-		else if(searchOption.equals("employee")) {
-			return repository.findByEmployeeAndDate(searchTerm, dateOption, beginDate, endDate);
-		}
-		else if(searchOption.equals("bank")) {
-			return repository.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, null);
+
+	public Long countByOption(String searchTerm, String searchOption, String dateOption, LocalDate beginDate,
+			LocalDate endDate) {
+		if(loggedUser.isAdmin()) {
+			return repository.countByOption(searchTerm, searchOption, dateOption, beginDate, endDate);
 		}
 		else {
-			return List.of();
+			return repository.countByOption(searchTerm, searchOption, dateOption, beginDate, endDate, loggedUser.getUsername());
 		}
-	}
-	
-	private List<Proposal> nonAdminSearch(String searchTerm, String searchOption, String dateOption,
-			LocalDate beginDate, LocalDate endDate){
-		Employee employee = loggedUser.getLoggedUser();
-		if(searchTerm.isBlank()) {
-			return repository.findByEmployeeAndDate(employee.getName(), dateOption, beginDate, endDate);
-		}
-		else if(searchOption.equals("proposal")) {
-			return repository.findByIdAndEmployee(Long.parseLong(searchTerm), employee.getCpf());
-		}
-		else if(searchOption.equals("bank")) {
-			return repository.findByBankAndDate(Long.parseLong(searchTerm), dateOption, beginDate, endDate, employee.getCpf());
-		}
-		else {
-			return List.of();
-		}
-	}
-	
-	private List<Proposal> listOfSingleProposal(String searchTerm){
-		Proposal proposal = repository.findById(Long.parseLong(searchTerm));
-		if(proposal == null) {
-			return List.of();
-		}
-		return List.of(proposal);
 	}
 	
 	@Transaction
 	public void save(Proposal proposal) {
-		changedStatusIfPaid(proposal);
+		changeStatusIfPaid(proposal);
 		repository.save(proposal);
 	}
 
-	private void changedStatusIfPaid(Proposal proposal) {
+	private void changeStatusIfPaid(Proposal proposal) {
 		if(proposal.getPayment() != null) {
 			proposal.setStatus(ProposalStatus.CONTRATADA);
 		}
@@ -96,10 +66,5 @@ public class ProposalService implements Serializable{
 		proposal.setStatus(ProposalStatus.CANCELADA);
 		proposal.setPayment(null);
 		repository.save(proposal);
-	}
-
-	public List<ProposalReportDTO> findByTeamAndDate(List<Team> selectedTeams, LocalDate firstDayOfMonth,
-			LocalDate lastDayOfMonth) {
-		return repository.findByTeamAndDate(selectedTeams, firstDayOfMonth, lastDayOfMonth);
 	}
 }
