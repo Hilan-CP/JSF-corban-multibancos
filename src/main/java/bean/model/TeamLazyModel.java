@@ -19,16 +19,17 @@ public class TeamLazyModel extends LazyDataModel<Team>{
 	private TeamService service;
 	
 	private List<Team> teams;
+	private String searchTerm;
 
 	@Override
 	public int count(Map<String, FilterMeta> filterBy) {
-		Long count = service.count();
+		Long count = service.countByOption(searchTerm);
 		return count.intValue();
 	}
 
 	@Override
 	public List<Team> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
-		teams = service.find(first, pageSize);
+		teams = service.findByOption(first, pageSize, searchTerm);
 		return teams;
 	}
 
@@ -45,5 +46,9 @@ public class TeamLazyModel extends LazyDataModel<Team>{
 			}
 		}
 		return null;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 }

@@ -24,12 +24,12 @@ public class TeamService implements Serializable{
 		return repository.findAll();
 	}
 
-	public List<Team> find(int startPosition, int pageSize) {
-		return repository.find(startPosition, pageSize);
+	public List<Team> findByOption(int startPosition, int pageSize, String searchTerm) {
+		return repository.findByOption(startPosition, pageSize, searchTerm);
 	}
 	
-	public Long count() {
-		return repository.count();
+	public Long countByOption(String searchTerm) {
+		return repository.countByOption(searchTerm);
 	}
 
 	@Transaction

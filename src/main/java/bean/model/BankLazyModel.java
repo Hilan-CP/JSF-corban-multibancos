@@ -19,16 +19,17 @@ public class BankLazyModel extends LazyDataModel<Bank>{
 	private BankService service;
 	
 	private List<Bank> banks;
+	private String searchTerm;
 
 	@Override
 	public int count(Map<String, FilterMeta> filterBy) {
-		Long count = service.count();
+		Long count = service.countByOption(searchTerm);
 		return count.intValue();
 	}
 
 	@Override
 	public List<Bank> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
-		banks = service.find(first, pageSize);
+		banks = service.findByOption(first, pageSize, searchTerm);
 		return banks;
 	}
 
@@ -45,5 +46,9 @@ public class BankLazyModel extends LazyDataModel<Bank>{
 			}
 		}
 		return null;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 }

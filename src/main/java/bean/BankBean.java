@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.primefaces.model.LazyDataModel;
 
 import bean.model.BankLazyModel;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -24,8 +25,16 @@ public class BankBean implements Serializable{
 	private BankLazyModel bankLazyModel;
 	
 	private Bank bank;
+	private String searchTerm;
+	
+	@PostConstruct
+	public void init() {
+		searchTerm = "";
+		bankLazyModel.setSearchTerm(searchTerm);
+	}
 	
 	public void findAll() {
+		bankLazyModel.setSearchTerm(searchTerm);
 	}
 	
 	public void save() {
@@ -47,5 +56,13 @@ public class BankBean implements Serializable{
 
 	public LazyDataModel<Bank> getBankLazyModel() {
 		return bankLazyModel;
+	}
+
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 }

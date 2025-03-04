@@ -15,10 +15,12 @@
 			
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
+					<p:inputText id="search" size="20" value="#{teamBean.searchTerm}"/>
+					
 					<p:commandButton value="Buscar" icon="pi pi-search" 
 						actionListener="#{teamBean.findAll}" update="teamTable"
 						onstart="PF('teamTable').getPaginator().setPage(0)"
-						process="@this"/>
+						process="@this search"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{teamBean.initializeCreate}"
 						oncomplete="PF('teamDialog').show()" update="teamDialog"

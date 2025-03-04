@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.primefaces.model.LazyDataModel;
 
 import bean.model.TeamLazyModel;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -24,8 +25,16 @@ public class TeamBean implements Serializable{
 	private TeamLazyModel teamLazyModel;
 	
 	private Team team;
+	private String searchTerm;
+	
+	@PostConstruct
+	public void init() {
+		searchTerm = "";
+		teamLazyModel.setSearchTerm(searchTerm);
+	}
 	
 	public void findAll() {
+		teamLazyModel.setSearchTerm(searchTerm);
 	}
 	
 	public void save() {
@@ -51,5 +60,13 @@ public class TeamBean implements Serializable{
 
 	public LazyDataModel<Team> getTeamLazyModel() {
 		return teamLazyModel;
+	}
+
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 }
