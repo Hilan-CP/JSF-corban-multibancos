@@ -3,6 +3,9 @@ package bean;
 import java.io.Serializable;
 import java.util.List;
 
+import org.primefaces.model.LazyDataModel;
+
+import bean.model.EmployeeLazyModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -25,8 +28,10 @@ public class EmployeeBean implements Serializable{
 	@Inject
 	private TeamService teamService;
 	
+	@Inject
+	private EmployeeLazyModel employeeLazyModel;
+	
 	private Employee employee;
-	private List<Employee> employeeList;
 	private List<Team> teamList;
 	private String searchTerm;
 	private String searchOption;
@@ -34,10 +39,14 @@ public class EmployeeBean implements Serializable{
 	@PostConstruct
 	public void init() {
 		teamList = teamService.findAll();
+		searchTerm = "";
+		employeeLazyModel.setSearchTerm(searchTerm);
+		employeeLazyModel.setSearchOption(searchOption);
 	}
 	
 	public void findEmployees() {
-		employeeList = employeeService.findByOption(searchTerm, searchOption);
+		employeeLazyModel.setSearchTerm(searchTerm);
+		employeeLazyModel.setSearchOption(searchOption);
 	}
 	
 	public void save() {
@@ -66,8 +75,8 @@ public class EmployeeBean implements Serializable{
 		this.employee = employee;
 	}
 	
-	public List<Employee> getEmployeeList() {
-		return employeeList;
+	public LazyDataModel<Employee> getEmployeeLazyModel() {
+		return employeeLazyModel;
 	}
 
 	public String getSearchTerm() {

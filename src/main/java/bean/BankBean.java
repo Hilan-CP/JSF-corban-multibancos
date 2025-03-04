@@ -1,8 +1,10 @@
 package bean;
 
 import java.io.Serializable;
-import java.util.List;
 
+import org.primefaces.model.LazyDataModel;
+
+import bean.model.BankLazyModel;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,11 +20,12 @@ public class BankBean implements Serializable{
 	@Inject
 	private BankService service;
 	
+	@Inject
+	private BankLazyModel bankLazyModel;
+	
 	private Bank bank;
-	private List<Bank> bankList;
 	
 	public void findAll() {
-		bankList = service.findAll();
 	}
 	
 	public void save() {
@@ -41,8 +44,8 @@ public class BankBean implements Serializable{
 	public void setBank(Bank bank) {
 		this.bank = bank;
 	}
-	
-	public List<Bank> getBankList() {
-		return bankList;
+
+	public LazyDataModel<Bank> getBankLazyModel() {
+		return bankLazyModel;
 	}
 }

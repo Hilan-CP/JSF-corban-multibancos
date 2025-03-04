@@ -26,6 +26,20 @@ public class BankRepository implements Serializable{
 		return query.getResultList();
 	}
 	
+	public List<Bank> find(int startPosition, int pageSize) {
+		String jpql = "SELECT b FROM Bank b";
+		TypedQuery<Bank> query = entityManager.createQuery(jpql, Bank.class);
+		query.setFirstResult(startPosition);
+		query.setMaxResults(pageSize);
+		return query.getResultList();
+	}
+
+	public Long count() {
+		String jpql = "SELECT COUNT(b) FROM Bank b";
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		return query.getSingleResult();
+	}
+	
 	public Bank save(Bank bank) {
 		return entityManager.merge(bank);
 	}

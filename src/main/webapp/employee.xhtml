@@ -23,6 +23,7 @@
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{employeeBean.findEmployees}" update="employeeTable"
+						onstart="PF('employeeTable').getPaginator().setPage(0)"
 						process="@this search option"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{employeeBean.initializeCreate}"
@@ -42,9 +43,10 @@
 				</f:facet>
 			</p:toolbar>
 			
-			<p:dataTable id="employeeTable" value="#{employeeBean.employeeList}"
-				var="employee" selectionMode="single" selection="#{employeeBean.employee}"
-				rowKey="#{employee.cpf}" lazy="false"
+			<p:dataTable id="employeeTable" widgetVar="employeeTable"
+				value="#{employeeBean.employeeLazyModel}" var="employee"
+				selectionMode="single" selection="#{employeeBean.employee}"
+				rowKey="#{employee.cpf}" lazy="true"
 				paginator="true" paginatorPosition="bottom" rows="10"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">

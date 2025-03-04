@@ -23,35 +23,20 @@ public class EmployeeService implements Serializable{
 	@Inject
 	private Pbkdf2PasswordHash passwordHash;
 	
-	public List<Employee> findByOption(String searchTerm, String searchOption){
-		if(searchTerm.isBlank()) {
-			return repository.findAll();
-		}
-		else if(searchOption.equals("cpf")) {
-			return listOfSingleEmployee(searchTerm);
-		}
-		else if(searchOption.equals("name")) {
-			return repository.findByName(searchTerm);
-		}
-		else {
-			return List.of();
-		}
-	}
-	
-	private List<Employee> listOfSingleEmployee(String searchTerm) {
-		Employee employee = repository.findByCpf(searchTerm);
-		if(employee == null) {
-			return List.of();
-		}
-		return List.of(employee);
-	}
-	
 	public List<Employee> findAll(){
 		return repository.findAll();
 	}
 	
 	public Employee findByCpf(String cpf) {
 		return repository.findByCpf(cpf);
+	}
+	
+	public List<Employee> findByOption(int startPosition, int pageSize, String searchTerm, String searchOption) {
+		return repository.findByOption(startPosition, pageSize, searchTerm, searchOption);
+	}
+
+	public Long countByOption(String searchTerm, String searchOption) {
+		return repository.countByOption(searchTerm, searchOption);
 	}
 	
 	@Transaction

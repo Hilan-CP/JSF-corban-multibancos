@@ -20,10 +20,24 @@ public class TeamRepository implements Serializable{
 		return entityManager.find(Team.class, id);
 	}
 	
-	public List<Team> findAll(){
+	public List<Team> findAll() {
 		String jpql = "SELECT t FROM Team t";
 		TypedQuery<Team> query = entityManager.createQuery(jpql, Team.class);
 		return query.getResultList();
+	}
+	
+	public List<Team> find(int startPosition, int pageSize){
+		String jpql = "SELECT t FROM Team t";
+		TypedQuery<Team> query = entityManager.createQuery(jpql, Team.class);
+		query.setFirstResult(startPosition);
+		query.setMaxResults(pageSize);
+		return query.getResultList();
+	}
+	
+	public Long count() {
+		String jpql = "SELECT COUNT(t) FROM Team t";
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		return query.getSingleResult();
 	}
 	
 	public Team save(Team team) {

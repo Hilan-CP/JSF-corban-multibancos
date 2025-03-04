@@ -19,9 +19,17 @@ public class TeamService implements Serializable{
 	public Team findById(Long id) {
 		return repository.findById(id);
 	}
-
+	
 	public List<Team> findAll() {
 		return repository.findAll();
+	}
+
+	public List<Team> find(int startPosition, int pageSize) {
+		return repository.find(startPosition, pageSize);
+	}
+	
+	public Long count() {
+		return repository.count();
 	}
 
 	@Transaction

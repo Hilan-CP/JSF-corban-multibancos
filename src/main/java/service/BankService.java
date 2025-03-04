@@ -16,16 +16,24 @@ public class BankService implements Serializable{
 	@Inject
 	private BankRepository repository;
 	
+	public Bank findById(Long id) {
+		return repository.findById(id);
+	}
+	
 	public List<Bank> findAll() {
 		return repository.findAll();
+	}
+	
+	public List<Bank> find(int startPosition, int pageSize) {
+		return repository.find(startPosition, pageSize);
+	}
+
+	public Long count() {
+		return repository.count();
 	}
 	
 	@Transaction
 	public void save(Bank bank) {
 		repository.save(bank);
-	}
-
-	public Bank findById(Long id) {
-		return repository.findById(id);
 	}
 }

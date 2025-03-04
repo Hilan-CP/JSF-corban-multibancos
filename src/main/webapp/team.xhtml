@@ -17,6 +17,7 @@
 				<f:facet name="left">
 					<p:commandButton value="Buscar" icon="pi pi-search" 
 						actionListener="#{teamBean.findAll}" update="teamTable"
+						onstart="PF('teamTable').getPaginator().setPage(0)"
 						process="@this"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{teamBean.initializeCreate}"
@@ -38,9 +39,9 @@
 				</f:facet>
 			</p:toolbar>
 			
-			<p:dataTable id="teamTable" value="#{teamBean.teamList}" var="team"
-				selectionMode="single" selection="#{teamBean.team}" rowKey="#{team.id}"
-				lazy="false"
+			<p:dataTable id="teamTable" widgetVar="teamTable"
+				value="#{teamBean.teamLazyModel}" var="team"
+				selectionMode="single" selection="#{teamBean.team}" rowKey="#{team.id}" lazy="true"
 				paginator="true" paginatorPosition="bottom" rows="10"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">

@@ -17,6 +17,7 @@
 				<f:facet name="left">
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{bankBean.findAll}" update="bankTable"
+						onstart="PF('bankTable').getPaginator().setPage(0)"
 						process="@this"/>
 					<p:commandButton value="Criar" icon="pi pi-plus-circle"
 						actionListener="#{bankBean.initializeCreate}"
@@ -36,9 +37,9 @@
 				</f:facet>
 			</p:toolbar>
 			
-			<p:dataTable id="bankTable" value="#{bankBean.bankList}" var="bank"
-				selectionMode="single" selection="#{bankBean.bank}"
-				rowKey="#{bank.id}" lazy="false"
+			<p:dataTable id="bankTable" widgetVar="bankTable"
+				value="#{bankBean.bankLazyModel}" var="bank"
+				selectionMode="single" selection="#{bankBean.bank}" rowKey="#{bank.id}" lazy="true"
 				paginator="true" paginatorPosition="bottom" rows="10"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros">

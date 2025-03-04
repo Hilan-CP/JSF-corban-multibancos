@@ -1,8 +1,10 @@
 package bean;
 
 import java.io.Serializable;
-import java.util.List;
 
+import org.primefaces.model.LazyDataModel;
+
+import bean.model.TeamLazyModel;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,11 +20,12 @@ public class TeamBean implements Serializable{
 	@Inject
 	private TeamService service;
 	
+	@Inject
+	private TeamLazyModel teamLazyModel;
+	
 	private Team team;
-	private List<Team> teamList;
 	
 	public void findAll() {
-		teamList = service.findAll();
 	}
 	
 	public void save() {
@@ -46,7 +49,7 @@ public class TeamBean implements Serializable{
 		this.team = team;
 	}
 
-	public List<Team> getTeamList() {
-		return teamList;
+	public LazyDataModel<Team> getTeamLazyModel() {
+		return teamLazyModel;
 	}
 }
