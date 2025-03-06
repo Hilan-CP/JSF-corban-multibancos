@@ -19,6 +19,7 @@ import model.entity.Bank;
 import model.entity.Employee;
 import model.entity.Proposal;
 import model.entity.Team;
+import model.enumeration.ProposalStatus;
 
 @Dependent
 public class ProposalRepository implements Serializable{
@@ -34,11 +35,14 @@ public class ProposalRepository implements Serializable{
 	public List<ProposalReportDTO> findByTeamAndDate(List<Team> teams, LocalDate beginDate, LocalDate endDate){
 		String jpql = "SELECT NEW dto.ProposalReportDTO(p.value, p.generation, p.payment, p.status, e.cpf, e.name, e.team.name) "
 					+ "FROM Proposal p JOIN p.employee e "
-					+ "WHERE e.team IN :teams AND p.generation BETWEEN :beginDate AND :endDate";
+					+ "WHERE e.team IN :teams "
+						+ "AND p.generation BETWEEN :beginDate AND :endDate "
+						+ "AND p.status <> :status";
 		TypedQuery<ProposalReportDTO> query = entityManager.createQuery(jpql, ProposalReportDTO.class);
 		query.setParameter("teams", teams);
 		query.setParameter("beginDate", beginDate);
 		query.setParameter("endDate", endDate);
+		query.setParameter("status", ProposalStatus.CANCELADA);
 		return query.getResultList();
 	}
 	

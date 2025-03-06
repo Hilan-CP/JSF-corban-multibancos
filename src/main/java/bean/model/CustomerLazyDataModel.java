@@ -36,7 +36,10 @@ public class CustomerLazyDataModel extends LazyDataModel<Customer>{
 	
 	@Override
 	public String getRowKey(Customer customer) {
-		return customer.getCpf();
+		if(customer.getCpf() != null) {
+			return customer.getCpf();
+		}
+		return null;
 	}
 	
 	@Override

@@ -2,10 +2,12 @@ package bean;
 
 import java.io.Serializable;
 
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
 
 import bean.model.TeamLazyModel;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -33,8 +35,15 @@ public class TeamBean implements Serializable{
 		teamLazyModel.setSearchTerm(searchTerm);
 	}
 	
-	public void findAll() {
+	public void find() {
+		resetDataTable();
 		teamLazyModel.setSearchTerm(searchTerm);
+	}
+	
+	private void resetDataTable() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:teamTable");
+		table.reset();
 	}
 	
 	public void save() {

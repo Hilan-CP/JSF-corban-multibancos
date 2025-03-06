@@ -35,7 +35,10 @@ public class BankLazyModel extends LazyDataModel<Bank>{
 
 	@Override
 	public String getRowKey(Bank bank) {
-		return bank.getId().toString();
+		if(bank.getId() != null) {
+			return bank.getId().toString();
+		}
+		return null;
 	}
 	
 	@Override

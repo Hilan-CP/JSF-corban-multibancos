@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
 
 import bean.model.ProposalLazyModel;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -73,6 +75,7 @@ public class ProposalBean implements Serializable{
 	public void findProposals() {
 		try {
 			checkSearchOptions();
+			resetDataTable();
 			proposalLazyModel.setSearchTerm(searchTerm);
 			proposalLazyModel.setSearchOption(searchOption);
 			proposalLazyModel.setDateOption(dateOption);
@@ -90,6 +93,12 @@ public class ProposalBean implements Serializable{
 				Long.parseLong(searchTerm);
 			}
 		}
+	}
+	
+	private void resetDataTable() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:proposalTable");
+		table.reset();
 	}
 	
 	public void findCustomer(){

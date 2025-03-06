@@ -2,10 +2,12 @@ package bean;
 
 import java.io.Serializable;
 
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
 
 import bean.model.BankLazyModel;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -33,8 +35,15 @@ public class BankBean implements Serializable{
 		bankLazyModel.setSearchTerm(searchTerm);
 	}
 	
-	public void findAll() {
+	public void find() {
+		resetDataTable();
 		bankLazyModel.setSearchTerm(searchTerm);
+	}
+	
+	private void resetDataTable() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:bankTable");
+		table.reset();
 	}
 	
 	public void save() {

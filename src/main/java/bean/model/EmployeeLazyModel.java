@@ -37,7 +37,10 @@ public class EmployeeLazyModel extends LazyDataModel<Employee>{
 
 	@Override
 	public String getRowKey(Employee employee) {
-		return employee.getCpf();
+		if(employee.getCpf() != null) {
+			return employee.getCpf();
+		}
+		return null;
 	}
 	
 	@Override

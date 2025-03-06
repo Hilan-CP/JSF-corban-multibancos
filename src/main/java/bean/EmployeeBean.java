@@ -3,10 +3,12 @@ package bean;
 import java.io.Serializable;
 import java.util.List;
 
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
 
 import bean.model.EmployeeLazyModel;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -45,8 +47,15 @@ public class EmployeeBean implements Serializable{
 	}
 	
 	public void findEmployees() {
+		resetDataTable();
 		employeeLazyModel.setSearchTerm(searchTerm);
 		employeeLazyModel.setSearchOption(searchOption);
+	}
+	
+	private void resetDataTable() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:employeeTable");
+		table.reset();
 	}
 	
 	public void save() {

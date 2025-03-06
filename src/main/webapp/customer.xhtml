@@ -21,10 +21,9 @@
 						<f:selectItem itemLabel="Nome" itemValue="name"/>
 						<f:selectItem itemLabel="Telefone" itemValue="phone"/>
 					</p:selectOneMenu>
-					
+
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{customerBean.find}" update="customerTable"
-						onstart="PF('customerTable').getPaginator().setPage(0)"
 						process="@this search option"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{customerBean.initializeCreate}"

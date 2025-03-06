@@ -35,7 +35,10 @@ public class TeamLazyModel extends LazyDataModel<Team>{
 
 	@Override
 	public String getRowKey(Team team) {
-		return team.getId().toString();
+		if(team.getId() != null) {
+			return team.getId().toString();
+		}
+		return null;
 	}
 	
 	@Override

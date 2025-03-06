@@ -41,7 +41,10 @@ public class ProposalLazyModel extends LazyDataModel<Proposal>{
 
 	@Override
 	public String getRowKey(Proposal proposal) {
-		return proposal.getId().toString();
+		if(proposal.getId() != null) {
+			return proposal.getId().toString();
+		}
+		return null;
 	}
 	
 	@Override

@@ -18,8 +18,7 @@
 					<p:inputText id="search" size="20" value="#{bankBean.searchTerm}"/>
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
-						actionListener="#{bankBean.findAll}" update="bankTable"
-						onstart="PF('bankTable').getPaginator().setPage(0)"
+						actionListener="#{bankBean.find}" update="bankTable"
 						process="@this search"/>
 					<p:commandButton value="Criar" icon="pi pi-plus-circle"
 						actionListener="#{bankBean.initializeCreate}"

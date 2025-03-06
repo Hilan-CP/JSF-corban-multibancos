@@ -23,7 +23,6 @@
 					
 					<p:commandButton value="Buscar" icon="pi pi-search"
 						actionListener="#{employeeBean.findEmployees}" update="employeeTable"
-						onstart="PF('employeeTable').getPaginator().setPage(0)"
 						process="@this search option"/>
 					<p:commandButton value="Criar" icon="pi pi-plus"
 						actionListener="#{employeeBean.initializeCreate}"
