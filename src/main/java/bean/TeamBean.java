@@ -1,6 +1,7 @@
 package bean;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
@@ -52,7 +53,12 @@ public class TeamBean implements Serializable{
 	}
 	
 	public void delete() {
-		service.remove(team);
+		try {
+			service.remove(team);
+		}
+		catch (SQLIntegrityConstraintViolationException e) {
+			Message.error("Não foi possível apagar a equipe. Existem funcionários cadastrado na equipe.");
+		}
 	}
 	
 	public void initializeCreate() {

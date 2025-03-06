@@ -1,11 +1,13 @@
 package service;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import model.entity.Team;
+import repository.EmployeeRepository;
 import repository.TeamRepository;
 import util.Transaction;
 
@@ -15,6 +17,9 @@ public class TeamService implements Serializable{
 	
 	@Inject
 	private TeamRepository repository;
+	
+	@Inject
+	private EmployeeRepository employeeRepository;
 	
 	public Team findById(Long id) {
 		return repository.findById(id);
@@ -38,7 +43,10 @@ public class TeamService implements Serializable{
 	}
 
 	@Transaction
-	public void remove(Team team) {
+	public void remove(Team team) throws SQLIntegrityConstraintViolationException {
+		if(employeeRepository.hasTeamRelationship(team)) {
+			throw new SQLIntegrityConstraintViolationException();
+		}
 		repository.remove(team);
 	}
 }

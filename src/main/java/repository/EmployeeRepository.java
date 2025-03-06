@@ -14,6 +14,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import model.entity.Employee;
+import model.entity.Team;
 
 @Dependent
 public class EmployeeRepository implements Serializable{
@@ -81,5 +82,18 @@ public class EmployeeRepository implements Serializable{
 	
 	public Employee save(Employee employee) {
 		return entityManager.merge(employee);
+	}
+	
+	public boolean hasTeamRelationship(Team team) {
+		String jpql = "SELECT COUNT(e) FROM Employee e WHERE e.team = :team";
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		query.setParameter("team", team);
+		Long count = query.getSingleResult();
+		if(count == 0) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 }
