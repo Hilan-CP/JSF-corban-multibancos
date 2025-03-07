@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import model.entity.Bank;
 
@@ -33,9 +34,8 @@ public class BankRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Bank> criteria = builder.createQuery(Bank.class);
 		Root<Bank> bank = criteria.from(Bank.class);
-		if(!searchTerm.isBlank()) {
-			criteria.where(builder.like(bank.get("shortName"), "%"+searchTerm+"%"));
-		}
+		Predicate predicate = buildPredicate(builder, bank, searchTerm);
+		criteria.where(predicate);
 		TypedQuery<Bank> query = entityManager.createQuery(criteria);
 		query.setFirstResult(startPosition);
 		query.setMaxResults(pageSize);
@@ -46,12 +46,18 @@ public class BankRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 		Root<Bank> bank = criteria.from(Bank.class);
-		if(!searchTerm.isBlank()) {
-			criteria.where(builder.like(bank.get("shortName"), "%"+searchTerm+"%"));
-		}
+		Predicate predicate = buildPredicate(builder, bank, searchTerm);
+		criteria.where(predicate);
 		criteria.select(builder.count(bank));
 		TypedQuery<Long> query = entityManager.createQuery(criteria);
 		return query.getSingleResult();
+	}
+
+	private Predicate buildPredicate(CriteriaBuilder builder, Root<Bank> bank, String searchTerm) {
+		if(!searchTerm.isBlank()) {
+			return builder.like(bank.get("shortName"), "%"+searchTerm+"%");
+		}
+		return builder.conjunction();
 	}
 
 	public Bank save(Bank bank) {

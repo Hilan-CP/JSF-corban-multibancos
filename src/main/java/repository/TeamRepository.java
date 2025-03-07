@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import model.entity.Team;
 
@@ -33,9 +34,8 @@ public class TeamRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Team> criteria = builder.createQuery(Team.class);
 		Root<Team> team = criteria.from(Team.class);
-		if(!searchTerm.isBlank()) {
-			criteria.where(builder.like(team.get("name"), "%"+searchTerm+"%"));
-		}
+		Predicate predicate = buildPredicate(builder, team, searchTerm);
+		criteria.where(predicate);
 		TypedQuery<Team> query = entityManager.createQuery(criteria);
 		query.setFirstResult(startPosition);
 		query.setMaxResults(pageSize);
@@ -46,14 +46,20 @@ public class TeamRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 		Root<Team> team = criteria.from(Team.class);
-		if(!searchTerm.isBlank()) {
-			criteria.where(builder.like(team.get("name"), "%"+searchTerm+"%"));
-		}
+		Predicate predicate = buildPredicate(builder, team, searchTerm);
+		criteria.where(predicate);
 		criteria.select(builder.count(team));
 		TypedQuery<Long> query = entityManager.createQuery(criteria);
 		return query.getSingleResult();
 	}
 	
+	private Predicate buildPredicate(CriteriaBuilder builder, Root<Team> team, String searchTerm) {
+		if(!searchTerm.isBlank()) {
+			return builder.like(team.get("name"), "%"+searchTerm+"%");
+		}
+		return builder.conjunction();
+	}
+
 	public Team save(Team team) {
 		return entityManager.merge(team);
 	}

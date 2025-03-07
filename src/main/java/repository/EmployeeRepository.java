@@ -45,16 +45,8 @@ public class EmployeeRepository implements Serializable{
 		CriteriaQuery<Employee> criteria = builder.createQuery(Employee.class);
 		Root<Employee> employee = criteria.from(Employee.class);
 		employee.fetch("team", JoinType.LEFT);
-		Predicate clause;
-		if(!searchTerm.isBlank()) {
-			if(searchOption.equals("cpf")) {
-				clause = builder.equal(employee.get("cpf"), searchTerm);
-			}
-			else {
-				clause = builder.like(employee.get("name"), "%"+searchTerm+"%");
-			}
-			criteria.where(clause);
-		}
+		Predicate predicate = buildPredicate(builder, employee, searchTerm, searchOption);
+		criteria.where(predicate);
 		TypedQuery<Employee> query = entityManager.createQuery(criteria);
 		query.setFirstResult(startPosition);
 		query.setMaxResults(pageSize);
@@ -65,19 +57,24 @@ public class EmployeeRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 		Root<Employee> employee = criteria.from(Employee.class);
-		Predicate clause;
-		if(!searchTerm.isBlank()) {
-			if(searchOption.equals("cpf")) {
-				clause = builder.equal(employee.get("cpf"), searchTerm);
-			}
-			else {
-				clause = builder.like(employee.get("name"), "%"+searchTerm+"%");
-			}
-			criteria.where(clause);
-		}
+		Predicate predicate = buildPredicate(builder, employee, searchTerm, searchOption);
+		criteria.where(predicate);
 		criteria.select(builder.count(employee));
 		TypedQuery<Long> query = entityManager.createQuery(criteria);
 		return query.getSingleResult();
+	}
+	
+	private Predicate buildPredicate(CriteriaBuilder builder, Root<Employee> employee, String searchTerm,
+			String searchOption) {
+		if(!searchTerm.isBlank()) {
+			if(searchOption.equals("cpf")) {
+				return builder.equal(employee.get("cpf"), searchTerm);
+			}
+			else {
+				return builder.like(employee.get("name"), "%"+searchTerm+"%");
+			}
+		}
+		return builder.conjunction();
 	}
 	
 	public Employee save(Employee employee) {

@@ -20,20 +20,16 @@ public class CustomerRepository implements Serializable{
 	@Inject
 	private EntityManager entityManager;
 	
+	public Customer findByCpf(String cpf) {
+		return entityManager.find(Customer.class, cpf);
+	}
+	
 	public List<Customer> findByOption(int startPosition, int pageSize, String searchTerm, String searchOption){
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
 		Root<Customer> customer = criteria.from(Customer.class);
-		Predicate clause;
-		if(!searchTerm.isBlank()) {
-			if(searchOption.equals("cpf")) {
-				clause = builder.equal(customer.get(searchOption), searchTerm);
-			}
-			else {
-				clause = builder.like(customer.get(searchOption), "%"+searchTerm+"%");
-			}
-			criteria.where(clause);
-		}
+		Predicate predicate = buildPredicate(builder, customer, searchTerm, searchOption); 
+		criteria.where(predicate);
 		TypedQuery<Customer> query = entityManager.createQuery(criteria);
 		query.setFirstResult(startPosition);
 		query.setMaxResults(pageSize);
@@ -44,25 +40,26 @@ public class CustomerRepository implements Serializable{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 		Root<Customer> customer = criteria.from(Customer.class);
-		Predicate clause;
-		if(!searchTerm.isBlank()) {
-			if(searchOption.equals("cpf")) {
-				clause = builder.equal(customer.get(searchOption), searchTerm);
-			}
-			else {
-				clause = builder.like(customer.get(searchOption), "%"+searchTerm+"%");
-			}
-			criteria.where(clause);
-		}
+		Predicate predicate = buildPredicate(builder, customer, searchTerm, searchOption); 
+		criteria.where(predicate);
 		criteria.select(builder.count(customer));
 		TypedQuery<Long> query = entityManager.createQuery(criteria);
 		return query.getSingleResult();
 	}
 	
-	public Customer findByCpf(String cpf) {
-		return entityManager.find(Customer.class, cpf);
+	private Predicate buildPredicate(CriteriaBuilder builder, Root<Customer> customer, String searchTerm,
+			String searchOption) {
+		if(!searchTerm.isBlank()) {
+			if(searchOption.equals("cpf")) {
+				return builder.equal(customer.get(searchOption), searchTerm);
+			}
+			else {
+				return builder.like(customer.get(searchOption), "%"+searchTerm+"%");
+			}
+		}
+		return builder.conjunction();
 	}
-	
+
 	public Customer save(Customer customer) {
 		return entityManager.merge(customer);
 	}
