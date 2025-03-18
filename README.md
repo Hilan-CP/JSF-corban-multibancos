@@ -42,6 +42,8 @@ Os requisitos funcionais do sistema podem ser encontrados no <a href="./document
 ## Imagens do projeto em execução
 Todos os dados utilizados foram gerados aleatoriamente usando ferramentas online e editores de planilha. Logomarca gerada por inteligência artificial.
 
+O projeto foi executado em servidor Glassfish 7 conectado com banco de dados MySQL 8.
+
 ------------------------------------------------------------
 
 Tela de login
