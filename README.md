@@ -1,5 +1,5 @@
 # Projeto JSF Corban Multibancos
-A empresa Corban Multibancos atua como correspondente bancário na oferta de empréstimos de diversos bancos. O sistema deste projeto tem como objetivo permitir o armazenamento de propostas de empréstimo realizadas para clientes e um acompanhamento de resultado diário.
+A empresa Central Multibancos atua como correspondente bancário na oferta de empréstimos de diversos bancos. O sistema deste projeto tem como objetivo permitir o armazenamento de propostas de empréstimo realizadas para clientes e um acompanhamento de resultado diário.
 
 É necessário armazenar os dados da proposta e do cliente para formar uma carteira de clientes que futuramente serão retrabalhados na oferta de renovações de empréstimo. Sendo assim, quanto mais clientes existirem em carteira, mais negócios serão fechados pela empresa.
 
