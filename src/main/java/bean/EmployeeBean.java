@@ -42,12 +42,26 @@ public class EmployeeBean implements Serializable{
 	public void init() {
 		teamList = teamService.findAll();
 		searchTerm = "";
-		employeeLazyModel.setSearchTerm(searchTerm);
-		employeeLazyModel.setSearchOption(searchOption);
+		updateLazyModel();
 	}
 	
 	public void findEmployees() {
 		resetDataTable();
+		updateLazyModel();
+	}
+	
+	public void save() {
+		try {
+			employeeService.save(employee);
+			updateLazyModel();
+			Message.info("Funcionário salvo com sucesso");
+		}
+		catch(IllegalArgumentException e) {
+			Message.error(e.getMessage());
+		}
+	}
+	
+	private void updateLazyModel() {
 		employeeLazyModel.setSearchTerm(searchTerm);
 		employeeLazyModel.setSearchOption(searchOption);
 	}
@@ -56,16 +70,6 @@ public class EmployeeBean implements Serializable{
 		FacesContext context = FacesContext.getCurrentInstance();
 		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:employeeTable");
 		table.reset();
-	}
-	
-	public void save() {
-		try {
-			employeeService.save(employee);
-			Message.info("Funcionário salvo com sucesso");
-		}
-		catch(IllegalArgumentException e) {
-			Message.error(e.getMessage());
-		}
 	}
 	
 	public void initializeCreate() {

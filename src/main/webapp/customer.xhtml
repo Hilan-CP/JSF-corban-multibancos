@@ -95,7 +95,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{customerBean.save}"
 						oncomplete="if(!args.validationFailed) PF('customerDialog').hide()"
-						update="@form" process="@form"/>
+						update="@form contentForm:customerTable" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

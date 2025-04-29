@@ -180,7 +180,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{proposalBean.save}"
 						oncomplete="if(!args.validationFailed) PF('proposalDialog').hide()"
-						update="@form" process="@form"/>
+						update="@form contentForm:proposalTable" process="@form"/>
 				</h:panelGrid>
 			</h:form>	
 		</p:dialog>

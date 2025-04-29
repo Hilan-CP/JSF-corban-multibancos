@@ -32,7 +32,7 @@
 						<p:resetInput target="teamDialog"/>
 					</p:commandButton>
 					<p:commandButton value="Apagar" icon="pi pi-trash"
-						actionListener="#{teamBean.delete}"
+						actionListener="#{teamBean.delete}" update="teamTable"
 						disabled="#{teamBean.team == null}" process="@this"/>
 					<p:commandButton value="Exportar" icon="pi pi-download" process="@this">
 						<p:dataExporter type="csv" target="teamTable" fileName="equipes"/>
@@ -68,7 +68,7 @@
 					<p:inputText size="45" value="#{teamBean.team.name}" />
 					<p:commandButton value="Salvar" actionListener="#{teamBean.save}"
 						oncomplete="if(!args.validationFailed) PF('teamDialog').hide()"
-						update="@form" process="@form"/>
+						update="@form contentForm:teamTable" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

@@ -33,12 +33,21 @@ public class CustomerBean implements Serializable{
 	@PostConstruct
 	public void init() {
 		searchTerm = "";
-		customerLazyModel.setSearchTerm(searchTerm);
-		customerLazyModel.setSearchOption(searchOption);
+		updateLazyModel();
 	}
 	
 	public void find() {
 		resetDataTable();
+		updateLazyModel();
+	}
+	
+	public void save() {
+		service.save(customer);
+		updateLazyModel();
+		Message.info("Cliente salvo com sucesso");
+	}
+	
+	private void updateLazyModel() {
 		customerLazyModel.setSearchTerm(searchTerm);
 		customerLazyModel.setSearchOption(searchOption);
 	}
@@ -47,11 +56,6 @@ public class CustomerBean implements Serializable{
 		FacesContext context = FacesContext.getCurrentInstance();
 		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:customerTable");
 		table.reset();
-	}
-	
-	public void save() {
-		service.save(customer);
-		Message.info("Cliente salvo com sucesso");
 	}
 	
 	public void initializeCreate() {

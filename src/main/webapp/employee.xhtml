@@ -100,7 +100,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{employeeBean.save}"
 						oncomplete="if(!args.validationFailed) PF('employeeDialog').hide()"
-						update="@form" process="@form"/>
+						update="@form contentForm:employeeTable" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

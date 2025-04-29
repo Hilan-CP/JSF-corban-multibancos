@@ -65,40 +65,18 @@ public class ProposalBean implements Serializable{
 		endDate = LocalDate.now();
 		searchTerm = "";
 		dateOption = "generation";
-		proposalLazyModel.setSearchTerm(searchTerm);
-		proposalLazyModel.setSearchOption(searchOption);
-		proposalLazyModel.setDateOption(dateOption);
-		proposalLazyModel.setBeginDate(beginDate);
-		proposalLazyModel.setEndDate(endDate);
+		updateLazyModel();
 	}
 	
 	public void findProposals() {
 		try {
 			checkSearchOptions();
 			resetDataTable();
-			proposalLazyModel.setSearchTerm(searchTerm);
-			proposalLazyModel.setSearchOption(searchOption);
-			proposalLazyModel.setDateOption(dateOption);
-			proposalLazyModel.setBeginDate(beginDate);
-			proposalLazyModel.setEndDate(endDate);
+			updateLazyModel();
 		}
 		catch(NumberFormatException e) {
 			Message.error("Código de busca inválido");
 		}
-	}
-	
-	private void checkSearchOptions() {
-		if(!searchTerm.isBlank()) {
-			if(searchOption.equals("proposal") || searchOption.equals("bank")) {
-				Long.parseLong(searchTerm);
-			}
-		}
-	}
-	
-	private void resetDataTable() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:proposalTable");
-		table.reset();
 	}
 	
 	public void findCustomer(){
@@ -109,12 +87,36 @@ public class ProposalBean implements Serializable{
 	
 	public void save() {
 		proposalService.save(proposal);
+		updateLazyModel();
 		Message.info("Proposta cadastrada com sucesso");
 	}
 	
 	public void cancelProposal() {
 		proposalService.cancelProposal(proposal);
+		updateLazyModel();
 		Message.info("Proposta cancelada");
+	}
+	
+	private void checkSearchOptions() {
+		if(!searchTerm.isBlank()) {
+			if(searchOption.equals("proposal") || searchOption.equals("bank")) {
+				Long.parseLong(searchTerm);
+			}
+		}
+	}
+	
+	private void updateLazyModel() {
+		proposalLazyModel.setSearchTerm(searchTerm);
+		proposalLazyModel.setSearchOption(searchOption);
+		proposalLazyModel.setDateOption(dateOption);
+		proposalLazyModel.setBeginDate(beginDate);
+		proposalLazyModel.setEndDate(endDate);
+	}
+	
+	private void resetDataTable() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:proposalTable");
+		table.reset();
 	}
 	
 	public void initializeCreate() {

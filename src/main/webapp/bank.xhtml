@@ -71,7 +71,7 @@
 					
 					<p:commandButton value="Salvar" actionListener="#{bankBean.save}"
 						oncomplete="if(!args.validationFailed) PF('bankDialog').hide()"
-						update="@form" process="@form"/>
+						update="@form contentForm:bankTable" process="@form"/>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>

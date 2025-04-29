@@ -33,11 +33,31 @@ public class TeamBean implements Serializable{
 	@PostConstruct
 	public void init() {
 		searchTerm = "";
-		teamLazyModel.setSearchTerm(searchTerm);
+		updateLazyModel();
 	}
 	
 	public void find() {
 		resetDataTable();
+		updateLazyModel();
+	}
+
+	public void save() {
+		service.save(team);
+		updateLazyModel();
+		Message.info("Equipe salva com sucesso");
+	}
+	
+	public void delete() {
+		try {
+			service.remove(team);
+			updateLazyModel();
+		}
+		catch (SQLIntegrityConstraintViolationException e) {
+			Message.error("Não foi possível apagar a equipe. Existem funcionários cadastrado na equipe.");
+		}
+	}
+	
+	private void updateLazyModel() {
 		teamLazyModel.setSearchTerm(searchTerm);
 	}
 	
@@ -45,20 +65,6 @@ public class TeamBean implements Serializable{
 		FacesContext context = FacesContext.getCurrentInstance();
 		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:teamTable");
 		table.reset();
-	}
-	
-	public void save() {
-		service.save(team);
-		Message.info("Equipe salva com sucesso");
-	}
-	
-	public void delete() {
-		try {
-			service.remove(team);
-		}
-		catch (SQLIntegrityConstraintViolationException e) {
-			Message.error("Não foi possível apagar a equipe. Existem funcionários cadastrado na equipe.");
-		}
 	}
 	
 	public void initializeCreate() {

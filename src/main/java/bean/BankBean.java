@@ -32,11 +32,21 @@ public class BankBean implements Serializable{
 	@PostConstruct
 	public void init() {
 		searchTerm = "";
-		bankLazyModel.setSearchTerm(searchTerm);
+		updateLazyModel();
 	}
 	
 	public void find() {
 		resetDataTable();
+		updateLazyModel();
+	}
+	
+	public void save() {
+		service.save(bank);
+		updateLazyModel();
+		Message.info("Banco salvo com sucesso");
+	}
+	
+	private void updateLazyModel() {
 		bankLazyModel.setSearchTerm(searchTerm);
 	}
 	
@@ -44,11 +54,6 @@ public class BankBean implements Serializable{
 		FacesContext context = FacesContext.getCurrentInstance();
 		DataTable table = (DataTable) context.getViewRoot().findComponent("contentForm:bankTable");
 		table.reset();
-	}
-	
-	public void save() {
-		service.save(bank);
-		Message.info("Banco salvo com sucesso");
 	}
 	
 	public void initializeCreate() {
