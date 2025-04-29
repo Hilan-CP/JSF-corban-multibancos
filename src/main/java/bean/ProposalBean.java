@@ -15,13 +15,10 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import model.entity.Bank;
 import model.entity.Customer;
-import model.entity.Employee;
 import model.entity.Proposal;
 import model.enumeration.ProposalStatus;
-import security.LoggedUserBean;
 import service.BankService;
 import service.CustomerService;
-import service.EmployeeService;
 import service.ProposalService;
 import util.Message;
 
@@ -34,22 +31,18 @@ public class ProposalBean implements Serializable{
 	private ProposalService proposalService;
 	
 	@Inject
-	private EmployeeService employeeService;
-	
-	@Inject
 	private BankService bankService;
 	
 	@Inject
 	private CustomerService customerService;
 	
 	@Inject
-	private LoggedUserBean loggedUser;
+	private LoggedUserBean loggedUserBean;
 	
 	@Inject
 	private ProposalLazyModel proposalLazyModel;
 	
 	private Proposal proposal;
-	private List<Employee> employeeList;
 	private List<Bank> bankList;
 	private String searchTerm;
 	private String searchOption;
@@ -59,7 +52,6 @@ public class ProposalBean implements Serializable{
 	
 	@PostConstruct
 	public void init() {
-		employeeList = employeeService.findAll();
 		bankList = bankService.findAll();
 		beginDate = LocalDate.now();
 		endDate = LocalDate.now();
@@ -124,7 +116,7 @@ public class ProposalBean implements Serializable{
 		proposal.setStatus(ProposalStatus.GERADA);
 		proposal.setCustomer(new Customer());
 		proposal.setGeneration(LocalDate.now());
-		proposal.setEmployee(loggedUser.getLoggedUser());
+		proposal.setEmployee(loggedUserBean.getLoggedUser());
 	}
 
 	public Proposal getProposal() {
@@ -137,10 +129,6 @@ public class ProposalBean implements Serializable{
 
 	public LazyDataModel<Proposal> getProposalLazyModel() {
 		return proposalLazyModel;
-	}
-
-	public List<Employee> getEmployeeList() {
-		return employeeList;
 	}
 
 	public List<Bank> getBankList() {

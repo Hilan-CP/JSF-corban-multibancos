@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import bean.LoggedUserBean;
 import dto.ProposalReportDTO;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
@@ -11,7 +12,6 @@ import model.entity.Proposal;
 import model.entity.Team;
 import model.enumeration.ProposalStatus;
 import repository.ProposalRepository;
-import security.LoggedUserBean;
 import util.Transaction;
 
 @Dependent

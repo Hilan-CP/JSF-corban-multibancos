@@ -1,4 +1,4 @@
-package security;
+package bean;
 
 import java.io.Serializable;
 

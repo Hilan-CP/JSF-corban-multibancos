@@ -134,13 +134,6 @@
 						<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
 					</p:inputMask>
 					
-					<p:outputLabel value="Funcionário: "/>
-					<p:selectOneMenu value="#{proposalBean.proposal.employee}"
-						converter="employeeConverter" disabled="#{!loggedUserBean.admin}">
-						<f:selectItems value="#{proposalBean.employeeList}"
-							var="employee" itemLabel="#{employee.name}" itemValue="#{employee}"/>
-					</p:selectOneMenu>
-					
 					<p:outputLabel value="Banco: "/>
 					<p:selectOneMenu value="#{proposalBean.proposal.bank}"
 						converter="bankConverter">
