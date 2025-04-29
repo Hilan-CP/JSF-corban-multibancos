@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import model.enumeration.ProposalStatus;
@@ -34,14 +35,17 @@ public class Proposal implements Serializable{
 	
 	@NotNull(message = "proposta deve ter um funcionário responsável")
 	@ManyToOne
+	@JoinColumn(name = "employee_cpf")
 	private Employee employee;
 	
 	@NotNull(message = "proposta deve pertencer a um banco")
 	@ManyToOne
+	@JoinColumn(name = "bank_id")
 	private Bank bank;
 	
 	@NotNull(message = "proposta deve ser feita para algum cliente")
 	@ManyToOne
+	@JoinColumn(name = "customer_cpf")
 	private Customer customer;
 
 	public Long getId() {

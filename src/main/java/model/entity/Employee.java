@@ -1,6 +1,8 @@
 package model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -8,7 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import model.enumeration.EmployeeType;
@@ -34,7 +38,11 @@ public class Employee implements Serializable{
 	private EmployeeType type;
 	
 	@ManyToOne
+	@JoinColumn(name = "team_id")
 	private Team team;
+	
+	@OneToMany(mappedBy = "employee")
+	private List<Proposal> proposals = new ArrayList<>();
 
 	public String getCpf() {
 		return cpf;
@@ -74,6 +82,10 @@ public class Employee implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<Proposal> getProposals() {
+		return proposals;
 	}
 
 	@Override

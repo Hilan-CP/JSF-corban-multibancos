@@ -1,6 +1,8 @@
 package model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,6 +29,9 @@ public class Bank implements Serializable{
 	@NotBlank(message = "nome do banco deve ser informado")
 	private String shortName;
 
+	@OneToMany(mappedBy = "bank")
+	private List<Proposal> proposals = new ArrayList<>();
+	
 	public Long getId() {
 		return id;
 	}
@@ -48,6 +54,10 @@ public class Bank implements Serializable{
 
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
+	}
+
+	public List<Proposal> getProposals() {
+		return proposals;
 	}
 
 	@Override

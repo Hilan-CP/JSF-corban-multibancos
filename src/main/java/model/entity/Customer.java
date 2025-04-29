@@ -2,11 +2,14 @@ package model.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -31,6 +34,9 @@ public class Customer implements Serializable{
 	
 	@NotNull(message = "data de nascimento deve ser informada")
 	private LocalDate birthDate;
+	
+	@OneToMany(mappedBy = "customer")
+	private List<Proposal> proposals = new ArrayList<>();
 
 	public String getCpf() {
 		return cpf;
@@ -62,6 +68,10 @@ public class Customer implements Serializable{
 
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
+	}
+	
+	public List<Proposal> getProposals() {
+		return proposals;
 	}
 
 	@Override
