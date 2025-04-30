@@ -26,12 +26,22 @@ Ambos os usuários podem exportar os resultados de buscas para arquivo de extens
 ## Diagrama de classes
 ![classes](documents/diagrama_de_classe.png)
 
-As propostas precisam obrigatoriamente ter um funcionário responsável pela sua elaboração, um cliente a quem se destina a proposta e um banco que emprestará o dinheiro. Os funcionários podem ter uma equipe ou não, podendo haver equipes sem funcionários. As enumerações são armazenadas como texto para facilitar a manipulação de dados.
-
+Cada proposta deve obrigatoriamente ter um funcionário responsável por sua elaboração, um cliente destinatário e um banco que realizará o empréstimo. Os funcionários podem atuar individualmente ou em equipe, sendo possível que existam equipes sem funcionários atribuídos. Bancos, clientes e funcionários podem ser cadastrados no sistema sem a necessidade de vínculo imediato com uma proposta.
 
 ## Requisitos de software
-Os requisitos funcionais do sistema podem ser encontrados no <a href="./documents/requisitos de software.docx">documento de requisitos</a>
+Os requisitos funcionais do sistema podem ser encontrados no <a href="./documents/requisitos de software.docx">documento de requisitos</a>.
 
+## Decisões no desenvolvimento
+- Implementação de consulta paginada para melhor evitar leitura de dados desnecessária.
+- Implementação de LazyDataModel para permitir paginação eficiente das tabelas no PrimeFaces.
+- A possibilidade de exportar dados para arquivos .csv permite a importação desses dados em outras ferramentas especializadas em análise de dados.
+- O PrimeFaces foi utilizado por possuir diversos componentes prontos, estilizados e fáceis de usar, tornando o desenvolvimento das páginas mais fácil.
+- Uso de JPQL para consultas simples.
+- Uso de Criteria API para consultas complexas.
+- As enumerações foram armazenadas como texto para facilitar a manipulação de dados.
+- A possibilidade de cadastrar ou buscar um cliente no mesmo formulário de propostas melhora a usabilidade do sistema, evitando navegações excessivas entre diferentes telas.
+- Validação de dados para evitar entradas inválidas e ter mais consistência nos dados armazenados.
+- Implementação de interceptador de transação para gerenciar commit e rollback das transações.
 
 ## Tecnologias utilizadas
 - Java
